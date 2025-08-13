@@ -2,9 +2,9 @@ import ReportViewer from "@/components/ReportCom/ReportViewer";
 import { notFound } from "next/navigation";
 
 interface ReportPageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export default async function ReportPage({ params }: ReportPageProps) {
