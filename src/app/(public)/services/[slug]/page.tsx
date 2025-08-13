@@ -17,7 +17,9 @@ interface ServiceDetails {
 }
 
 interface Props {
-  params: { slug: string };
+  params: Promise<{
+    slug: string;
+  }>;
 }
 
 const serviceData: ServiceDetails[] = [
