@@ -2,8 +2,8 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { Card, CardContent } from "@/components/ui/card";
-import { FC } from "react";
 
+// ---------------- Types ----------------
 interface ServiceDetails {
   title: string;
   slug: string;
@@ -14,12 +14,6 @@ interface ServiceDetails {
   benefits?: string;
   afterCare?: string;
   image?: string;
-}
-
-interface Props {
-  params: Promise<{
-    slug: string;
-  }>;
 }
 
 const serviceData: ServiceDetails[] = [
@@ -104,21 +98,28 @@ const serviceData: ServiceDetails[] = [
   },
 ];
 
-// ? here we generate the metadata which help me to make dynamic title:-
+// ---------------- Metadata ----------------
 export async function generateMetadata({
   params,
 }: {
   params: { slug: string };
 }): Promise<Metadata> {
-  const { slug } = await params;
-  const service = serviceData.find((item) => item?.slug === slug);
+  const { slug } = await params; // params is already resolved here
+  const service = serviceData.find((item) => item.slug === slug);
+
   return {
     title: service?.title ?? "Service Detail",
-    description: service?.fullDescription.slice(0, 140),
+    description: service?.fullDescription
+      ? service.fullDescription.slice(0, 140)
+      : undefined,
   };
 }
 
-const ServiceDetailPage: FC<Props> = async ({ params }) => {
+export default async function ServiceDetailPage({
+  params,
+}: {
+  params: { slug: string };
+}) {
   const { slug } = await params;
   const service = serviceData.find((item) => item.slug === slug);
 
@@ -195,6 +196,4 @@ const ServiceDetailPage: FC<Props> = async ({ params }) => {
       </div>
     </section>
   );
-};
-
-export default ServiceDetailPage;
+}
