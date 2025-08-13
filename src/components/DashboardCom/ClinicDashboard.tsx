@@ -7,7 +7,6 @@ import {
   ClipboardCheck,
   FileClock,
 } from "lucide-react";
-import { set } from "mongoose";
 import { useEffect, useState } from "react";
 
 interface IAppointmentPatient {
