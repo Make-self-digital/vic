@@ -50,7 +50,9 @@ const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar }: TopbarProps) => {
   };
 
   return (
-    <header className="w-full h-20 px-4 md:px-8 bg-[#f9fafb] border-b border-gray-200 flex items-center justify-between sticky top-0 z-50">
+    <header
+      id="topbar"
+      className="w-full p-4 px-4 md:px-8 bg-white border-b border-gray-200 flex items-center justify-between fixed top-0 z-50">
       {/* Left: Logo & App Controls */}
       <div className="flex items-center gap-4">
         {/* Logo */}
@@ -74,7 +76,7 @@ const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar }: TopbarProps) => {
           onClick={onToggleSidebar}
           className="rounded-xl p-2 hover:bg-[#d4f0ec] transition-all duration-150 ease-in-out cursor-pointer">
           <div
-            className="w-6 h-6 text-[#42998d] flex items-center justify-center"
+            className="w-6 h-6 text-[#0b968d] flex items-center justify-center"
             title="Menu">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -97,7 +99,7 @@ const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar }: TopbarProps) => {
           <button
             className="rounded-xl p-2 hover:bg-[#d4f0ec] transition-all duration-150 ease-in-out cursor-pointer"
             title="Home">
-            <div className="w-6 h-6 text-[#42998d] flex items-center justify-center">
+            <div className="w-6 h-6 text-[#0b968d] flex items-center justify-center">
               <Home className="w-full h-full" strokeWidth={2.2} />
             </div>
           </button>
@@ -117,13 +119,13 @@ const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar }: TopbarProps) => {
         <div
           className="flex items-center gap-3"
           title={`${role?.charAt(0).toUpperCase() + role?.slice(1)} Name`}>
-          <Avatar className="h-10 w-10 border border-[#42998d] hidden md:block">
-            <AvatarFallback className="text-[#42998d] font-bold text-lg">
+          <Avatar className="h-10 w-10 border border-[#42998d] transition-colors hidden md:block">
+            <AvatarFallback className="text-[#0b968d] font-bold text-lg">
               <User className="h-6 w-6" />
             </AvatarFallback>
           </Avatar>
           <div className="hidden md:block text-base font-semibold text-left leading-tight">
-            <p className="text-[#42998d]">
+            <p className="text-[#0b968d] tracking-wide text-md font-semibold">
               {name
                 ? name
                     ?.trim()
@@ -133,7 +135,7 @@ const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar }: TopbarProps) => {
                     .join(" ")
                 : ""}
             </p>
-            <p className="text-[#1f1f1f] text-sm font-medium">
+            <p className="text-gray-700 text-sm font-medium tracking-wide">
               {role
                 ? "Exclusive" + " " + role[0].toUpperCase() + role.slice(1)
                 : ""}

@@ -92,15 +92,15 @@ const data: ServiceComparison[] = [
 const ServiceComparisonTable: React.FC = () => {
   return (
     <section className="py-12 px-4 md:px-8 max-w-7xl mx-auto">
-      <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-8 text-center tracking-tight">
+      <h2 className="text-3xl md:text-4xl font-bold tracking-wide text-[#1e4d4f] mb-8 text-center">
         Ultrasound Service Comparison
       </h2>
       <div className="overflow-x-auto">
         <div className="min-w-[1000px]">
           <Table className="w-full text-base border-collapse">
             <TableHeader>
-              <TableRow className="bg-[#42998d] text-white">
-                <TableHead className="px-6 py-4 text-lg font-semibold text-white whitespace-nowrap border border-gray-300">
+              <TableRow className="bg-[#0b968d] text-white">
+                <TableHead className="px-6 py-4 text-lg font-semibold text-white whitespace-nowrap border border-gray-300 tracking-wide">
                   Feature
                 </TableHead>
                 {Object.keys(data[0])
@@ -108,7 +108,7 @@ const ServiceComparisonTable: React.FC = () => {
                   .map((key) => (
                     <TableHead
                       key={key}
-                      className="px-6 py-4 text-base font-medium text-white whitespace-nowrap border border-gray-300">
+                      className="px-6 py-4 text-base font-medium text-white whitespace-nowrap border border-gray-300 tracking-wide">
                       {key}
                     </TableHead>
                   ))}
@@ -119,7 +119,7 @@ const ServiceComparisonTable: React.FC = () => {
                 <TableRow
                   key={index}
                   className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                  <TableCell className="px-6 py-4 font-semibold text-gray-800 whitespace-nowrap border border-gray-300">
+                  <TableCell className="px-6 py-4 font-semibold text-gray-800 whitespace-nowrap border border-gray-300 tracking-wide">
                     {row.feature}
                   </TableCell>
                   {Object.keys(row)
@@ -127,7 +127,7 @@ const ServiceComparisonTable: React.FC = () => {
                     .map((key) => (
                       <TableCell
                         key={key}
-                        className="px-6 py-4 text-gray-700 whitespace-nowrap border border-gray-300">
+                        className="px-6 py-4 text-gray-700 whitespace-nowrap border border-gray-300 tracking-wide">
                         {row[key]}
                       </TableCell>
                     ))}

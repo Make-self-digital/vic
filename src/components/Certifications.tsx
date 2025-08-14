@@ -36,10 +36,10 @@ const Certifications: React.FC = () => {
   return (
     <section className="py-12 px-4 md:px-6 bg-white">
       <div className="max-w-6xl mx-auto text-center">
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+        <h2 className="text-3xl md:text-4xl font-bold mb-3 tracking-wide text-[#1e4d4f]">
           Certifications & Registrations
         </h2>
-        <p className="text-gray-600 text-sm md:text-base max-w-2xl mx-auto mb-8">
+        <p className="text-gray-600 text-sm md:text-base max-w-2xl mx-auto mb-8 tracking-wide">
           We are recognized and approved by leading health and diagnostic
           authorities ensuring safe, legal, and high-quality ultrasound
           services.
@@ -49,7 +49,7 @@ const Certifications: React.FC = () => {
           {certifications.map((item, idx) => (
             <Card
               key={idx}
-              className="group transition duration-300 hover:shadow-md border-l-4 border-[#42998d] text-center">
+              className="group transition duration-300 hover:shadow-md border-l-4 border-[#42998d] text-center tracking-wide">
               <CardContent className="pt-6 pb-4 px-4 flex flex-col items-center justify-center">
                 <div className="flex items-center justify-center w-12 h-12 rounded-full bg-[#42998d] mb-4">
                   {item.icon}

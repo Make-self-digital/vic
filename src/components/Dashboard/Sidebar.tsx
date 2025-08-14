@@ -20,6 +20,8 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 interface SidebarProps {
   isOpen: boolean;
+  onToggleSidebar: () => void;
+  topbarHeight: number;
 }
 
 type NavItem = {
@@ -28,38 +30,60 @@ type NavItem = {
   icon: React.ElementType;
 };
 
-const navItems: NavItem[] = [
-  { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  {
-    name: "Appointments",
-    href: "/appointments",
-    icon: CalendarCheck,
-  },
-  { name: "Notifications", href: "/notifications", icon: Bell },
-  { name: "Patients", href: "/patients", icon: Users },
-  { name: "Reports", href: "/reports", icon: FileText },
-  { name: "Billing", href: "/billing", icon: BadgeDollarSign },
-  { name: "Revenue", href: "/revenue", icon: Banknote },
-  { name: "Staff", href: "/staff", icon: UserCog },
-  { name: "Inventory", href: "/inventory", icon: Boxes },
-];
-
-export default function AdminSidebar({ isOpen }: SidebarProps) {
+export default function AdminSidebar({
+  isOpen,
+  onToggleSidebar,
+  topbarHeight = 72,
+}: SidebarProps) {
+  // pathname and auth:-
   const pathname = usePathname();
   const { name, role } = useAuth();
+
+  // Conditional item (Login or Dashboard)
+  const navItems: NavItem[] = [
+    ...(role === "admin" || role === "staff"
+      ? [{ name: "Dashboard", href: "/dashboard", icon: LayoutDashboard }]
+      : []),
+
+    ...(role === "patient"
+      ? [{ name: "Appointments", href: "/appointments", icon: CalendarCheck }]
+      : []),
+
+    { name: "Notifications", href: "/notifications", icon: Bell },
+
+    { name: "Patients", href: "/patients", icon: Users },
+
+    { name: "Reports", href: "/reports", icon: FileText },
+
+    // { name: "Billing", href: "/billing", icon: BadgeDollarSign },
+
+    ...(role === "admin"
+      ? [{ name: "Revenue", href: "/revenue", icon: Banknote }]
+      : []),
+
+    // { name: "Staff", href: "/staff", icon: UserCog },
+
+    ...(role === "admin" || role === "staff"
+      ? [{ name: "Inventory", href: "/inventory", icon: Boxes }]
+      : []),
+  ];
 
   return (
     <>
       {isOpen && (
         <aside
           className={cn(
-            "fixed top-20 left-0 h-[calc(100vh-80px)] w-64 bg-[#f9fafb] border-r border-gray-200 transition-transform duration-300 ease-in-out z-100 flex flex-col",
+            "fixed left-0 w-64 bg-white border-r border-gray-200 z-50 flex flex-col transform transition-transform duration-300 ease-in-out",
             {
               "-translate-x-full md:translate-x-0": !isOpen,
               "translate-x-0": isOpen,
             }
-          )}>
-          <nav className="flex-1 px-4 py-6 space-y-1">
+          )}
+          style={{
+            top: `${topbarHeight}px`,
+            height: `calc(100vh - ${topbarHeight}px)`,
+          }}>
+          <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
             {navItems.map(({ name, href, icon: Icon }) => (
               <Link
                 key={name}
@@ -69,7 +93,13 @@ export default function AdminSidebar({ isOpen }: SidebarProps) {
                   pathname === href &&
                     "bg-[#d4f0ec] text-[#42998d] font-semibold"
                 )}
-                title={name}>
+                title={name}
+                onClick={() => {
+                  // Only trigger onToggleSidebar on small screens (<768px)
+                  if (window.innerWidth < 768) {
+                    onToggleSidebar?.();
+                  }
+                }}>
                 <Icon className="h-5 w-5" />
                 {name}
               </Link>
@@ -78,15 +108,15 @@ export default function AdminSidebar({ isOpen }: SidebarProps) {
 
           {/* profile related */}
           <div
-            className="flex items-center gap-3 px-6 py-6 md:hidden"
+            className="flex items-center gap-3 p-4 md:hidden"
             title={`${role?.charAt(0).toUpperCase() + role?.slice(1)} Name`}>
-            <Avatar className="h-10 w-10 border border-[#42998d]">
-              <AvatarFallback className="text-[#42998d] font-bold text-lg">
+            <Avatar className="border border-[#42998d] transition-colors">
+              <AvatarFallback className="text-[#0b968d] font-bold text-lg">
                 <User className="h-6 w-6" />
               </AvatarFallback>
             </Avatar>
             <div className="text-base font-semibold text-left leading-tight">
-              <p className="text-[#42998d]">
+              <p className="text-[#0b968d] tracking-wide text-md font-semibold">
                 {name
                   ? name
                       ?.trim()
@@ -96,7 +126,7 @@ export default function AdminSidebar({ isOpen }: SidebarProps) {
                       .join(" ")
                   : ""}
               </p>
-              <p className="text-[#1f1f1f] text-sm font-medium">
+              <p className="text-gray-700 text-sm font-medium tracking-wide">
                 {role
                   ? "Exclusive" + " " + role[0].toUpperCase() + role.slice(1)
                   : ""}

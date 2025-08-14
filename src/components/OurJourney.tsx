@@ -45,10 +45,10 @@ const OurJourney: React.FC = () => {
   return (
     <section className="py-12 px-4 md:px-8 bg-white">
       <div className="max-w-5xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-4">
+        <h2 className="text-3xl md:text-4xl font-bold text-center tracking-wide text-[#1e4d4f] mb-4">
           Our Journey
         </h2>
-        <p className="text-center text-gray-600 mb-8 text-sm md:text-base max-w-2xl mx-auto">
+        <p className="text-center text-gray-600 mb-8 text-sm md:text-base max-w-2xl mx-auto tracking-wide">
           Since 2015, we have been constantly evolving to provide the best
           diagnostic care. Here's how we grew with your trust.
         </p>
@@ -57,7 +57,7 @@ const OurJourney: React.FC = () => {
           {timeline.map((item, index) => (
             <Card
               key={index}
-              className="relative border-l-4 border-[#42998d] shadow-md hover:shadow-lg transition duration-200">
+              className="relative border-l-4 border-[#42998d] shadow-md hover:shadow-lg transition duration-200 tracking-wide">
               <div className="absolute -left-5 top-6 bg-[#42998d] rounded-full p-2">
                 {item.icon}
               </div>

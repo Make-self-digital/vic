@@ -21,9 +21,9 @@ export default function PageRefreshButton() {
         disabled={isRefreshing}
         className="rounded-xl p-2 hover:bg-[#d4f0ec] transition-all duration-150 ease-in-out cursor-pointer"
         title="Reload this page">
-        <div className="w-5.5 h-5.5 text-[#42998d] flex items-center justify-center">
+        <div className="w-5.5 h-5.5 text-[#0b968d] flex items-center justify-center">
           <RefreshCcw
-            className={`w-full h-full text-[#42998d] transition-transform duration-500 ${
+            className={`w-full h-full transition-transform duration-500 ${
               isRefreshing ? "animate-spin" : ""
             }`}
           />

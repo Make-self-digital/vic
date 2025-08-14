@@ -44,10 +44,10 @@ const FaqAccordion: React.FC = () => {
   return (
     <section className="py-16 px-4 md:px-8 bg-gray-50">
       <div className="max-w-5xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 text-center mb-4">
+        <h2 className="text-3xl md:text-4xl font-bold tracking-wide text-[#1e4d4f] text-center mb-4">
           Frequently Asked Questions
         </h2>
-        <p className="text-gray-600 text-center text-base md:text-lg mb-10">
+        <p className="text-gray-600 text-center text-base md:text-lg mb-10 tracking-wide">
           Everything you need to know before visiting our ultrasound center.
         </p>
 
@@ -56,12 +56,12 @@ const FaqAccordion: React.FC = () => {
             <AccordionItem
               key={index}
               value={`faq-${index}`}
-              className="border border-gray-200 rounded-xl bg-white shadow-sm">
-              <AccordionTrigger className="w-full text-left px-6 py-5 font-medium text-gray-900 hover:bg-gray-100 rounded-t-xl transition-all text-base md:text-lg cursor-pointer">
+              className="border border-gray-200 rounded-xl bg-white">
+              <AccordionTrigger className="w-full text-left px-6 py-5 font-medium text-gray-900 hover:bg-gray-100 rounded-t-xl transition-all text-base md:text-lg cursor-pointer tracking-wide">
                 {item.question}
               </AccordionTrigger>
 
-              <AccordionContent className="px-6 pt-2 pb-6 text-left text-gray-700 text-sm md:text-base leading-relaxed">
+              <AccordionContent className="px-6 pt-2 pb-6 text-left text-gray-700 text-sm md:text-base leading-relaxed tracking-wide">
                 {item.answer}
               </AccordionContent>
             </AccordionItem>

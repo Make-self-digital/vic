@@ -136,52 +136,66 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
               src={service.image}
               alt={service.title}
               fill
+              sizes="100vw"
+              style={{ objectFit: "cover" }}
               className="object-cover"
             />
           </div>
         )}
-        <h1 className="text-3xl font-bold mb-4">{service.title}</h1>
-        <p className="text-gray-700 mb-6">{service.fullDescription}</p>
+        <h1 className="text-3xl font-bold mb-4 tracking-wide text-[#1e4d4f]">
+          {service.title}
+        </h1>
+        <p className="text-gray-700 mb-6 tracking-wide">
+          {service.fullDescription}
+        </p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
         {service.preparation && (
-          <Card>
+          <Card className="tracking-wide">
             <CardContent>
-              <h3>Preparation</h3>
-              <p>{service.preparation}</p>
+              <h3 className="text-md font-semibold text-gray-800">
+                Preparation
+              </h3>
+              <p className="text-sm text-gray-600">{service.preparation}</p>
             </CardContent>
           </Card>
         )}
         {service.procedureTime && (
-          <Card>
+          <Card className="tracking-wide">
             <CardContent>
-              <h3>Procedure Time</h3>
-              <p>{service.procedureTime}</p>
+              <h3 className="text-md font-semibold text-gray-800">
+                Procedure Time
+              </h3>
+              <p className="text-sm text-gray-600">{service.procedureTime}</p>
             </CardContent>
           </Card>
         )}
         {service.safetyInfo && (
-          <Card>
+          <Card className="tracking-wide">
             <CardContent>
-              <h3>Safety Info</h3>
-              <p>{service.safetyInfo}</p>
+              <h3 className="text-md font-semibold text-gray-800">
+                Safety Info
+              </h3>
+              <p className="text-sm text-gray-600">{service.safetyInfo}</p>
             </CardContent>
           </Card>
         )}
         {service.benefits && (
-          <Card>
+          <Card className="tracking-wide">
             <CardContent>
-              <h3>Benefits</h3>
-              <p>{service.benefits}</p>
+              <h3 className="text-md font-semibold text-gray-800">Benefits</h3>
+              <p className="text-sm text-gray-600">{service.benefits}</p>
             </CardContent>
           </Card>
         )}
         {service.afterCare && (
-          <Card className="sm:col-span-2">
+          <Card className="sm:col-span-2 tracking-wide">
             <CardContent>
-              <h3>Aftercare Instructions</h3>
-              <p>{service.afterCare}</p>
+              <h3 className="text-md font-semibold text-gray-800">
+                Aftercare Instructions
+              </h3>
+              <p className="text-sm text-gray-600">{service.afterCare}</p>
             </CardContent>
           </Card>
         )}

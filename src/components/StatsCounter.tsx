@@ -52,14 +52,14 @@ const StatsCounter: React.FC = () => {
   return (
     <section className="py-12 px-4 md:px-8 bg-gray-50">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-10">
+        <h2 className="text-3xl md:text-4xl font-bold text-center tracking-wide text-[#1e4d4f] mb-10">
           Our Achievements
         </h2>
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-6">
           {stats.map((stat, i) => (
             <Card
               key={i}
-              className="text-center shadow-sm border border-gray-200">
+              className="text-center shadow-sm border border-gray-200 tracking-wide">
               <CardContent className="py-6 flex flex-col items-center justify-center">
                 <div className="mb-2">{stat.icon}</div>
                 <h3 className="text-2xl md:text-3xl font-bold text-[#42998d]">

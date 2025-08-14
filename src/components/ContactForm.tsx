@@ -36,54 +36,58 @@ export default function ContactForm() {
 
   return (
     <section className="py-10 px-4 md:px-8 max-w-7xl mx-auto">
-      <h2 className="text-3xl font-bold text-gray-900 text-center mb-2">
+      <h2 className="text-3xl font-bold tracking-wide text-[#1e4d4f] text-center mb-2">
         Get in Touch
       </h2>
-      <p className="text-center text-gray-600 text-sm md:text-base mb-6">
+      <p className="text-center text-gray-600 text-sm md:text-base mb-6 tracking-wide">
         Have questions or want to schedule an appointment? We’re here to help.
       </p>
 
-      <Card className="shadow-sm border border-gray-200 p-0">
+      <Card className="border border-[#42998d] p-0">
         <CardContent className="p-5 md:p-6">
           <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Patient Name */}
             <div>
               <label
                 htmlFor="name"
-                className="block text-md font-medium text-gray-800 mb-1">
+                className="block text-md tracking-wide font-medium text-gray-800 mb-1">
                 Patient Name
               </label>
               <Input
+                type="text"
                 id="name"
                 name="name"
                 value={form.name}
                 onChange={handleChange}
                 required
                 placeholder="Patient Name"
-                className="text-sm p-5 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-1 focus:ring-[#42998d] focus:outline-none transition duration-150"
+                className="text-sm mt-1 p-5 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0 tracking-wide"
               />
             </div>
 
+            {/* Patient Phone */}
             <div>
               <label
                 htmlFor="phone"
-                className="block text-md font-medium text-gray-800 mb-1">
+                className="block text-md font-medium text-gray-800 mb-1 tracking-wide">
                 Phone
               </label>
               <Input
+                type="tel"
                 id="phone"
                 name="phone"
-                type="tel"
                 value={form.phone}
                 onChange={handleChange}
-                placeholder="e.g. +91 9876543210"
-                className="text-sm p-5 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-1 focus:ring-[#42998d] focus:outline-none transition duration-150"
+                placeholder="Patient Phone"
+                className="text-sm mt-1 p-5 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0 tracking-wide"
               />
             </div>
 
+            {/* Patient Message */}
             <div>
               <label
                 htmlFor="message"
-                className="block text-md font-medium text-gray-800 mb-1">
+                className="block text-md font-medium text-gray-800 mb-1 tracking-wide">
                 Message
               </label>
               <Textarea
@@ -92,7 +96,7 @@ export default function ContactForm() {
                 placeholder="Write your message here..."
                 value={form.message}
                 onChange={handleChange}
-                className="resize-none overflow-hidden text-sm p-5 pt-2 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-1 focus:ring-[#42998d] focus:outline-none transition duration-150"
+                className="resize-none overflow-hidden text-sm p-5 pt-2 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0 tracking-wide"
                 rows={3}
                 style={{ minHeight: "90px" }}
                 onInput={(e) => {
@@ -103,10 +107,11 @@ export default function ContactForm() {
               />
             </div>
 
+            {/* Submit Button */}
             <div className="flex justify-center">
               <Button
                 type="submit"
-                className="w-full bg-[#42998d] hover:bg-[#367c74] text-white text-base font-medium cursor-pointer p-6">
+                className="bg-[#02998d] hover:bg-[#02998d]/90 text-white text-base font-medium cursor-pointer tracking-wide px-4 py-2 rounded-md">
                 Send Message
               </Button>
             </div>

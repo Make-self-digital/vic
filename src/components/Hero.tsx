@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 import { useRef, useEffect } from "react";
+import { useAuth } from "@/hooks/use-auth";
 
 const slides = [
   {
@@ -29,6 +30,7 @@ const slides = [
 ];
 
 const HeroSlider: React.FC = () => {
+  const { isAuthenticated } = useAuth();
   const carouselRef = useRef<any>(null);
 
   // Auto-slide effect
@@ -37,8 +39,7 @@ const HeroSlider: React.FC = () => {
       if (carouselRef.current) {
         carouselRef.current.scrollNext();
       }
-    }, 5000); // Change every 5s
-
+    }, 5000);
     return () => clearInterval(interval);
   }, []);
 
@@ -66,23 +67,30 @@ const HeroSlider: React.FC = () => {
               />
 
               {/* Text Overlay */}
-              <div className="absolute inset-0 bg-black/50 flex flex-col justify-center items-start p-6 md:p-12 text-white">
-                <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold">
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent flex flex-col justify-center items-center md:items-start p-6 md:p-12 text-white">
+                <h2
+                  className="text-center md:text-left text-4xl md:text-5xl font-bold tracking-wide drop-shadow-lg"
+                  aria-label={slide.heading}>
                   {slide.heading}
                 </h2>
-                <p className="mt-2 text-sm md:text-base max-w-xl">
+                <p className="mt-3 text-center md:text-left text-md max-w-xl tracking-wide drop-shadow-md font-semibold text-gray-200">
                   {slide.text}
                 </p>
-                <div className="mt-4 flex gap-4">
-                  <Link href="/appointments">
-                    <Button className="bg-white cursor-pointer text-black hover:bg-gray-200 text-sm">
+                <div className="mt-6 flex flex-col items-center sm:flex-row gap-4">
+                  <Link href={isAuthenticated ? "/appointments" : "/login"}>
+                    <Button
+                      size="lg"
+                      className="bg-[#0b968d] cursor-pointer text-white hover:[#0b968d]/90 hover:scale-105 transition-transform shadow-lg text-sm tracking-wide"
+                      title="Book Appointment">
                       Book Appointment
                     </Button>
                   </Link>
                   <Link href="/services">
                     <Button
+                      size="lg"
                       variant="outline"
-                      className="text-white border-white cursor-pointer hover:bg-white hover:text-black text-sm">
+                      title="View Services"
+                      className="text-white border border-white cursor-pointer hover:bg-[#0b968d] hover:text-white hover:border-none hover:scale-105 transition-transform shadow-lg text-sm tracking-wide">
                       View Services
                     </Button>
                   </Link>

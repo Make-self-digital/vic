@@ -16,7 +16,6 @@ import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { SelectItem } from "@/components/ui/select";
 
 interface PatientForm {
   patientName: string;
@@ -169,7 +168,7 @@ const LoginPage: React.FC = () => {
             },
           });
           //* Redirect to dashboard
-          router.push("/dashboard");
+          router.push("/appointments");
         } else {
           toast.error("Login failed", {
             id: toastId,
@@ -264,21 +263,21 @@ const LoginPage: React.FC = () => {
 
   return (
     <section
-      className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-12"
+      className="relative h-screen bg-gray-50 flex items-center justify-center px-4 py-12"
       style={{
-        backgroundImage: "url('/LoginBg.png')",
+        backgroundImage: "url('/login-bg.png')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
       }}>
-      <div className="absolute inset-0 bg-white/10 backdrop-blur-xs z-0" />
+      <div className="absolute inset-0 bg-white/10 backdrop-blur-[4px] z-0" />
       <div className="relative w-full max-w-md">
-        <Card className="shadow-lg bg-white border border-gray-200 rounded-xl">
+        <Card className=" bg-white border border-[#42998d] rounded-xl">
           <CardHeader className="text-center">
-            <CardTitle className="text-3xl font-bold text-[#42998d]">
+            <CardTitle className="text-3xl font-bold text-[#42998d] tracking-wide">
               Welcome VIC
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="tracking-wide">
               Please enter your details to login.
             </CardDescription>
           </CardHeader>
@@ -289,7 +288,7 @@ const LoginPage: React.FC = () => {
               <div>
                 <RadioGroup
                   defaultValue="patient"
-                  className="flex gap-6 "
+                  className="flex gap-6 tracking-wide"
                   onValueChange={(value: "patient" | "admin" | "staff") => {
                     setRole(value);
                     // setOtpSent(false);
@@ -363,17 +362,18 @@ const LoginPage: React.FC = () => {
                   <div>
                     <Label
                       htmlFor="patientName"
-                      className="text-sm font-medium text-gray-800">
+                      className="text-sm font-medium text-gray-800 tracking-wide">
                       Patient Name
                     </Label>
                     <Input
+                      type="text"
                       id="patientName"
                       name="patientName"
                       value={patientForm.patientName}
                       onChange={handlePatientChange}
                       required
                       placeholder="Patient Name"
-                      className="text-sm mt-1 p-5 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0"
+                      className="text-sm mt-1 p-5 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0 tracking-wide"
                     />
                   </div>
 
@@ -381,19 +381,19 @@ const LoginPage: React.FC = () => {
                   <div>
                     <Label
                       htmlFor="phone"
-                      className="text-sm font-medium text-gray-800">
+                      className="text-sm font-medium text-gray-800 tracking-wide">
                       Phone Number
                     </Label>
                     <Input
+                      type="tel"
                       id="phone"
                       name="phone"
-                      type="tel"
                       value={patientForm.phone}
                       onChange={handlePatientChange}
                       required
                       placeholder="Enter phone number"
                       maxLength={10}
-                      className="text-sm mt-1 p-5 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0"
+                      className="text-sm mt-1 p-5 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0 tracking-wide"
                     />
                   </div>
 
@@ -429,17 +429,18 @@ const LoginPage: React.FC = () => {
                   <div>
                     <Label
                       htmlFor="adminName"
-                      className="text-sm font-medium text-gray-800">
+                      className="text-sm font-medium text-gray-800 tracking-wide">
                       Admin Name
                     </Label>
                     <Input
+                      type="text"
                       id="adminName"
                       name="adminName"
                       value={adminForm.adminName}
                       onChange={handleAdminChange}
                       required
                       placeholder="Enter admin name"
-                      className="text-sm mt-1 p-5 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0"
+                      className="text-sm mt-1 p-5 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0 tracking-wide"
                     />
                   </div>
 
@@ -447,18 +448,18 @@ const LoginPage: React.FC = () => {
                   <div className="relative">
                     <Label
                       htmlFor="password"
-                      className="text-sm font-medium text-gray-800">
+                      className="text-sm font-medium text-gray-800 tracking-wide">
                       Password
                     </Label>
                     <Input
+                      type={showPassword ? "text" : "password"}
                       id="password"
                       name="password"
-                      type={showPassword ? "text" : "password"}
                       value={adminForm.password}
                       onChange={handleAdminChange}
                       required
                       placeholder="Enter your password"
-                      className="text-sm mt-1 p-5 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0"
+                      className="text-sm mt-1 p-5 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0 tracking-wide"
                     />
                     <div
                       className="absolute right-3 top-[38px] cursor-pointer text-gray-500 hover:text-gray-700"
@@ -474,17 +475,18 @@ const LoginPage: React.FC = () => {
                   <div>
                     <Label
                       htmlFor="staffName"
-                      className="text-sm font-medium text-gray-800">
+                      className="text-sm font-medium text-gray-800 tracking-wide">
                       Staff Name
                     </Label>
                     <Input
+                      type="text"
                       id="staffName"
                       name="staffName"
                       value={staffForm.staffName}
                       onChange={handleStaffChange}
                       required
                       placeholder="Enter staff name"
-                      className="text-sm mt-1 p-5 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0"
+                      className="text-sm mt-1 p-5 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0 tracking-wide"
                     />
                   </div>
 
@@ -492,19 +494,19 @@ const LoginPage: React.FC = () => {
                   <div>
                     <Label
                       htmlFor="phone"
-                      className="text-sm font-medium text-gray-800">
+                      className="text-sm font-medium text-gray-800 tracking-wide">
                       Phone Number
                     </Label>
                     <Input
+                      type="tel"
                       id="phone"
                       name="phone"
-                      type="tel"
                       value={staffForm.phone}
                       onChange={handleStaffChange}
                       required
                       placeholder="Enter phone number"
                       maxLength={10}
-                      className="text-sm mt-1 p-5 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0"
+                      className="text-sm mt-1 p-5 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0 tracking-wide"
                     />
                   </div>
 
@@ -512,18 +514,18 @@ const LoginPage: React.FC = () => {
                   <div className="relative">
                     <Label
                       htmlFor="password"
-                      className="text-sm font-medium text-gray-800">
+                      className="text-sm font-medium text-gray-800 tracking-wide">
                       Password
                     </Label>
                     <Input
+                      type={showPassword ? "text" : "password"}
                       id="password"
                       name="password"
-                      type={showPassword ? "text" : "password"}
                       value={staffForm.password}
                       onChange={handleStaffChange}
                       required
                       placeholder="Enter your password"
-                      className="text-sm mt-1 p-5 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0"
+                      className="text-sm mt-1 p-5 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0 tracking-wide"
                     />
                     <div
                       className="absolute right-3 top-[38px] cursor-pointer text-gray-500 hover:text-gray-700"
@@ -535,16 +537,19 @@ const LoginPage: React.FC = () => {
               )}
 
               {/* Login Button */}
-              <Button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-[#42998d] hover:bg-[#367c74] text-white text-base font-medium py-2.5 rounded-md shadow transition cursor-pointer mt-2">
-                {loading ? (
-                  <Loader2 className="animate-spin h-5 w-5" />
-                ) : (
-                  "Login"
-                )}
-              </Button>
+              <div className="flex items-center justify-center">
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  className="bg-[#0b968d] hover:bg-[#0b968d]/90 text-white text-md font-medium py-2.5 rounded-md shadow transition cursor-pointer mt-2 tracking-wide"
+                  title="Login">
+                  {loading ? (
+                    <Loader2 className="animate-spin h-5 w-5" />
+                  ) : (
+                    "Login"
+                  )}
+                </Button>
+              </div>
             </form>
           </CardContent>
         </Card>
@@ -554,20 +559,3 @@ const LoginPage: React.FC = () => {
 };
 
 export default LoginPage;
-
-// ? Custom Item with hover styling
-function CustomSelectItem({
-  children,
-  value,
-}: {
-  children: string;
-  value: string;
-}) {
-  return (
-    <SelectItem
-      value={value}
-      className="hover:bg-[#42998d] hover:text-white cursor-pointer transition-colors rounded-md px-2">
-      {children}
-    </SelectItem>
-  );
-}

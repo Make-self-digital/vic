@@ -36,54 +36,77 @@ export default function Navbar() {
   const allNavItems = [...staticNavItems, authNavItem];
 
   return (
-    <header className="sticky top-0 z-50 bg-[#f9fafb] shadow-sm">
+    <header className="sticky top-0 z-50 bg-white border border-gray-200">
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between relative">
-        <div className="text-xl font-bold text-[#42998d] cursor-pointer">
+        <div
+          className="text-xl font-bold text-[#42998d] cursor-pointer"
+          title="Vaishnavi Imaging Center Logo">
           Vaishnavi Imaging Center
         </div>
 
         {/* Hamburger Icon */}
         <button
-          className="md:hidden"
+          className="md:hidden cursor-pointer"
           onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Toggle Menu">
+          aria-label="Toggle Menu"
+          title="Toggle Menu">
           {menuOpen ? (
-            <X className="w-6 h-6 text-[#42998d]" />
+            <X className="w-8 h-8 text-[#42998d] rounded-full p-1.5 transition-all duration-300 ease-in-out cursor-pointer hover:bg-[#02998d] hover:text-white hover:shadow-lg" />
           ) : (
-            <Menu className="w-6 h-6 text-[#42998d]" />
+            <Menu className="w-8 h-8 text-[#42998d] rounded-full p-1.5 transition-all duration-300 ease-in-out cursor-pointer hover:bg-[#02998d] hover:text-white hover:shadow-lg" />
           )}
         </button>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex space-x-6">
-          {allNavItems.map(({ name, href }) => (
+          {allNavItems.map(({ name, href, icon: Icon }) => (
             <Link
               key={href}
               href={href}
-              className={cn(
-                "relative text-sm cursor-pointer font-medium text-gray-600 hover:text-black transition",
-                pathname === href &&
-                  "text-black after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:bg-black"
-              )}>
-              {name}
+              title={name}
+              className="relative flex items-center space-x-2 text-sm cursor-pointer font-medium text-gray-600 hover:text-black transition tracking-wide">
+              <Icon
+                className={cn(
+                  "w-4 h-4 text-black",
+                  pathname === href && "text-[#42998d]"
+                )}
+              />
+              <span
+                className={cn(
+                  "relative", // needed so after is positioned correctly
+                  pathname === href &&
+                    "text-[#42998d] font-semibold tracking-wide after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:bg-[#42998d]"
+                )}>
+                {name}
+              </span>
             </Link>
           ))}
         </nav>
 
         {/* Mobile Dropdown Menu */}
         {menuOpen && (
-          <div className="absolute top-full right-4 mt-2 w-56 rounded-md border bg-white shadow-md p-3 flex flex-col space-y-2 md:hidden">
+          <div className="absolute top-full right-4 mt-2 w-56 rounded-md border border-[#42998d] bg-white shadow-md p-3 flex flex-col space-y-2 md:hidden">
             {allNavItems.map(({ name, href, icon: Icon }) => (
               <Link
                 key={href}
                 href={href}
+                title={name}
                 onClick={() => setMenuOpen(false)}
-                className={cn(
-                  "flex items-center space-x-2 text-sm font-medium text-gray-600 cursor-pointer hover:text-black transition",
-                  pathname === href && "text-black underline underline-offset-6"
-                )}>
-                <Icon className="w-4 h-4 text-[#42998d]" />
-                <span>{name}</span>
+                className="relative flex items-center space-x-2 text-sm cursor-pointer font-medium text-gray-600 hover:text-black transition tracking-wide">
+                <Icon
+                  className={cn(
+                    "w-4 h-4 text-black",
+                    pathname === href && "text-[#42998d]"
+                  )}
+                />
+                <span
+                  className={cn(
+                    "relative", // needed so after is positioned correctly
+                    pathname === href &&
+                      "text-[#42998d] font-semibold tracking-wide after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:bg-[#42998d]"
+                  )}>
+                  {name}
+                </span>
               </Link>
             ))}
           </div>

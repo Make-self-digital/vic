@@ -1,10 +1,10 @@
 const ClinicLocation: React.FC = () => {
   return (
     <section className="mt-16 px-4 md:px-8 max-w-7xl mx-auto text-center">
-      <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+      <h2 className="text-2xl md:text-3xl font-bold tracking-wide text-[#1e4d4f] mb-4">
         Find Us on Google Maps
       </h2>
-      <p className="text-gray-600 mb-6 max-w-2xl mx-auto text-sm md:text-base">
+      <p className="text-gray-600 mb-6 max-w-2xl mx-auto text-sm md:text-base tracking-wide">
         Visit our ultrasound center easily. Use the map below to get directions
         or open it in your preferred maps app.
       </p>
