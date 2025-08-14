@@ -4,12 +4,12 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(
   req: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   await connectToDatabase();
 
   const { status } = await req.json();
-  const { id } = await context.params;
+  const { id } = await params;
 
   if (!["Pending", "Completed", "Cancelled"].includes(status)) {
     return NextResponse.json(

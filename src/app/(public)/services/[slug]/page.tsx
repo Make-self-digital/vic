@@ -4,6 +4,12 @@ import { Metadata } from "next";
 import { Card, CardContent } from "@/components/ui/card";
 
 // ---------------- Types ----------------
+interface ServicePageProps {
+  params: Promise<{
+    slug: string;
+  }>;
+}
+
 interface ServiceDetails {
   title: string;
   slug: string;
@@ -101,27 +107,23 @@ const serviceData: ServiceDetails[] = [
 // ---------------- Metadata ----------------
 export async function generateMetadata({
   params,
-}: {
-  params: { slug: string };
-}): Promise<Metadata> {
-  const { slug } = await params; // params is already resolved here
-  const service = serviceData.find((item) => item.slug === slug);
+}: ServicePageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const service = serviceData.find((s) => s.slug === slug);
+
+  if (!service) {
+    return { title: "Service Detail" };
+  }
 
   return {
-    title: service?.title ?? "Service Detail",
-    description: service?.fullDescription
-      ? service.fullDescription.slice(0, 140)
-      : undefined,
+    title: service.title,
+    description: service.fullDescription.slice(0, 140),
   };
 }
 
-export default async function ServiceDetailPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
+export default async function ServiceDetailPage({ params }: ServicePageProps) {
   const { slug } = await params;
-  const service = serviceData.find((item) => item.slug === slug);
+  const service = serviceData.find((s) => s.slug === slug);
 
   if (!service) return notFound();
 
@@ -135,61 +137,51 @@ export default async function ServiceDetailPage({
               alt={service.title}
               fill
               className="object-cover"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 60vw"
-              priority
             />
           </div>
         )}
-        <h1 className="text-3xl font-bold mb-4 text-gray-900">
-          {service.title}
-        </h1>
-        <p className="text-gray-700 text-base leading-relaxed mb-6">
-          {service.fullDescription}
-        </p>
+        <h1 className="text-3xl font-bold mb-4">{service.title}</h1>
+        <p className="text-gray-700 mb-6">{service.fullDescription}</p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
         {service.preparation && (
           <Card>
-            <CardContent className="p-4">
-              <h3 className="font-semibold mb-2 text-[#42998d]">Preparation</h3>
-              <p className="text-gray-600 text-sm">{service.preparation}</p>
+            <CardContent>
+              <h3>Preparation</h3>
+              <p>{service.preparation}</p>
             </CardContent>
           </Card>
         )}
         {service.procedureTime && (
           <Card>
-            <CardContent className="p-4">
-              <h3 className="font-semibold mb-2 text-[#42998d]">
-                Procedure Time
-              </h3>
-              <p className="text-gray-600 text-sm">{service.procedureTime}</p>
+            <CardContent>
+              <h3>Procedure Time</h3>
+              <p>{service.procedureTime}</p>
             </CardContent>
           </Card>
         )}
         {service.safetyInfo && (
           <Card>
-            <CardContent className="p-4">
-              <h3 className="font-semibold mb-2 text-[#42998d]">Safety Info</h3>
-              <p className="text-gray-600 text-sm">{service.safetyInfo}</p>
+            <CardContent>
+              <h3>Safety Info</h3>
+              <p>{service.safetyInfo}</p>
             </CardContent>
           </Card>
         )}
         {service.benefits && (
           <Card>
-            <CardContent className="p-4">
-              <h3 className="font-semibold mb-2 text-[#42998d]">Benefits</h3>
-              <p className="text-gray-600 text-sm">{service.benefits}</p>
+            <CardContent>
+              <h3>Benefits</h3>
+              <p>{service.benefits}</p>
             </CardContent>
           </Card>
         )}
         {service.afterCare && (
           <Card className="sm:col-span-2">
-            <CardContent className="p-4">
-              <h3 className="font-semibold mb-2 text-[#42998d]">
-                Aftercare Instructions
-              </h3>
-              <p className="text-gray-600 text-sm">{service.afterCare}</p>
+            <CardContent>
+              <h3>Aftercare Instructions</h3>
+              <p>{service.afterCare}</p>
             </CardContent>
           </Card>
         )}
