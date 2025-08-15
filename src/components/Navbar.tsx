@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Menu,
   X,
@@ -15,6 +15,7 @@ import {
   LayoutDashboard,
 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
+import Image from "next/image";
 
 const staticNavItems = [
   { name: "Home", href: "/", icon: Home },
@@ -24,9 +25,22 @@ const staticNavItems = [
 ];
 
 export default function Navbar() {
+  // pathname and auth:-
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const { isAuthenticated } = useAuth();
+
+  // scroll navbar fixed:-
+  const [scrolled, setScrolled] = useState(false);
+
+  // Scroll effect:-
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // Conditional item (Login or Dashboard)
   const authNavItem = isAuthenticated
@@ -36,12 +50,28 @@ export default function Navbar() {
   const allNavItems = [...staticNavItems, authNavItem];
 
   return (
-    <header className="sticky top-0 z-50 bg-white border border-gray-200">
-      <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between relative">
+    <header
+      className={`fixed top-0 w-full z-[60] transition-all duration-300 ease-in-out ${
+        scrolled
+          ? "bg-white border border-gray-200"
+          : "bg-transparent border-none"
+      }`}>
+      <div className="max-w-7xl px-4 py-2 mx-auto flex items-center justify-between">
+        {/* Logo */}
         <div
-          className="text-xl font-bold text-[#42998d] cursor-pointer"
+          className="w-full max-w-[60px]"
           title="Vaishnavi Imaging Center Logo">
-          Vaishnavi Imaging Center
+          <Link href="/">
+            <Image
+              src="/logo-2.png"
+              alt="Vaishnavi Imaging Center Logo"
+              priority
+              width="100"
+              height="100"
+              style={{ height: "auto", width: "auto" }}
+              className="object-contain fit-cover cursor-pointer"
+            />
+          </Link>
         </div>
 
         {/* Hamburger Icon */}
@@ -51,9 +81,9 @@ export default function Navbar() {
           aria-label="Toggle Menu"
           title="Toggle Menu">
           {menuOpen ? (
-            <X className="w-8 h-8 text-[#42998d] rounded-full p-1.5 transition-all duration-300 ease-in-out cursor-pointer hover:bg-[#02998d] hover:text-white hover:shadow-lg" />
+            <X className="w-8 h-8 rounded-full p-1.5 transition-all duration-300 ease-in-out cursor-pointer bg-[#02998d] text-white hover:shadow-lg" />
           ) : (
-            <Menu className="w-8 h-8 text-[#42998d] rounded-full p-1.5 transition-all duration-300 ease-in-out cursor-pointer hover:bg-[#02998d] hover:text-white hover:shadow-lg" />
+            <Menu className="w-8 h-8 rounded-full p-1.5 transition-all duration-300 ease-in-out cursor-pointer bg-[#02998d] text-white hover:shadow-lg" />
           )}
         </button>
 

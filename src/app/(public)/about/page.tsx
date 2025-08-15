@@ -11,10 +11,12 @@ export const metadata: Metadata = metadataConfig["/about"];
 const page: React.FC = () => {
   return (
     <>
-      <OurJourney />
-      <StatsCounter />
-      <PatientPromise />
-      <Certifications />
+      <main className="pt-16">
+        <OurJourney />
+        <StatsCounter />
+        <PatientPromise />
+        <Certifications />
+      </main>
     </>
   );
 };

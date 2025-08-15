@@ -8,13 +8,11 @@ import WhyChooseUs from "@/components/WhyChooseUS";
 const page: React.FC = () => {
   return (
     <>
-      <div>
-        <HeroSlider />
-        <WhyChooseUs />
-        <Testimonials />
-        <DoctorSlider />
-        <FaqAccordion />
-      </div>
+      <HeroSlider />
+      <WhyChooseUs />
+      <Testimonials />
+      <DoctorSlider />
+      <FaqAccordion />
     </>
   );
 };

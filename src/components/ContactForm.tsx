@@ -61,6 +61,7 @@ export default function ContactForm() {
                 onChange={handleChange}
                 required
                 placeholder="Patient Name"
+                autoComplete="off"
                 className="text-sm mt-1 p-5 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0 tracking-wide"
               />
             </div>
@@ -79,6 +80,7 @@ export default function ContactForm() {
                 value={form.phone}
                 onChange={handleChange}
                 placeholder="Patient Phone"
+                autoComplete="off"
                 className="text-sm mt-1 p-5 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0 tracking-wide"
               />
             </div>
@@ -96,6 +98,7 @@ export default function ContactForm() {
                 placeholder="Write your message here..."
                 value={form.message}
                 onChange={handleChange}
+                autoComplete="off"
                 className="resize-none overflow-hidden text-sm p-5 pt-2 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0 tracking-wide"
                 rows={3}
                 style={{ minHeight: "90px" }}
@@ -111,7 +114,7 @@ export default function ContactForm() {
             <div className="flex justify-center">
               <Button
                 type="submit"
-                className="bg-[#02998d] hover:bg-[#02998d]/90 text-white text-base font-medium cursor-pointer tracking-wide px-4 py-2 rounded-md">
+                className="bg-[#0b968d] hover:bg-[#02998d]/90 text-white text-base font-medium cursor-pointer tracking-wide px-4 py-2 rounded-md">
                 Send Message
               </Button>
             </div>

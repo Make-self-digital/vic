@@ -16,6 +16,8 @@ import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
+import Link from "next/link";
 
 interface PatientForm {
   patientName: string;
@@ -272,12 +274,26 @@ const LoginPage: React.FC = () => {
       }}>
       <div className="absolute inset-0 bg-white/10 backdrop-blur-[4px] z-0" />
       <div className="relative w-full max-w-md">
-        <Card className=" bg-white border border-[#42998d] rounded-xl">
+        <Card className="px-0 py-4 bg-white border border-[#42998d] rounded-xl">
           <CardHeader className="text-center">
-            <CardTitle className="text-3xl font-bold text-[#42998d] tracking-wide">
+            {/* Logo */}
+            <Link href={"/"}>
+              <div>
+                <Image
+                  src="/logo-2.png"
+                  alt="VIC Logo"
+                  width={100}
+                  height={100}
+                  className="mx-auto"
+                  priority
+                  style={{ width: "auto", height: "auto" }}
+                />
+              </div>
+            </Link>
+            <CardTitle className="text-2xl font-bold text-[#1e4d4f] tracking-wide">
               Welcome VIC
             </CardTitle>
-            <CardDescription className="tracking-wide">
+            <CardDescription className="tracking-wide leading-1 text-gray-500">
               Please enter your details to login.
             </CardDescription>
           </CardHeader>
@@ -541,7 +557,8 @@ const LoginPage: React.FC = () => {
                 <Button
                   type="submit"
                   disabled={loading}
-                  className="bg-[#0b968d] hover:bg-[#0b968d]/90 text-white text-md font-medium py-2.5 rounded-md shadow transition cursor-pointer mt-2 tracking-wide"
+                  size="sm"
+                  className="bg-[#0b968d] hover:bg-[#0b968d]/90 text-white text-base font-semibold pb-0.5 rounded-md shadow transition cursor-pointer mt-2 tracking-wide"
                   title="Login">
                   {loading ? (
                     <Loader2 className="animate-spin h-5 w-5" />

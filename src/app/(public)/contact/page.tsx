@@ -9,8 +9,10 @@ export const metadata: Metadata = metadataConfig["/contact"];
 const page: React.FC = () => {
   return (
     <>
-      <ClinicLocation />
-      <ContactForm />
+      <main className="pt-16">
+        <ClinicLocation />
+        <ContactForm />
+      </main>
     </>
   );
 };

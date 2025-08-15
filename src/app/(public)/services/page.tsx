@@ -9,8 +9,10 @@ export const metadata: Metadata = metadataConfig["/services"];
 const page: React.FC = () => {
   return (
     <>
-      <UltrasoundServices />
-      <ExtraUltrasoundSections />
+      <main className="pt-16">
+        <UltrasoundServices />
+        <ExtraUltrasoundSections />
+      </main>
     </>
   );
 };

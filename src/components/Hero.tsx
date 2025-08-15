@@ -44,7 +44,7 @@ const HeroSlider: React.FC = () => {
   }, []);
 
   return (
-    <section className="w-full bg-gray-50">
+    <section className="relative w-full">
       <Carousel
         opts={{ loop: true }}
         setApi={(api) => {
@@ -55,7 +55,7 @@ const HeroSlider: React.FC = () => {
           {slides.map((slide, index) => (
             <CarouselItem
               key={index}
-              className="relative w-full h-[400px] md:h-[500px] lg:h-[600px]">
+              className="relative w-full h-[400px] md:h-[600px] lg:h-[800px]">
               {/* Background Image */}
               <Image
                 src={slide.image}
@@ -67,16 +67,22 @@ const HeroSlider: React.FC = () => {
               />
 
               {/* Text Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent flex flex-col justify-center items-center md:items-start p-6 md:p-12 text-white">
+              <div className="absolute inset-0 flex flex-col justify-center items-center md:items-start p-6 md:p-12 text-white">
+                {/* Bottom Fade Layer */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
+
+                {/* Content */}
                 <h2
-                  className="text-center md:text-left text-4xl md:text-5xl font-bold tracking-wide drop-shadow-lg"
+                  className="relative z-10 text-center md:text-left text-4xl md:text-5xl font-bold tracking-wide drop-shadow-lg"
                   aria-label={slide.heading}>
                   {slide.heading}
                 </h2>
-                <p className="mt-3 text-center md:text-left text-md max-w-xl tracking-wide drop-shadow-md font-semibold text-gray-200">
+                <p className="relative z-10 mt-3 text-center md:text-left text-md max-w-xl tracking-wide drop-shadow-md font-semibold text-gray-200">
                   {slide.text}
                 </p>
-                <div className="mt-6 flex flex-col items-center sm:flex-row gap-4">
+
+                <div className="relative z-10 mt-6 flex flex-col items-center sm:flex-row gap-4">
+                  {/* Book Appointment Button */}
                   <Link href={isAuthenticated ? "/appointments" : "/login"}>
                     <Button
                       size="lg"
@@ -85,6 +91,8 @@ const HeroSlider: React.FC = () => {
                       Book Appointment
                     </Button>
                   </Link>
+
+                  {/* Services Button */}
                   <Link href="/services">
                     <Button
                       size="lg"
