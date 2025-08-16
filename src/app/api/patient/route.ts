@@ -12,7 +12,6 @@ export async function POST(req: NextRequest) {
   // * Clean and validate input:-
   patientName = patientName?.trim().toLowerCase();
   phone = phone?.replace(/\D/g, "").trim();
-  // age = age?.trim();
 
   if (!patientName || !phone) {
     return NextResponse.json(

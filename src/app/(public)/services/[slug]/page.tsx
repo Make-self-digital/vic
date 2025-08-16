@@ -2,6 +2,13 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+  CheckCircle,
+  CheckCircle2,
+  Clock,
+  HeartPulse,
+  ShieldCheck,
+} from "lucide-react";
 
 // ---------------- Types ----------------
 interface ServicePageProps {
@@ -116,7 +123,7 @@ export async function generateMetadata({
   }
 
   return {
-    title: service.title,
+    title: `${service.title} Details`,
     description: service.fullDescription.slice(0, 140),
   };
 }
@@ -128,32 +135,35 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
   if (!service) return notFound();
 
   return (
-    <section className="py-10 px-4 md:px-8 max-w-4xl mx-auto">
-      <div className="mb-8">
+    <section className="py-10 px-4 md:px-8 max-w-4xl mx-auto mt-16">
+      <div className="mb-6">
         {service.image && (
-          <div className="relative w-full h-64 md:h-80 rounded-lg overflow-hidden mb-6">
+          <div className="relative w-full h-64 md:h-80 rounded-lg overflow-hidden mb-6 border border-[#42998d] bg-white">
             <Image
               src={service.image}
               alt={service.title}
               fill
-              sizes="100vw"
-              style={{ objectFit: "cover" }}
-              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-center object-cover"
             />
           </div>
         )}
-        <h1 className="text-3xl font-bold mb-4 tracking-wide text-[#1e4d4f]">
+        <h2 className="text-xl font-bold mb-1.5 tracking-wide text-[#1e4d4f] leading-5">
           {service.title}
-        </h1>
-        <p className="text-gray-700 mb-6 tracking-wide">
+        </h2>
+        <p className="text-gray-700 text-sm text-semibold mb-6 tracking-wide  line-clamp-2">
           {service.fullDescription}
         </p>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-8 sm:grid-cols-2">
+        {/* Preparation */}
         {service.preparation && (
-          <Card className="tracking-wide">
-            <CardContent>
+          <Card className="relative border-l-4 border-[#42998d] shadow-md hover:shadow-lg transition duration-200 tracking-wide">
+            <div className="absolute -left-5 top-10 bg-[#42998d] rounded-full p-2">
+              <CheckCircle className="text-white" />
+            </div>
+            <CardContent className="pl-12 py-4">
               <h3 className="text-md font-semibold text-gray-800">
                 Preparation
               </h3>
@@ -161,9 +171,14 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
             </CardContent>
           </Card>
         )}
+
+        {/* Procedure Time */}
         {service.procedureTime && (
-          <Card className="tracking-wide">
-            <CardContent>
+          <Card className="relative border-l-4 border-[#42998d] shadow-md hover:shadow-lg transition duration-200 tracking-wide">
+            <div className="absolute -left-5 top-10 bg-[#42998d] rounded-full p-2">
+              <Clock className="text-white" />
+            </div>
+            <CardContent className="pl-12 py-4">
               <h3 className="text-md font-semibold text-gray-800">
                 Procedure Time
               </h3>
@@ -171,9 +186,14 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
             </CardContent>
           </Card>
         )}
+
+        {/* Safety */}
         {service.safetyInfo && (
-          <Card className="tracking-wide">
-            <CardContent>
+          <Card className="relative border-l-4 border-[#42998d] shadow-md hover:shadow-lg transition duration-200 tracking-wide">
+            <div className="absolute -left-5 top-10 bg-[#42998d] rounded-full p-2">
+              <ShieldCheck className="text-white" />
+            </div>
+            <CardContent className="pl-12 py-4">
               <h3 className="text-md font-semibold text-gray-800">
                 Safety Info
               </h3>
@@ -181,17 +201,27 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
             </CardContent>
           </Card>
         )}
+
+        {/* Benefits */}
         {service.benefits && (
-          <Card className="tracking-wide">
-            <CardContent>
+          <Card className="relative border-l-4 border-[#42998d] shadow-md hover:shadow-lg transition duration-200 tracking-wide">
+            <div className="absolute -left-5 top-10 bg-[#42998d] rounded-full p-2">
+              <HeartPulse className="text-white" />
+            </div>
+            <CardContent className="pl-12 py-4">
               <h3 className="text-md font-semibold text-gray-800">Benefits</h3>
               <p className="text-sm text-gray-600">{service.benefits}</p>
             </CardContent>
           </Card>
         )}
+
+        {/* Aftercare */}
         {service.afterCare && (
-          <Card className="sm:col-span-2 tracking-wide">
-            <CardContent>
+          <Card className="sm:col-span-2 relative border-l-4 border-[#42998d] shadow-md hover:shadow-lg transition duration-200 tracking-wide">
+            <div className="absolute -left-5 top-10 bg-[#42998d] rounded-full p-2">
+              <CheckCircle2 className="text-white" />
+            </div>
+            <CardContent className="pl-12 py-4">
               <h3 className="text-md font-semibold text-gray-800">
                 Aftercare Instructions
               </h3>

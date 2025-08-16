@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Dashboard | Vaishnavi Imaging Center",
+  title: "Dashboard - Vaishnavi Imaging Center",
   description: "Access your dashboard, manage appointments and view reports.",
 };
 

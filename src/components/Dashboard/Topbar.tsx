@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import Link from "next/link";
 import { useAuth } from "@/hooks/use-auth";
 import PageRefreshButton from "../RefreshButtonCom/PageRefreshButton";
-// import Image from "next/image";
+import Image from "next/image";
 
 interface TopbarProps {
   onToggleSidebar: () => void;
@@ -56,20 +56,21 @@ const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar }: TopbarProps) => {
       {/* Left: Logo & App Controls */}
       <div className="flex items-center gap-4">
         {/* Logo */}
-        <div className="flex items-center gap-2" title="Logo">
-          {/* <div className="bg-[#42998d] px-3 py-2 rounded-lg">
+        <Link href={"/"}>
+          <div
+            className="w-full max-w-[60px] mr-10"
+            title="Vaishnavi Imaging Center Logo">
             <Image
-              src="/logo-white.png"
-              alt="Logo"
-              width={32}
-              height={32}
-              className="object-contain"
+              src="/logo-2.png"
+              alt="Vaishnavi Imaging Center Logo"
+              priority
+              width="100"
+              height="100"
+              style={{ height: "auto", width: "auto" }}
+              className="object-contain fit-cover cursor-pointer"
             />
-          </div> */}
-          <span className="text-xl font-bold text-[#42998d] tracking-wide hidden md:block">
-            Vaishnavi Imaging Center
-          </span>
-        </div>
+          </div>
+        </Link>
 
         {/* Menu Icons */}
         <button

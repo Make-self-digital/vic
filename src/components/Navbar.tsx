@@ -17,13 +17,6 @@ import {
 import { useAuth } from "@/hooks/use-auth";
 import Image from "next/image";
 
-const staticNavItems = [
-  { name: "Home", href: "/", icon: Home },
-  { name: "About", href: "/about", icon: Info },
-  { name: "Services", href: "/services", icon: Stethoscope },
-  { name: "Contact", href: "/contact", icon: Calendar },
-];
-
 export default function Navbar() {
   // pathname and auth:-
   const pathname = usePathname();
@@ -41,6 +34,13 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const staticNavItems = [
+    { name: "Home", href: "/", icon: Home },
+    { name: "About", href: "/about", icon: Info },
+    { name: "Services", href: "/services", icon: Stethoscope },
+    { name: "Contact", href: "/contact", icon: Calendar },
+  ];
 
   // Conditional item (Login or Dashboard)
   const authNavItem = isAuthenticated
@@ -94,10 +94,10 @@ export default function Navbar() {
               key={href}
               href={href}
               title={name}
-              className="relative flex items-center space-x-2 text-sm cursor-pointer font-medium text-gray-600 hover:text-black transition tracking-wide">
+              className="relative flex items-center space-x-2 text-sm cursor-pointer font-semibold text-gray-600 hover:text-black transition tracking-wide">
               <Icon
                 className={cn(
-                  "w-4 h-4 text-black",
+                  "w-4 h-4 text-gray-600",
                   pathname === href && "text-[#42998d]"
                 )}
               />
@@ -122,10 +122,10 @@ export default function Navbar() {
                 href={href}
                 title={name}
                 onClick={() => setMenuOpen(false)}
-                className="relative flex items-center space-x-2 text-sm cursor-pointer font-medium text-gray-600 hover:text-black transition tracking-wide">
+                className="relative flex items-center space-x-2 text-sm cursor-pointer font-semibold text-gray-600 hover:text-black transition tracking-wide p-1">
                 <Icon
                   className={cn(
-                    "w-4 h-4 text-black",
+                    "w-4 h-4 text-gray-600",
                     pathname === href && "text-[#42998d]"
                   )}
                 />

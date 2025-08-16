@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { toast } from "sonner";
 
 export default function ContactForm() {
   const [form, setForm] = useState({
@@ -12,6 +13,7 @@ export default function ContactForm() {
     phone: "",
     message: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -20,18 +22,65 @@ export default function ContactForm() {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form Data:", form);
+    setLoading(true);
 
-    // Handle submit logic (API, email etc.)
-
-    // Reset form
-    setForm({
-      name: "",
-      phone: "",
-      message: "",
+    // Show loading toast
+    const toastId = toast.loading("Sending message...", {
+      description: "Please wait...",
+      style: {
+        background: "#42998d",
+        color: "#ffffff",
+      },
     });
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        // Success: update toast
+        toast.success(data.message, {
+          id: toastId, // Replace loading toast
+          description: "Done",
+          style: {
+            background: "#42998d",
+            color: "#ffffff",
+          },
+        });
+
+        // Reset form
+        setForm({ name: "", phone: "", message: "" });
+      } else {
+        // Error: update toast
+        toast.error(data.message, {
+          id: toastId,
+          description: "Please try again.",
+          style: {
+            background: "#ff4d4f",
+            color: "#ffffff",
+          },
+        });
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Server error. Please try again.", {
+        id: toastId,
+        description: "Please try again.",
+        style: {
+          background: "#ff4d4f",
+          color: "#ffffff",
+        },
+      });
+    } finally {
+      setLoading(false); // Stop loading state
+    }
   };
 
   return (
@@ -81,6 +130,7 @@ export default function ContactForm() {
                 onChange={handleChange}
                 placeholder="Patient Phone"
                 autoComplete="off"
+                maxLength={10}
                 className="text-sm mt-1 p-5 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0 tracking-wide"
               />
             </div>
@@ -114,8 +164,9 @@ export default function ContactForm() {
             <div className="flex justify-center">
               <Button
                 type="submit"
+                disabled={loading}
                 className="bg-[#0b968d] hover:bg-[#02998d]/90 text-white text-base font-medium cursor-pointer tracking-wide px-4 py-2 rounded-md">
-                Send Message
+                {loading ? "Sending..." : "Send Message"}
               </Button>
             </div>
           </form>

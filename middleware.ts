@@ -32,6 +32,7 @@ export async function middleware(req: NextRequest) {
         return NextResponse.redirect(new URL("/dashboard", req.url));
       }
     } catch (err) {
+      console.error("Error verifying token:", err);
       // Invalid token, let user stay on login page
     }
   }

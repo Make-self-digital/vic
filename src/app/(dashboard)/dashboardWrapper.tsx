@@ -48,7 +48,7 @@ export default function DashboardWrapper({
   };
 
   return (
-    <div className="flex min-h-screen relative bg-gray-50">
+    <div className="relative">
       {/* Sidebar */}
       <AdminSidebar
         isOpen={isSidebarOpen}
@@ -59,7 +59,7 @@ export default function DashboardWrapper({
       {/* Overlay for mobile */}
       {isMobile && isSidebarOpen && (
         <div
-          className="fixed inset-0 z-40 md:hidden transition-opacity duration-300"
+          className="fixed inset-0 md:hidden transition-opacity duration-300"
           onClick={toggleSidebar}
         />
       )}

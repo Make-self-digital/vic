@@ -1,15 +1,13 @@
-"use client";
+import { metadataConfig } from "@/app/(public)/metadata-config";
+import MainReportPage from "@/components/ReportCom/MainReportPage";
+import type { Metadata } from "next";
 
-import PatientReport from "@/components/ReportCom/PatientReport";
-import ReportTable from "@/components/ReportCom/StaffReport";
-import { useAuth } from "@/hooks/use-auth";
+export const metadata: Metadata = metadataConfig["/reports"];
 
 const ReportPage: React.FC = () => {
-  const { role } = useAuth();
   return (
     <>
-      {(role === "admin" || role === "staff") && <ReportTable />}
-      {role === "patient" && <PatientReport />}
+      <MainReportPage />
     </>
   );
 };

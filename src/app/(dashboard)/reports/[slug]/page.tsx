@@ -1,5 +1,9 @@
 import ReportViewer from "@/components/ReportCom/ReportViewer";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
+import { metadataConfig } from "@/app/(public)/metadata-config";
+
+export const metadata: Metadata = metadataConfig["/reports"];
 
 interface ReportPageProps {
   params: Promise<{

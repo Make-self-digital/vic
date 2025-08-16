@@ -328,7 +328,7 @@ const MedicalInventory = () => {
 
           <div className="space-y-4">
             {/* Table */}
-            <div className="w-full rounded-md p-0 shadow-sm overflow-x-auto scrollbar-hide">
+            <div className="w-full rounded-md p-0 overflow-x-auto scrollbar-hide">
               <table className="w-full min-w-[700px] table-fixed">
                 <thead className="bg-[#0b968d] sticky top-0 z-10">
                   <tr className="text-left font-semibold">

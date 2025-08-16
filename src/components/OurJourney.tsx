@@ -53,7 +53,7 @@ const OurJourney: React.FC = () => {
           diagnostic care. Here's how we grew with your trust.
         </p>
 
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-8 md:grid-cols-2">
           {timeline.map((item, index) => (
             <Card
               key={index}

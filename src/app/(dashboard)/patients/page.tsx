@@ -1,22 +1,13 @@
-"use client";
+import type { Metadata } from "next";
+import { metadataConfig } from "@/app/(public)/metadata-config";
+import MainPatientPage from "@/components/PatientCom/MainPatientPage";
 
-import { PatientFilters } from "@/components/PatientCom/PatientFilters";
-import PatientTable from "@/components/PatientCom/PatientLists";
-import { useAuth } from "@/hooks/use-auth";
-import { useState } from "react";
+export const metadata: Metadata = metadataConfig["/patients"];
 
 const PatientsPage: React.FC = () => {
-  const [filters, setFilters] = useState({
-    category: "",
-    subCategory: "",
-    search: "",
-  });
-  const { role } = useAuth();
   return (
     <>
-      {role === "admin" ||
-        (role === "staff" && <PatientFilters onFilterChange={setFilters} />)}
-      <PatientTable filters={filters} />
+      <MainPatientPage />
     </>
   );
 };

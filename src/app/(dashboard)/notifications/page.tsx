@@ -1,15 +1,13 @@
-"use client";
+import type { Metadata } from "next";
+import MainNotificationPage from "@/components/NotificationCom/MainNotificationPage";
+import { metadataConfig } from "@/app/(public)/metadata-config";
 
-import PatientNotificationList from "@/components/NotificationCom/patientNotificationPage";
-import StaffNotificationList from "@/components/NotificationCom/StaffNotificationPage";
-import { useAuth } from "@/hooks/use-auth";
+export const metadata: Metadata = metadataConfig["/notifications"];
 
 const NotificationPage: React.FC = () => {
-  const { role } = useAuth();
   return (
     <>
-      {role === "patient" && <PatientNotificationList />}
-      {(role === "staff" || role === "admin") && <StaffNotificationList />}
+      <MainNotificationPage />
     </>
   );
 };

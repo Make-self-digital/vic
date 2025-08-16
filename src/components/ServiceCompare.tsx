@@ -100,7 +100,7 @@ const ServiceComparisonTable: React.FC = () => {
           <Table className="w-full text-base border-collapse">
             <TableHeader>
               <TableRow className="bg-[#0b968d] text-white">
-                <TableHead className="px-6 py-4 text-lg font-semibold text-white whitespace-nowrap border border-gray-300 tracking-wide">
+                <TableHead className="px-6 py-4 font-semibold text-white text-sm whitespace-nowrap border border-gray-300 tracking-wide">
                   Feature
                 </TableHead>
                 {Object.keys(data[0])
@@ -108,7 +108,7 @@ const ServiceComparisonTable: React.FC = () => {
                   .map((key) => (
                     <TableHead
                       key={key}
-                      className="px-6 py-4 text-base font-medium text-white whitespace-nowrap border border-gray-300 tracking-wide">
+                      className="px-6 py-4 text-sm font-semibold text-white whitespace-nowrap border border-gray-300 tracking-wide">
                       {key}
                     </TableHead>
                   ))}
@@ -119,7 +119,7 @@ const ServiceComparisonTable: React.FC = () => {
                 <TableRow
                   key={index}
                   className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                  <TableCell className="px-6 py-4 font-semibold text-gray-800 whitespace-nowrap border border-gray-300 tracking-wide">
+                  <TableCell className="px-6 py-4 text-sm font-semibold text-gray-800 whitespace-nowrap border border-gray-300 tracking-wide">
                     {row.feature}
                   </TableCell>
                   {Object.keys(row)
@@ -127,7 +127,7 @@ const ServiceComparisonTable: React.FC = () => {
                     .map((key) => (
                       <TableCell
                         key={key}
-                        className="px-6 py-4 text-gray-700 whitespace-nowrap border border-gray-300 tracking-wide">
+                        className="px-6 py-4 text-gray-700 whitespace-nowrap border border-gray-300 tracking-wide text-sm">
                         {row[key]}
                       </TableCell>
                     ))}
