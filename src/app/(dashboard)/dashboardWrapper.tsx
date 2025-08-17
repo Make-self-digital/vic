@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Topbar from "@/components/Dashboard/Topbar";
 import AdminSidebar from "@/components/Dashboard/Sidebar";
+import Protected from "@/ProtectedRoute/Protected";
 
 export default function DashboardWrapper({
   children,
@@ -11,7 +12,7 @@ export default function DashboardWrapper({
 }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
-  const [topbarHeight, setTopbarHeight] = useState(0);
+  const [topbarHeight, setTopbarHeight] = useState(75);
 
   // ? Detect screen size:-
   useEffect(() => {
@@ -48,33 +49,37 @@ export default function DashboardWrapper({
   };
 
   return (
-    <div className="relative">
-      {/* Sidebar */}
-      <AdminSidebar
-        isOpen={isSidebarOpen}
-        onToggleSidebar={toggleSidebar}
-        topbarHeight={topbarHeight}
-      />
+    <>
+      <Protected>
+        <div className="relative">
+          {/* Sidebar */}
+          <AdminSidebar
+            isOpen={isSidebarOpen}
+            onToggleSidebar={toggleSidebar}
+            topbarHeight={topbarHeight}
+          />
 
-      {/* Overlay for mobile */}
-      {isMobile && isSidebarOpen && (
-        <div
-          className="fixed inset-0 md:hidden transition-opacity duration-300"
-          onClick={toggleSidebar}
-        />
-      )}
+          {/* Overlay for mobile */}
+          {isMobile && isSidebarOpen && (
+            <div
+              className="fixed inset-0 md:hidden transition-opacity duration-300"
+              onClick={toggleSidebar}
+            />
+          )}
 
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col min-h-screen">
-        <Topbar onToggleSidebar={toggleSidebar} />
-        <main
-          className={`flex-1 p-4 transition-all duration-300 ${
-            !isMobile && isSidebarOpen ? "md:ml-64" : "ml-0"
-          }`}
-          style={{ marginTop: `${topbarHeight}px` }}>
-          {children}
-        </main>
-      </div>
-    </div>
+          {/* Main Content */}
+          <div className="flex-1 flex flex-col min-h-screen">
+            <Topbar onToggleSidebar={toggleSidebar} />
+            <main
+              className={`flex-1 p-4 transition-all duration-300 ${
+                !isMobile && isSidebarOpen ? "md:ml-64" : "ml-0"
+              }`}
+              style={{ marginTop: `${topbarHeight}px` }}>
+              {children}
+            </main>
+          </div>
+        </div>
+      </Protected>
+    </>
   );
 }

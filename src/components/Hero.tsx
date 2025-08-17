@@ -30,7 +30,7 @@ const slides = [
 ];
 
 const HeroSlider: React.FC = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, role } = useAuth();
   const carouselRef = useRef<any>(null);
 
   // Auto-slide effect
@@ -42,6 +42,12 @@ const HeroSlider: React.FC = () => {
     }, 5000);
     return () => clearInterval(interval);
   }, []);
+
+  const targetPath = !isAuthenticated
+    ? "/login"
+    : role === "staff" || role === "admin"
+    ? "/dashboard"
+    : "/appointments";
 
   return (
     <section className="relative w-full">
@@ -83,7 +89,7 @@ const HeroSlider: React.FC = () => {
 
                 <div className="relative z-10 mt-6 flex flex-col items-center sm:flex-row gap-4">
                   {/* Book Appointment Button */}
-                  <Link href={isAuthenticated ? "/appointments" : "/login"}>
+                  <Link href={targetPath}>
                     <Button
                       size="lg"
                       className="bg-[#0b968d] cursor-pointer text-white hover:[#0b968d]/90 hover:scale-105 transition-transform shadow-lg text-sm tracking-wide"

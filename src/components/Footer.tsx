@@ -6,7 +6,13 @@ import Image from "next/image";
 import { useAuth } from "@/hooks/use-auth";
 
 const Footer: React.FC = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, role } = useAuth();
+
+  const targetPath = !isAuthenticated
+    ? "/login"
+    : role === "staff" || role === "admin"
+    ? "/dashboard"
+    : "/appointments";
 
   return (
     <footer className="bg-white text-gray-800 border border-gray-200 pt-12 pb-6 px-4 md:px-8">
@@ -52,9 +58,7 @@ const Footer: React.FC = () => {
               </Link>
             </li>
             <li>
-              <Link
-                href={isAuthenticated ? "/appointments" : "/login"}
-                className="hover:underline tracking-wide">
+              <Link href={targetPath} className="hover:underline tracking-wide">
                 Book Appointment
               </Link>
             </li>

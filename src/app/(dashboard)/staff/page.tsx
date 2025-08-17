@@ -1,9 +1,12 @@
 import AttendancePage from "@/components/Attendance";
+import Protected from "@/ProtectedRoute/Protected";
 
 const StaffPage: React.FC = () => {
   return (
     <>
-      <AttendancePage />
+      <Protected>
+        <AttendancePage />
+      </Protected>
     </>
   );
 };

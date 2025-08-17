@@ -1,9 +1,12 @@
 import PaymentPage from "@/components/PaymentComponents/PaymentPage";
+import Protected from "@/ProtectedRoute/Protected";
 
 const BillingPage: React.FC = () => {
   return (
     <>
-      <PaymentPage />
+      <Protected>
+        <PaymentPage />
+      </Protected>
     </>
   );
 };

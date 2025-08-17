@@ -15,8 +15,3 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
-
-// * Middleware matcher config
-export const config = {
-  matcher: ["/dashboard/:path*", "/login"],
-};

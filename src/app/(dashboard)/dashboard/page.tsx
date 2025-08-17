@@ -1,9 +1,12 @@
 import ClinicDashboard from "@/components/DashboardCom/ClinicDashboard";
+import Protected from "@/ProtectedRoute/Protected";
 
 const DashboardPage: React.FC = () => {
   return (
     <>
-      <ClinicDashboard />
+      <Protected>
+        <ClinicDashboard />
+      </Protected>
     </>
   );
 };

@@ -2,6 +2,7 @@ import ReportViewer from "@/components/ReportCom/ReportViewer";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { metadataConfig } from "@/app/(public)/metadata-config";
+import Protected from "@/ProtectedRoute/Protected";
 
 export const metadata: Metadata = metadataConfig["/reports"];
 
@@ -23,7 +24,9 @@ export default async function ReportPage({ params }: ReportPageProps) {
 
   return (
     <div className="min-h-screen">
-      <ReportViewer />
+      <Protected>
+        <ReportViewer />
+      </Protected>
     </div>
   );
 }
