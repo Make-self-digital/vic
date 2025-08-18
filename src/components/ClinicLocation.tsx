@@ -17,41 +17,41 @@ const ClinicLocation: React.FC = () => {
       {/* Clinic Info */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
         {/* Address */}
-        <div className="flex items-center gap-3 bg-gray-50 hover:bg-gray-100 rounded-xl p-5 shadow-sm transition border border-[#42998d]">
+        <div className="flex items-center gap-3 bg-white rounded-xl p-5 shadow-sm transition border border-[#42998d]">
           <div className="bg-[#42998d]/10 p-3 rounded-full">
             <MapPin className="w-6 h-6 text-[#42998d]" />
           </div>
-          <p className="text-gray-500 text-sm font-medium tracking-wide">
+          <p className="text-[#1e4d4f] text-sm font-medium tracking-wide">
             NH-139, Tiwari Mohalla, Daudnagar, Aurangabad, Bihar
           </p>
         </div>
 
         {/* Phone */}
-        <div className="flex items-center gap-3 bg-gray-50 hover:bg-gray-100 rounded-xl p-5 shadow-sm transition border border-[#42998d]">
+        <div className="flex items-center gap-3 bg-white rounded-xl p-5 shadow-sm transition border border-[#42998d]">
           <div className="bg-[#42998d]/10 p-3 rounded-full">
             <Phone className="w-6 h-6 text-[#42998d]" />
           </div>
           <a
             href="tel:+919876543210"
-            className="text-gray-500 text-sm font-medium tracking-wide hover:text-[#0b968d] transition">
+            className="text-[#1e4d4f] text-sm font-medium tracking-wide hover:text-[#0b968d] transition">
             +91 9876543210
           </a>
         </div>
 
         {/* Email */}
-        <div className="flex items-center gap-3 bg-gray-50 hover:bg-gray-100 rounded-xl p-5 shadow-sm transition border border-[#42998d]">
+        <div className="flex items-center gap-3 bg-white rounded-xl p-5 shadow-sm transition border border-[#42998d]">
           <div className="bg-[#42998d]/10 p-3 rounded-full">
             <Mail className="w-6 h-6 text-[#42998d]" />
           </div>
           <a
             href="mailto:info@vaishnaviimaging.com"
-            className="text-gray-500 text-sm font-medium tracking-wide hover:text-[#0b968d] transition">
+            className="text-[#1e4d4f] text-sm font-medium tracking-wide hover:text-[#0b968d] transition">
             info@vaishnaviimaging.com
           </a>
         </div>
 
         {/* Website */}
-        <div className="flex items-center gap-3 bg-gray-50 hover:bg-gray-100 rounded-xl p-5 shadow-sm transition border border-[#42998d]">
+        <div className="flex items-center gap-3 bg-white rounded-xl p-5 shadow-sm transition border border-[#42998d]">
           <div className="bg-[#42998d]/10 p-3 rounded-full">
             <Globe className="w-6 h-6 text-[#42998d]" />
           </div>
@@ -59,24 +59,24 @@ const ClinicLocation: React.FC = () => {
             href="https://www.vaishnaviimagingcenter.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-gray-500 text-sm font-medium tracking-wide hover:text-[#0b968d] transition">
+            className="text-[#1e4d4f] text-sm font-medium tracking-wide hover:text-[#0b968d] transition">
             www.vaishnaviimagingcenter.com
           </a>
         </div>
 
         {/* Opening Hours */}
-        <div className="flex items-center gap-3 bg-gray-50 hover:bg-gray-100 rounded-xl p-5 shadow-sm transition border border-[#42998d]">
+        <div className="flex items-center gap-3 bg-white rounded-xl p-5 shadow-sm transition border border-[#42998d]">
           <div className="bg-[#42998d]/10 p-3 rounded-full">
             <Clock className="w-6 h-6 text-[#42998d]" />
           </div>
-          <div className="text-gray-500 text-sm font-medium tracking-wide">
+          <div className="text-[#1e4d4f] text-sm font-medium tracking-wide">
             <p>Mon – Sat: 7:30 AM – 8:00 PM</p>
             <p>Sunday: 9:00 AM – 2:00 PM</p>
           </div>
         </div>
 
         {/* CTA Buttons - span full width */}
-        <div className="flex items-center gap-3 bg-gray-50 hover:bg-gray-100 rounded-xl p-4 shadow-sm transition border border-[#42998d]">
+        <div className="flex items-center gap-3 bg-white rounded-xl p-4 shadow-sm transition border border-[#42998d]">
           <a
             href="https://maps.google.com/?q=Vaishnavi+Imaging+Center"
             target="_blank"
