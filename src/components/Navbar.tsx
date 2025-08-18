@@ -16,12 +16,14 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import Image from "next/image";
+import { useLanguage } from "@/hooks/LanguageContext";
 
 export default function Navbar() {
   // pathname and auth:-
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const { isAuthenticated } = useAuth();
+  const { language } = useLanguage();
 
   // scroll navbar fixed:-
   const [scrolled, setScrolled] = useState(false);
@@ -36,16 +38,40 @@ export default function Navbar() {
   }, []);
 
   const staticNavItems = [
-    { name: "Home", href: "/", icon: Home },
-    { name: "About", href: "/about", icon: Info },
-    { name: "Services", href: "/services", icon: Stethoscope },
-    { name: "Contact", href: "/contact", icon: Calendar },
+    {
+      name: `${language === "english" ? "Home" : "होम"}`,
+      href: "/",
+      icon: Home,
+    },
+    {
+      name: `${language === "english" ? "About" : "हमारे बारे में"}`,
+      href: "/about",
+      icon: Info,
+    },
+    {
+      name: `${language === "english" ? "Services" : "सेवाएं"}`,
+      href: "/services",
+      icon: Stethoscope,
+    },
+    {
+      name: `${language === "english" ? "Contact" : "संपर्क"}`,
+      href: "/contact",
+      icon: Calendar,
+    },
   ];
 
   // Conditional item (Login or Dashboard)
   const authNavItem = isAuthenticated
-    ? { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard }
-    : { name: "Login", href: "/login", icon: LogIn };
+    ? {
+        name: `${language === "english" ? "Dashboard" : "डैशबोर्ड"}`,
+        href: "/dashboard",
+        icon: LayoutDashboard,
+      }
+    : {
+        name: `${language === "english" ? "Login" : "लॉगिन"}`,
+        href: "/login",
+        icon: LogIn,
+      };
 
   const allNavItems = [...staticNavItems, authNavItem];
 

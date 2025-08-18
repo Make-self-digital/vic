@@ -1,16 +1,24 @@
+"use client";
+
+import { useLanguage } from "@/hooks/LanguageContext";
 import { MapPin, Phone, Globe, Clock, Mail } from "lucide-react";
 
 const ClinicLocation: React.FC = () => {
+  const { language } = useLanguage();
+
   return (
     <section className="mt-16 px-4 md:px-8 max-w-7xl mx-auto">
       {/* Title */}
       <div className="text-center mb-10">
         <h2 className="text-2xl md:text-3xl font-bold tracking-wide text-[#1e4d4f] mb-3">
-          Find Us on Google Maps
+          {language === "english"
+            ? "Find Us on Google Maps"
+            : "हमें गूगल मैप्स पर खोजें"}
         </h2>
         <p className="text-gray-600 max-w-2xl mx-auto text-sm md:text-base tracking-wide">
-          Visit our ultrasound center easily. Use the map below to get
-          directions or explore our contact details and opening hours.
+          {language === "english"
+            ? "Visit our ultrasound center easily. Use the map below to get directions or explore our contact details and opening hours."
+            : "हमारे अल्ट्रासाउंड सेंटर पर आसानी से आएं। मार्गदर्शन पाने के लिए नीचे दिए गए नक्शे का उपयोग करें या हमारे संपर्क विवरण और खुलने के समय देखें।"}
         </p>
       </div>
 
@@ -22,7 +30,9 @@ const ClinicLocation: React.FC = () => {
             <MapPin className="w-6 h-6 text-[#42998d]" />
           </div>
           <p className="text-[#1e4d4f] text-sm font-medium tracking-wide">
-            NH-139, Tiwari Mohalla, Daudnagar, Aurangabad, Bihar
+            {language === "english"
+              ? "NH-139, Tiwari Mohalla, Daudnagar, Aurangabad, Bihar"
+              : "एनएच-139, तिवारी मोहल्ला, दाउदनगर, औरंगाबाद, बिहार"}
           </p>
         </div>
 
@@ -70,8 +80,16 @@ const ClinicLocation: React.FC = () => {
             <Clock className="w-6 h-6 text-[#42998d]" />
           </div>
           <div className="text-[#1e4d4f] text-sm font-medium tracking-wide">
-            <p>Mon – Sat: 7:30 AM – 8:00 PM</p>
-            <p>Sunday: 9:00 AM – 2:00 PM</p>
+            <p>
+              {language === "english"
+                ? "Mon - Sat: 7:30 AM - 8:00 PM"
+                : "सोमवार - शनिवार: सुबह 7:30 बजे - रात 8:00 बजे"}
+            </p>
+            <p>
+              {language === "english"
+                ? "Sunday: 9:00 AM - 1:00 PM"
+                : "रविवार: सुबह 9:00 बजे - दोपहर 1:00 बजे"}
+            </p>
           </div>
         </div>
 
@@ -82,12 +100,14 @@ const ClinicLocation: React.FC = () => {
             target="_blank"
             rel="noopener noreferrer"
             className="px-6 py-2 bg-[#0b968d] hover:bg-[#02867d] text-white rounded-md text-sm transition tracking-wide font-semibold">
-            Get Directions
+            {language === "english"
+              ? "Get Directions"
+              : "मार्गदर्शन पाने के लिए"}
           </a>
           <a
             href="tel:+919876543210"
             className="px-6 py-2 border border-[#0b968d] text-[#0b968d] hover:bg-[#0b968d] hover:text-white rounded-md text-sm transition tracking-wide font-semibold">
-            Call Now
+            {language === "english" ? "Call Now" : "अभी कॉल करें"}
           </a>
         </div>
       </div>

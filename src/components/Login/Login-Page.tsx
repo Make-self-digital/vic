@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
+import { useLanguage } from "@/hooks/LanguageContext";
 
 interface PatientForm {
   patientName: string;
@@ -57,6 +58,9 @@ const LoginPage: React.FC = () => {
   // const [otpSent, setOtpSent] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
+
+  // language change
+  const { language } = useLanguage();
 
   const handlePatientChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -290,7 +294,9 @@ const LoginPage: React.FC = () => {
               </div>
             </Link>
             <CardDescription className="tracking-wide leading-1 text-gray-500">
-              Please enter your details to login.
+              {language === "english"
+                ? "Please enter your details to login."
+                : "कृपया लॉगिन करने के लिए अपनी जानकारी दर्ज करें।"}
             </CardDescription>
           </CardHeader>
 
@@ -321,7 +327,7 @@ const LoginPage: React.FC = () => {
                       )}
                     />
                     <Label htmlFor="patient" className="text-sm">
-                      Patient
+                      {language === "english" ? "Patient" : "मरीज"}
                     </Label>
                   </div>
 
@@ -341,7 +347,7 @@ const LoginPage: React.FC = () => {
                       )}
                     />
                     <Label htmlFor="admin" className="text-sm">
-                      Admin
+                      {language === "english" ? "Admin" : "एडमिन"}
                     </Label>
                   </div>
 
@@ -361,7 +367,7 @@ const LoginPage: React.FC = () => {
                       )}
                     />
                     <Label htmlFor="staff" className="text-sm">
-                      Staff
+                      {language === "english" ? "Staff" : "स्टाफ"}
                     </Label>
                   </div>
                 </RadioGroup>
@@ -375,7 +381,7 @@ const LoginPage: React.FC = () => {
                     <Label
                       htmlFor="patientName"
                       className="text-sm font-medium text-gray-800 tracking-wide">
-                      Patient Name
+                      {language === "english" ? "Patient Name" : "मरीज का नाम"}
                     </Label>
                     <Input
                       type="text"
@@ -394,7 +400,7 @@ const LoginPage: React.FC = () => {
                     <Label
                       htmlFor="phone"
                       className="text-sm font-medium text-gray-800 tracking-wide">
-                      Phone Number
+                      {language === "english" ? "Phone Number" : "फोन नंबर"}
                     </Label>
                     <Input
                       type="tel"
@@ -442,7 +448,7 @@ const LoginPage: React.FC = () => {
                     <Label
                       htmlFor="adminName"
                       className="text-sm font-medium text-gray-800 tracking-wide">
-                      Admin Name
+                      {language === "english" ? "Admin Name" : "एडमिन का नाम"}
                     </Label>
                     <Input
                       type="text"
@@ -461,7 +467,7 @@ const LoginPage: React.FC = () => {
                     <Label
                       htmlFor="password"
                       className="text-sm font-medium text-gray-800 tracking-wide">
-                      Password
+                      {language === "english" ? "Password" : "पासवर्ड"}
                     </Label>
                     <Input
                       type={showPassword ? "text" : "password"}
@@ -488,7 +494,7 @@ const LoginPage: React.FC = () => {
                     <Label
                       htmlFor="staffName"
                       className="text-sm font-medium text-gray-800 tracking-wide">
-                      Staff Name
+                      {language === "english" ? "Staff Name" : "स्टाफ का नाम"}
                     </Label>
                     <Input
                       type="text"
@@ -507,7 +513,7 @@ const LoginPage: React.FC = () => {
                     <Label
                       htmlFor="phone"
                       className="text-sm font-medium text-gray-800 tracking-wide">
-                      Phone Number
+                      {language === "english" ? "Phone Number" : "फोन नंबर"}
                     </Label>
                     <Input
                       type="tel"
@@ -527,7 +533,7 @@ const LoginPage: React.FC = () => {
                     <Label
                       htmlFor="password"
                       className="text-sm font-medium text-gray-800 tracking-wide">
-                      Password
+                      {language === "english" ? "Password" : "पासवर्ड"}
                     </Label>
                     <Input
                       type={showPassword ? "text" : "password"}
@@ -558,8 +564,10 @@ const LoginPage: React.FC = () => {
                   title="Login">
                   {loading ? (
                     <Loader2 className="animate-spin h-5 w-5" />
-                  ) : (
+                  ) : language === "english" ? (
                     "Login"
+                  ) : (
+                    "लॉगिन"
                   )}
                 </Button>
               </div>

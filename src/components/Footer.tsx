@@ -4,9 +4,11 @@ import Link from "next/link";
 import { Mail, MapPin, Phone } from "lucide-react";
 import Image from "next/image";
 import { useAuth } from "@/hooks/use-auth";
+import { useLanguage } from "@/hooks/LanguageContext";
 
 const Footer: React.FC = () => {
   const { isAuthenticated, role } = useAuth();
+  const { language } = useLanguage();
 
   const targetPath = !isAuthenticated
     ? "/login"
@@ -36,35 +38,38 @@ const Footer: React.FC = () => {
             </Link>
           </div>
           <p className="text-sm text-gray-500 tracking-wide">
-            Trusted ultrasound services in Daudnagar, Bihar. We ensure accurate
-            care with compassion.
+            {language === "english"
+              ? "Trusted ultrasound services in Daudnagar, Bihar. We ensure accurate care with compassion."
+              : "दाउदनगर, बिहार में विश्वसनीय अल्ट्रासाउंड सेवाएँ। हम सटीक देखभाल और सहानुभूति की गारंटी देते हैं।"}
           </p>
         </div>
 
         {/* Column 2 - Quick Links */}
         <div>
           <h3 className="text-lg font-bold text-[#1e4d4f] mb-3 tracking-wide">
-            Quick Links
+            {language === "english" ? "Quick Links" : "त्वरित लिंक"}
           </h3>
           <ul className="space-y-2 text-sm text-gray-500">
             <li>
               <Link href="/" className="hover:underline tracking-wide">
-                Home
+                {language === "english" ? "Home" : "होम"}
               </Link>
             </li>
             <li>
               <Link href="/services" className="hover:underline tracking-wide">
-                Services
+                {language === "english" ? "Services" : "सेवाएं"}
               </Link>
             </li>
             <li>
               <Link href={targetPath} className="hover:underline tracking-wide">
-                Book Appointment
+                {language === "english"
+                  ? "Book Appointments"
+                  : "अपॉइंटमेंट्स बुक करें"}
               </Link>
             </li>
             <li>
               <Link href="/about" className="hover:underline tracking-wide">
-                About Us
+                {language === "english" ? "About Us" : "हमारे बारे में"}
               </Link>
             </li>
             <li>
@@ -72,11 +77,11 @@ const Footer: React.FC = () => {
                 <Link
                   href="/dashboard"
                   className="hover:underline tracking-wide">
-                  Dashboard
+                  {language === "english" ? "Dashboard" : "डैशबोर्ड"}
                 </Link>
               ) : (
                 <Link href="/login" className="hover:underline tracking-wide">
-                  Login
+                  {language === "english" ? "Login" : "लॉगिन"}
                 </Link>
               )}
             </li>
@@ -86,7 +91,7 @@ const Footer: React.FC = () => {
         {/* Column 3 - Contact Info */}
         <div>
           <h3 className="text-lg font-bold text-[#1e4d4f] mb-3 tracking-wide">
-            Contact Us
+            {language === "english" ? "Contact Us" : "संपर्क करें"}
           </h3>
           <ul className="space-y-3 text-sm text-gray-500">
             <li className="flex items-start gap-2 tracking-wide">
@@ -99,7 +104,12 @@ const Footer: React.FC = () => {
             </li>
             <li className="flex items-start gap-2 tracking-wide">
               <MapPin className="w-4 h-4 mt-1 text-gray-500" />
-              <span>Tiwari Mohalla, Daudnagar, Bihar</span>
+              <span>
+                {" "}
+                {language === "english"
+                  ? "NH-139, Tiwari Mohalla, Daudnagar, Bihar"
+                  : "एनएच-139, तिवारी मोहला, दाउदनगर, बिहार"}{" "}
+              </span>
             </li>
           </ul>
         </div>
@@ -107,19 +117,29 @@ const Footer: React.FC = () => {
         {/* Column 4 - Opening Hours */}
         <div>
           <h3 className="text-lg mb-3 tracking-wide font-bold text-[#1e4d4f]">
-            Opening Hours
+            {language === "english" ? "Opening Hours" : "खुलने का समय"}
           </h3>
           <ul className="text-sm text-gray-500 space-y-1 tracking-wide">
-            <li>Mon - Sat: 7:30 AM - 8:00 PM</li>
-            <li>Sunday: 9:00 AM - 1:00 PM</li>
+            <li>
+              {" "}
+              {language === "english"
+                ? "Mon - Sat: 7:30 AM - 8:00 PM"
+                : "सोमवार - शनिवार: सुबह 7:30 बजे - रात 8:00 बजे"}
+            </li>
+            <li>
+              {language === "english"
+                ? "Sunday: 9:00 AM - 1:00 PM"
+                : "रविवार: सुबह 9:00 बजे - दोपहर 1:00 बजे"}
+            </li>
           </ul>
         </div>
       </div>
 
       {/* Bottom Copyright */}
       <div className="border-t border-gray-300 mt-10 pt-4 text-center text-sm text-gray-500 tracking-wide">
-        © {new Date().getFullYear()} Vaishnavi Imaging Center. All rights
-        reserved.
+        {language === "english"
+          ? `© ${new Date().getFullYear()} Vaishnavi Imaging Center. All rights reserved.`
+          : `© ${new Date().getFullYear()} वैष्णवी इमेजिंग सेंटर। सर्वाधिकार सुरक्षित।`}
       </div>
     </footer>
   );

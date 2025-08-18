@@ -6,14 +6,19 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "sonner";
+import { useLanguage } from "@/hooks/LanguageContext";
 
 export default function ContactForm() {
+  // ? Form state:-
   const [form, setForm] = useState({
     name: "",
     phone: "",
     message: "",
   });
   const [loading, setLoading] = useState(false);
+
+  // ? Language:-
+  const { language } = useLanguage();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -86,10 +91,12 @@ export default function ContactForm() {
   return (
     <section className="py-10 px-4 md:px-8 max-w-7xl mx-auto">
       <h2 className="text-3xl font-bold tracking-wide text-[#1e4d4f] text-center mb-2">
-        Get in Touch
+        {language === "english" ? "Get in Touch" : "संपर्क करें"}
       </h2>
       <p className="text-center text-gray-600 text-sm md:text-base mb-6 tracking-wide">
-        Have questions or want to schedule an appointment? We’re here to help.
+        {language === "english"
+          ? "Have questions or want to schedule an appointment? We’re here to help."
+          : "क्या आपके पास सवाल हैं या अपॉइंटमेंट शेड्यूल करना चाहते हैं? हम मदद के लिए यहाँ हैं।"}
       </p>
 
       <Card className="border border-[#42998d] p-0">
@@ -100,7 +107,7 @@ export default function ContactForm() {
               <label
                 htmlFor="name"
                 className="block text-md tracking-wide font-medium text-gray-800 mb-1">
-                Patient Name
+                {language === "english" ? "Patient Name" : "मरीज का नाम"}
               </label>
               <Input
                 type="text"
@@ -120,7 +127,7 @@ export default function ContactForm() {
               <label
                 htmlFor="phone"
                 className="block text-md font-medium text-gray-800 mb-1 tracking-wide">
-                Phone
+                {language === "english" ? "Phone" : "फोन नंबर"}
               </label>
               <Input
                 type="tel"
@@ -140,7 +147,7 @@ export default function ContactForm() {
               <label
                 htmlFor="message"
                 className="block text-md font-medium text-gray-800 mb-1 tracking-wide">
-                Message
+                {language === "english" ? "Message" : "संदेश"}
               </label>
               <Textarea
                 id="message"
@@ -166,7 +173,13 @@ export default function ContactForm() {
                 type="submit"
                 disabled={loading}
                 className="bg-[#0b968d] hover:bg-[#02998d]/90 text-white text-base font-medium cursor-pointer tracking-wide px-4 py-2 rounded-md">
-                {loading ? "Sending..." : "Send Message"}
+                {loading
+                  ? language === "english"
+                    ? "Sending..."
+                    : "भेजा जा रहा है..."
+                  : language === "english"
+                  ? "Send Message"
+                  : "संदेश भेजें"}
               </Button>
             </div>
           </form>

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Users, Activity, ShieldCheck, Stethoscope } from "lucide-react";
+import { useLanguage } from "@/hooks/LanguageContext";
 
 interface StatItem {
   label: string;
@@ -10,32 +11,44 @@ interface StatItem {
   icon: React.ReactNode;
 }
 
-const stats: StatItem[] = [
-  {
-    label: "Patients Served",
-    value: 5000,
-    icon: <Users className="w-6 h-6 text-[#42998d]" />,
-  },
-  {
-    label: "Years of Experience",
-    value: 8,
-    icon: <Activity className="w-6 h-6 text-[#42998d]" />,
-  },
-  {
-    label: "Certified Doctors",
-    value: 3,
-    icon: <ShieldCheck className="w-6 h-6 text-[#42998d]" />,
-  },
-  {
-    label: "Ultrasound Types",
-    value: 12,
-    icon: <Stethoscope className="w-6 h-6 text-[#42998d]" />,
-  },
-];
-
 const StatsCounter: React.FC = () => {
+  const { language } = useLanguage();
+
+  // ? List of stats:-
+  const stats: StatItem[] = [
+    {
+      label: `${
+        language === "english" ? "Patients Served" : "मरीज देखभाल किए गए"
+      }`,
+      value: 5000,
+      icon: <Users className="w-6 h-6 text-[#42998d]" />,
+    },
+    {
+      label: `${
+        language === "english" ? "Years of Experience" : "अनुभव के वर्ष"
+      }`,
+      value: 8,
+      icon: <Activity className="w-6 h-6 text-[#42998d]" />,
+    },
+    {
+      label: `${
+        language === "english" ? "Certified Doctors" : "प्रमाणित डॉक्टर"
+      }`,
+      value: 3,
+      icon: <ShieldCheck className="w-6 h-6 text-[#42998d]" />,
+    },
+    {
+      label: `${
+        language === "english" ? "Ultrasound Types" : "अल्ट्रासाउंड प्रकार"
+      }`,
+      value: 12,
+      icon: <Stethoscope className="w-6 h-6 text-[#42998d]" />,
+    },
+  ];
+
   const [counters, setCounters] = useState(stats.map(() => 0));
 
+  // ? Counter Animation:
   useEffect(() => {
     const interval = setInterval(() => {
       setCounters((prev) =>
@@ -52,9 +65,12 @@ const StatsCounter: React.FC = () => {
   return (
     <section className="py-12 px-4 md:px-8 bg-gray-50">
       <div className="max-w-6xl mx-auto">
+        {/* ? Heading */}
         <h2 className="text-3xl md:text-4xl font-bold text-center tracking-wide text-[#1e4d4f] mb-10">
-          Our Achievements
+          {language === "english" ? "Our Achievements" : "हमारी उपलब्धियां"}
         </h2>
+
+        {/* ? Stats: */}
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-6">
           {stats.map((stat, i) => (
             <Card
