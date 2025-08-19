@@ -9,6 +9,7 @@ import Link from "next/link";
 import { useAuth } from "@/hooks/use-auth";
 import PageRefreshButton from "../RefreshButtonCom/PageRefreshButton";
 import Image from "next/image";
+import { useLanguage } from "@/hooks/LanguageContext";
 
 interface TopbarProps {
   onToggleSidebar: () => void;
@@ -17,7 +18,9 @@ interface TopbarProps {
 const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar }: TopbarProps) => {
   const router = useRouter();
   const { name, role } = useAuth();
+  const { language } = useLanguage();
 
+  // ? Handle logout:-
   const handleLogout = async () => {
     try {
       const res = await fetch("/api/logout", {
@@ -25,27 +28,54 @@ const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar }: TopbarProps) => {
       });
 
       if (res.ok) {
-        toast.success("Logged out successfully", {
-          description: "See you soon!",
-          style: {
-            background: "#42998d",
-            color: "#ffffff",
-          },
-        });
+        toast.success(
+          language === "english"
+            ? "Logged out successfully"
+            : "सफलतापूर्वक लॉग आउट हो गया",
+          {
+            description:
+              language === "english" ? "See you soon!" : "फिर मिलेंगे!",
+            style: {
+              background: "#42998d",
+              color: "#ffffff",
+            },
+          }
+        );
         // Redirect to login
         localStorage.removeItem("login_patient");
         router.push("/login");
       } else {
-        toast.error("Logout failed", {
-          description: "Please try again.",
+        toast.error(
+          language === "english" ? "Logout failed" : "लॉग आउट असफल रहा",
+          {
+            description:
+              language === "english"
+                ? "Please try again."
+                : "कृपया दोबारा प्रयास करें।",
+            style: {
+              background: "#ff4d4f",
+              color: "#ffffff",
+            },
+          }
+        );
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+      toast.error(
+        language === "english"
+          ? `Logout failed error:- ${error}`
+          : "लॉग आउट असफल रहा",
+        {
+          description:
+            language === "english"
+              ? "Please try again."
+              : "कृपया दोबारा प्रयास करें।",
           style: {
             background: "#ff4d4f",
             color: "#ffffff",
           },
-        });
-      }
-    } catch (error) {
-      console.error("Logout error:", error);
+        }
+      );
     }
   };
 

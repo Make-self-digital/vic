@@ -137,7 +137,9 @@ export default function ContactForm() {
                 value={form.name}
                 onChange={handleChange}
                 required
-                placeholder="Patient Name"
+                placeholder={
+                  language === "english" ? "Patient Name" : "मरीज का नाम"
+                }
                 autoComplete="off"
                 className="text-sm mt-1 p-5 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0 tracking-wide"
               />
@@ -156,7 +158,9 @@ export default function ContactForm() {
                 name="phone"
                 value={form.phone}
                 onChange={handleChange}
-                placeholder="Patient Phone"
+                placeholder={
+                  language === "english" ? "Patient Phone" : "मरीज का फोन नंबर"
+                }
                 autoComplete="off"
                 maxLength={10}
                 className="text-sm mt-1 p-5 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0 tracking-wide"
@@ -173,7 +177,11 @@ export default function ContactForm() {
               <Textarea
                 id="message"
                 name="message"
-                placeholder="Write your message here..."
+                placeholder={
+                  language === "english"
+                    ? "Write your message here..."
+                    : "अपना संदेश यहाँ लिखें..."
+                }
                 value={form.message}
                 onChange={handleChange}
                 autoComplete="off"

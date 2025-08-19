@@ -18,6 +18,7 @@ import jsPDF from "jspdf";
 import { toast } from "sonner";
 import NoDataFound from "../No-Records/NoRecordCom";
 import { useRouter } from "next/navigation";
+import { useLanguage } from "@/hooks/LanguageContext";
 
 interface ILoginPatient {
   _id: string;
@@ -48,6 +49,9 @@ export default function PatientReport() {
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
 
   const router = useRouter();
+
+  // language:-
+  const { language } = useLanguage();
 
   // ? getting login patient data from localhost:-
   useEffect(() => {
@@ -106,13 +110,21 @@ export default function PatientReport() {
 
     try {
       setDownloading(true);
-      const toastId = toast.loading("Downloading Report...", {
-        description: "Please wait...",
-        style: {
-          background: "#42998d",
-          color: "#ffffff",
-        },
-      });
+      const toastId = toast.loading(
+        language === "english"
+          ? "Downloading Report..."
+          : "रिपोर्ट डाउनलोड हो रही है...",
+        {
+          description:
+            language === "english"
+              ? "Please wait..."
+              : "कृपया प्रतीक्षा करें...",
+          style: {
+            background: "#42998d",
+            color: "#ffffff",
+          },
+        }
+      );
 
       const response = await fetch(url);
       const blob = await response.blob();
@@ -136,25 +148,38 @@ export default function PatientReport() {
 
         URL.revokeObjectURL(imgUrl);
         setDownloading(false);
-        toast.success("Report downloaded successfully!", {
-          id: toastId,
-          description: "Done ✔️",
-          style: {
-            background: "#42998d",
-            color: "#ffffff",
-          },
-        });
+        toast.success(
+          language === "english"
+            ? "Report downloaded successfully!"
+            : "रिपोर्ट सफलतापूर्वक डाउनलोड हो गई!",
+          {
+            id: toastId, // loading toast को replace करेगा
+            description: language === "english" ? "Done" : "संपन्न",
+            style: {
+              background: "#42998d",
+              color: "#ffffff",
+            },
+          }
+        );
       };
     } catch (error) {
       console.error("Download failed:", error);
       setDownloading(false);
-      toast.error(`Download failed :- ${error}`, {
-        description: "Please try again.",
-        style: {
-          background: "#ff4d4f",
-          color: "#ffffff",
-        },
-      });
+      toast.error(
+        language === "english"
+          ? `Download failed :- ${error}`
+          : `डाउनलोड असफल :- ${error}`,
+        {
+          description:
+            language === "english"
+              ? "Please try again."
+              : "कृपया पुनः प्रयास करें।",
+          style: {
+            background: "#ff4d4f",
+            color: "#ffffff",
+          },
+        }
+      );
     } finally {
       setDownloading(false);
     }
@@ -188,9 +213,13 @@ export default function PatientReport() {
           {/* Patient Info */}
           <Card className="w-full rounded-md border border-gray-300 px-6 bg-white">
             {/* Heading */}
-            <h2 className="text-2xl font-bold text-[#1e4d4f] tracking-wide">
+            <h2
+              className="text-2xl font-bold text-[#1e4d4f] tracking-wide"
+              title={
+                language === "english" ? "Patient Info" : "मरीज की जानकारी"
+              }>
               <span className="border-b border-[#18564e] inline-block pb-1">
-                Patient Info
+                {language === "english" ? "Patient Info" : "मरीज की जानकारी"}
               </span>
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -198,7 +227,9 @@ export default function PatientReport() {
               <div className="bg-[#e6f4f2] rounded-xl p-4 flex items-start gap-4">
                 <Users className="w-6 h-6 text-[#18564e] mt-1" />
                 <div>
-                  <p className="text-sm text-gray-600">Patient Name</p>
+                  <p className="text-sm text-gray-600">
+                    {language === "english" ? "Patient Name" : "मरीज का नाम"}
+                  </p>
                   <p className="text-base font-semibold text-[#18564e]">
                     {loginPatient?.patientName
                       ? loginPatient?.patientName
@@ -208,7 +239,9 @@ export default function PatientReport() {
                               word.charAt(0).toUpperCase() + word.slice(1)
                           )
                           .join(" ")
-                      : "No Data Found"}
+                      : language === "english"
+                      ? "No Data Found"
+                      : "कोई डेटा नहीं मिला"}
                   </p>
                 </div>
               </div>
@@ -217,12 +250,16 @@ export default function PatientReport() {
               <div className="bg-[#e6f4f2] rounded-xl p-4 flex items-start gap-4">
                 <Phone className="w-6 h-6 text-[#18564e] mt-1" />
                 <div>
-                  <p className="text-sm text-gray-600">Phone</p>
+                  <p className="text-sm text-gray-600">
+                    {language === "english" ? "Phone" : "फ़ोन नंबर"}
+                  </p>
                   <p className="text-base font-semibold text-[#18564e]">
                     {`+91 ${
                       loginPatient?.phone
                         ? loginPatient?.phone
-                        : "No Data Found"
+                        : language === "english"
+                        ? "No Data Found"
+                        : "कोई डेटा नहीं मिला"
                     }`}
                   </p>
                 </div>
@@ -232,13 +269,17 @@ export default function PatientReport() {
               <div className="bg-[#e6f4f2] rounded-xl p-4 flex items-start gap-4">
                 <BadgeInfo className="w-6 h-6 text-[#18564e] mt-1" />
                 <div>
-                  <p className="text-sm text-gray-600">Patient ID</p>
+                  <p className="text-sm text-gray-600">
+                    {language === "english" ? "Patient ID" : "मरीज़ का आईडी"}
+                  </p>
                   <p className="text-base font-semibold text-[#18564e]">
                     {/* {dummyPatient.patientId} P-20250730001 */}
                     {`P-${
                       loginPatient?._id
                         ? loginPatient?._id.replace(/[a-z]/g, "")
-                        : "No Data Found"
+                        : language === "english"
+                        ? "No Data Found"
+                        : "कोई डेटा नहीं मिला"
                     }`}
                   </p>
                 </div>
@@ -249,13 +290,17 @@ export default function PatientReport() {
                 <div className="bg-[#e6f4f2] rounded-xl p-4 flex items-start gap-4">
                   <CalendarClock className="w-6 h-6 text-[#18564e] mt-1" />
                   <div>
-                    <p className="text-sm text-gray-600">Last Visit</p>
+                    <p className="text-sm text-gray-600">
+                      {language === "english" ? "Last Visit" : "आखिरी मुलाक़ात"}
+                    </p>
                     <p className="text-base font-semibold text-[#18564e]">
                       {patientReport.length > 0
                         ? formatDate(
                             patientReport[patientReport.length - 1].lastDate
                           )
-                        : "No Data Found"}
+                        : language === "english"
+                        ? "No Data Found"
+                        : "कोई डेटा नहीं मिला"}
                     </p>
                   </div>
                 </div>
@@ -265,9 +310,11 @@ export default function PatientReport() {
               <div className="bg-[#e6f4f2] rounded-xl p-4 flex items-start gap-4">
                 <HeartPulse className="w-6 h-6 text-[#18564e] mt-1" />
                 <div>
-                  <p className="text-sm text-gray-600">Status</p>
+                  <p className="text-sm text-gray-600">
+                    {language === "english" ? "Status" : "स्थिति"}
+                  </p>
                   <p className="text-base font-semibold text-green-600">
-                    Active
+                    {language === "english" ? "Active" : "सक्रिय"}
                   </p>
                 </div>
               </div>
@@ -294,9 +341,17 @@ export default function PatientReport() {
               {/* Report Tracking Progress */}
               <Card className="w-full rounded-md border border-gray-300 px-6 py-6 bg-white">
                 {/* Heading */}
-                <h2 className="text-2xl font-bold text-[#1e4d4f] tracking-wide">
+                <h2
+                  className="text-2xl font-bold text-[#1e4d4f] tracking-wide"
+                  title={
+                    language === "english"
+                      ? "Track Your Report"
+                      : "अपनी रिपोर्ट ट्रैक करें"
+                  }>
                   <span className="border-b border-[#18564e] inline-block pb-1">
-                    Track Your Report
+                    {language === "english"
+                      ? "Track Your Report"
+                      : "अपनी रिपोर्ट ट्रैक करें"}
                   </span>
                 </h2>
 
@@ -318,9 +373,21 @@ export default function PatientReport() {
                       }
 
                       const steps = [
-                        { id: 1, label: "Appointment" },
-                        { id: 2, label: "Payment" },
-                        { id: 3, label: "Report" },
+                        {
+                          id: 1,
+                          label:
+                            language === "english"
+                              ? "Appointment"
+                              : "अपॉइंटमेंट",
+                        },
+                        {
+                          id: 2,
+                          label: language === "english" ? "Payment" : "भुगतान",
+                        },
+                        {
+                          id: 3,
+                          label: language === "english" ? "Report" : "रिपोर्ट",
+                        },
                       ];
 
                       const statusIndexMap = {
@@ -341,7 +408,10 @@ export default function PatientReport() {
                                 <span className="inline-flex items-center justify-center rounded-full bg-[#0b968d] text-[#fff] aspect-square px-[6px] sm:px-2 text-[10px] sm:text-xs mr-2">
                                   {index + 1}
                                 </span>
-                                Tracking:{" "}
+                                {language === "english"
+                                  ? "Tracking"
+                                  : "ट्रैकिंग"}
+                                :{" "}
                                 <span className="text-[#18564e] ml-1 break-words">
                                   {report.service}
                                 </span>
@@ -428,9 +498,17 @@ export default function PatientReport() {
               <Card className="w-full rounded-md border border-gray-300 bg-white mt-6">
                 <CardContent className="px-6 space-y-5">
                   {/* Heading */}
-                  <h2 className="text-2xl font-bold text-[#1e4d4f] tracking-wide">
+                  <h2
+                    className="text-2xl font-bold text-[#1e4d4f] tracking-wide"
+                    title={
+                      language === "english"
+                        ? "Patient Reports"
+                        : "मरीज की रिपोर्ट्स"
+                    }>
                     <span className="border-b border-[#18564e] inline-block pb-1">
-                      Patient Reports
+                      {language === "english"
+                        ? "Patient Reports"
+                        : "मरीज की रिपोर्ट्स"}
                     </span>
                   </h2>
 
@@ -454,27 +532,41 @@ export default function PatientReport() {
                                 {/* Report Info */}
                                 <div className="space-y-1 text-sm text-gray-700">
                                   <p className="font-semibold text-base text-[#18564e]">
-                                    {report.service || "No service found"}
+                                    {report.service
+                                      ? report.service
+                                      : language === "english"
+                                      ? "No service found"
+                                      : "कोई सेवा नहीं मिली"}
                                   </p>
                                   {report.lastDate && (
                                     <p>
-                                      Date:{" "}
+                                      {language === "english"
+                                        ? "Date:"
+                                        : "तारीख़:"}{" "}
                                       <span className="text-gray-600">
                                         {(report?.lastDate &&
                                           formatDate(report?.lastDate)) ||
-                                          "No date found"}
+                                          (language === "english"
+                                            ? "No date found"
+                                            : "कोई तारीख़ नहीं मिली")}
                                       </span>
                                     </p>
                                   )}
                                   <p>
-                                    Status:{" "}
+                                    {language === "english"
+                                      ? "Status:"
+                                      : "स्थिति:"}{" "}
                                     <span
                                       className={
                                         report.status === "Completed"
                                           ? "text-green-600 font-medium"
                                           : "text-yellow-600 font-medium"
                                       }>
-                                      {report.status || "No status found"}
+                                      {report.status
+                                        ? report.status
+                                        : language === "english"
+                                        ? "No status found"
+                                        : "कोई स्थिति नहीं"}
                                     </span>
                                   </p>
                                 </div>
@@ -487,20 +579,31 @@ export default function PatientReport() {
                                     <Button
                                       variant="outline"
                                       size="sm"
-                                      title="View Report"
+                                      title={
+                                        language === "english"
+                                          ? "View Report"
+                                          : "रिपोर्ट देखें"
+                                      }
                                       className="border-gray-300 text-[#18564e] hover:border-[#509f94] cursor-pointer tracking-wide"
                                       onClick={() =>
                                         setIsOpenReportId(
                                           isOpen ? null : report._id // toggle
                                         )
                                       }>
-                                      <FileText className="w-4 h-4 mr-1" /> View
+                                      <FileText className="w-4 h-4 mr-1" />
+                                      {language === "english"
+                                        ? "View"
+                                        : "रिपोर्ट देखें"}
                                     </Button>
 
                                     {/* Download Button */}
                                     <Button
                                       size="sm"
-                                      title="Download Report"
+                                      title={
+                                        language === "english"
+                                          ? "Download Report"
+                                          : "रिपोर्ट डाउनलोड करें"
+                                      }
                                       className="bg-[#0b968d] hover:bg-[#097c74] text-white cursor-pointer tracking-wide"
                                       disabled={downloading}
                                       onClick={() => {
@@ -513,13 +616,19 @@ export default function PatientReport() {
                                       }}>
                                       <Download className="w-4 h-4 mr-1" />
                                       {downloading
-                                        ? "Downloading..."
-                                        : "Download"}
+                                        ? language === "english"
+                                          ? "Downloading..."
+                                          : "डाउनलोड हो रहा है..."
+                                        : language === "english"
+                                        ? "Download"
+                                        : "डाउनलोड"}
                                     </Button>
                                   </>
                                 ) : (
                                   <span className="text-sm text-gray-400 italic">
-                                    Report not available
+                                    {language === "english"
+                                      ? "Report not available"
+                                      : "रिपोर्ट उपलब्ध नहीं है"}
                                   </span>
                                 )}
                               </div>

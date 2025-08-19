@@ -1,5 +1,6 @@
 "use client";
 
+import { useLanguage } from "@/hooks/LanguageContext";
 import {
   IndianRupee,
   Users,
@@ -82,12 +83,18 @@ const ClinicDashboard = () => {
     completed: 0,
   });
 
+  // language:-
+  const { language } = useLanguage();
+
   const columns = [
-    { key: "patientName", label: "Name" },
-    { key: "phone", label: "Phone" },
-    { key: "service", label: "Service" },
-    { key: "status", label: "Status" },
-    { key: "paymentStatus", label: "Payment Status" },
+    { key: "patientName", label: language === "english" ? "Name" : "नाम" },
+    { key: "phone", label: language === "english" ? "Phone" : "फ़ोन" },
+    { key: "service", label: language === "english" ? "Service" : "सेवा" },
+    { key: "status", label: language === "english" ? "Status" : "स्थिति" },
+    {
+      key: "paymentStatus",
+      label: language === "english" ? "Payment Status" : "भुगतान स्थिति",
+    },
   ];
 
   // ? Get Today Login Patients:-
@@ -166,9 +173,9 @@ const ClinicDashboard = () => {
           {/* Heading */}
           <h2
             className="text-2xl font-bold text-[#1e4d4f] tracking-wide"
-            title="Notifications">
+            title={language === "english" ? "Dashboard" : "डैशबोर्ड"}>
             <span className="border-b-2 border-[#18564e] inline-block pb-1">
-              Dashboard
+              {language === "english" ? "Dashboard" : "डैशबोर्ड"}
             </span>
           </h2>
         </div>
@@ -184,11 +191,15 @@ const ClinicDashboard = () => {
             <Users className="w-6 h-6 text-[#18564e]" />
             <div>
               <p className="text-sm text-gray-600 tracking-wide">
-                Today Registered Patients
+                {language === "english"
+                  ? "Today Registered Patients"
+                  : "आज रजिस्टर किए गए मरीज"}
               </p>
               <p className="text-lg font-semibold text-[#18564e] tracking-wide">
                 {loginLoading ? (
-                  <span className="text-xs tracking-wide">Loading...</span>
+                  <span className="text-xs tracking-wide">
+                    {language === "english" ? "Loading..." : "लोड हो रहा है..."}
+                  </span>
                 ) : (
                   patients.length
                 )}
@@ -205,11 +216,15 @@ const ClinicDashboard = () => {
             <CalendarCheck className="w-6 h-6 text-[#18564e]" />
             <div>
               <p className="text-sm text-gray-600 tracking-wide">
-                Today Appointments
+                {language === "english"
+                  ? "Today Appointments"
+                  : "आज की अपॉइंटमेंट"}
               </p>
               <p className="text-lg font-semibold text-[#18564e] tracking-wide">
                 {appointmentLoading ? (
-                  <span className="text-xs tracking-wide">Loading...</span>
+                  <span className="text-xs tracking-wide">
+                    {language === "english" ? "Loading..." : "लोड हो रहा है..."}
+                  </span>
                 ) : (
                   counts.total
                 )}
@@ -226,11 +241,15 @@ const ClinicDashboard = () => {
             <ClipboardCheck className="w-6 h-6 text-[#18564e]" />
             <div>
               <p className="text-sm text-gray-600 tracking-wide">
-                Today Completed Reports
+                {language === "english"
+                  ? "Today Completed Reports"
+                  : "आज की पूर्ण रिपोर्ट्स"}
               </p>
               <p className="text-lg font-semibold text-[#18564e] tracking-wide">
                 {appointmentLoading ? (
-                  <span className="text-xs tracking-wide">Loading...</span>
+                  <span className="text-xs tracking-wide">
+                    {language === "english" ? "Loading..." : "लोड हो रहा है..."}
+                  </span>
                 ) : (
                   counts.completed
                 )}
@@ -247,11 +266,15 @@ const ClinicDashboard = () => {
             <FileClock className="w-6 h-6 text-[#18564e]" />
             <div>
               <p className="text-sm text-gray-600 tracking-wide">
-                Today Pending Reports
+                {language === "english"
+                  ? "Today Pending Reports"
+                  : "आज की लंबित रिपोर्ट्स"}
               </p>
               <p className="text-lg font-semibold text-[#18564e] tracking-wide">
                 {appointmentLoading ? (
-                  <span className="text-xs tracking-wide">Loading...</span>
+                  <span className="text-xs tracking-wide">
+                    {language === "english" ? "Loading..." : "लोड हो रहा है..."}
+                  </span>
                 ) : (
                   counts.pending
                 )}
@@ -266,11 +289,15 @@ const ClinicDashboard = () => {
             <IndianRupee className="w-6 h-6 text-[#18564e]" />
             <div>
               <p className="text-sm text-gray-600 tracking-wide">
-                Today Paid Patient
+                {language === "english"
+                  ? "Today Paid Patient"
+                  : "आज के भुगतान किए गए मरीज"}
               </p>
               <p className="text-lg font-semibold text-[#18564e] tracking-wide">
                 {appointmentLoading ? (
-                  <span className="text-xs tracking-wide">Loading...</span>
+                  <span className="text-xs tracking-wide">
+                    {language === "english" ? "Loading..." : "लोड हो रहा है..."}
+                  </span>
                 ) : (
                   counts.paid
                 )}
@@ -287,11 +314,15 @@ const ClinicDashboard = () => {
             <IndianRupee className="w-6 h-6 text-[#18564e]" />
             <div>
               <p className="text-sm text-gray-600 tracking-wide">
-                Today Unpaid Patient
+                {language === "english"
+                  ? "Today Unpaid Patient"
+                  : "आज के बिना भुगतान वाले मरीज"}
               </p>
               <p className="text-lg font-semibold text-[#18564e] tracking-wide">
                 {appointmentLoading ? (
-                  <span className="text-xs tracking-wide">Loading...</span>
+                  <span className="text-xs tracking-wide">
+                    {language === "english" ? "Loading..." : "लोड हो रहा है..."}
+                  </span>
                 ) : (
                   counts.unpaid
                 )}
@@ -309,9 +340,15 @@ const ClinicDashboard = () => {
                   {/* Heading */}
                   <h2
                     className="text-xl mb-6 font-bold text-[#1e4d4f] tracking-wide"
-                    title={selectedTable.title}>
+                    title={
+                      language === "english"
+                        ? selectedTable.title
+                        : "मरीज की सूची"
+                    }>
                     <span className="border-b-2 border-[#18564e] inline-block pb-1">
-                      {selectedTable.title}
+                      {language === "english"
+                        ? selectedTable.title
+                        : "मरीज की सूची"}
                     </span>
                   </h2>
 
@@ -327,7 +364,7 @@ const ClinicDashboard = () => {
                       <thead className="bg-[#0b968d] sticky top-0 z-10">
                         <tr>
                           <th className="w-12 px-4 py-3 text-sm font-semibold text-white tracking-wide text-left">
-                            Sr.
+                            {language === "english" ? "Sr." : "क्रमांक"}
                           </th>
                           {visibleColumns.map((col) => (
                             <th

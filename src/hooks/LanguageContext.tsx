@@ -1,6 +1,12 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
 
 type Language = "hindi" | "english";
 
@@ -14,7 +20,20 @@ const LanguageContext = createContext<LanguageContextProps | undefined>(
 );
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  const [language, setLanguage] = useState<Language>("hindi");
+  const [language, setLanguageState] = useState<Language>("hindi");
+
+  // Page load पर localStorage से language set करें
+  useEffect(() => {
+    const storedLang = localStorage.getItem("language") as Language;
+    if (storedLang) {
+      setLanguageState(storedLang);
+    }
+  }, []);
+
+  const setLanguage = (lang: Language) => {
+    localStorage.setItem("language", lang); // persist
+    setLanguageState(lang); // context update
+  };
 
   return (
     <LanguageContext.Provider value={{ language, setLanguage }}>

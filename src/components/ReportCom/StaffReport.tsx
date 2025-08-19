@@ -8,6 +8,7 @@ import { Check, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Loading from "../Loading";
 import NoDataFound from "../No-Records/NoRecordCom";
+import { useLanguage } from "@/hooks/LanguageContext";
 
 interface Patient {
   _id: string;
@@ -42,6 +43,10 @@ export default function ReportTable() {
 
   const router = useRouter();
 
+  // language:-
+  const { language } = useLanguage();
+
+  // ? Fetch Patients:
   useEffect(() => {
     const fetchPatients = async () => {
       setLoading(true);
@@ -70,10 +75,18 @@ export default function ReportTable() {
     const trimmedName = inputValue.trim();
 
     if (trimmedName.length < 2) {
-      toast.error("Doctor name is too short", {
-        description: "Please enter at least 2 characters",
-        style: { background: "#ef4444", color: "#ffffff" },
-      });
+      toast.error(
+        language === "english"
+          ? "Doctor name is too short"
+          : "डॉक्टर का नाम बहुत छोटा है",
+        {
+          description:
+            language === "english"
+              ? "Please enter at least 2 characters"
+              : "कृपया कम से कम 2 अक्षर दर्ज करें",
+          style: { background: "#ef4444", color: "#ffffff" },
+        }
+      );
       return;
     }
 
@@ -90,13 +103,24 @@ export default function ReportTable() {
         body: JSON.stringify({ id, doctorName: trimmedName }),
       });
 
-      toast.success("Doctor name updated", {
-        description: "Saved successfully",
-        style: { background: "#42998d", color: "#ffffff" },
-      });
+      toast.success(
+        language === "english"
+          ? "Doctor name updated"
+          : "डॉक्टर का नाम अपडेट हुआ",
+        {
+          description:
+            language === "english"
+              ? "Saved successfully"
+              : "सफलतापूर्वक सेव हुआ",
+          style: { background: "#42998d", color: "#ffffff" },
+        }
+      );
     } catch (error) {
-      toast.error("Update failed", {
-        description: "Try again later",
+      toast.error(language === "english" ? "Update failed" : "अपडेट असफल हुआ", {
+        description:
+          language === "english"
+            ? "Try again later"
+            : "बाद में पुनः प्रयास करें",
         style: { background: "#ef4444", color: "#ffffff" },
       });
     }
@@ -181,31 +205,31 @@ export default function ReportTable() {
                 <thead className="bg-[#0b968d] sticky top-0 z-10">
                   <tr>
                     <th className="px-4 py-3 w-[5%] text-left text-sm font-semibold text-white tracking-wide">
-                      Sr.
+                      {language === "english" ? "Sr." : "क्रमांक"}
                     </th>
                     <th className="w-[18%] px-4 py-3 text-center text-sm font-semibold text-white truncate tracking-wide">
-                      Name
+                      {language === "english" ? "Name" : "मरीज का नाम"}
                     </th>
                     <th className="w-[10%] px-4 py-3 text-center text-sm font-semibold text-white truncate tracking-wide">
-                      Age
+                      {language === "english" ? "Age" : "उम्र"}
                     </th>
                     <th className="w-[12%] px-4 py-3 text-center text-sm font-semibold text-white truncate tracking-wide">
-                      Gender
+                      {language === "english" ? "Gender" : "लिंग"}
                     </th>
                     <th className="w-[20%] px-4 py-3 text-center text-sm font-semibold text-white truncate tracking-wide">
-                      Phone
+                      {language === "english" ? "Phone" : "फोन नंबर"}
                     </th>
                     <th className="w-[20%] px-4 py-3 text-center text-sm font-semibold text-white truncate tracking-wide">
-                      Service
+                      {language === "english" ? "Services" : "सेवाएं"}
                     </th>
                     <th className="w-[15%] px-4 py-3 text-center text-sm font-semibold text-white truncate tracking-wide">
-                      Payment
+                      {language === "english" ? "Payment" : "भुगतान"}
                     </th>
                     <th className="w-[15%] px-4 py-3 text-center text-sm font-semibold text-white truncate tracking-wide">
-                      Doctor
+                      {language === "english" ? "Doctor" : "डॉक्टर का नाम"}
                     </th>
                     <th className="w-[20%] px-4 py-3 text-center text-sm font-semibold text-white truncate tracking-wide">
-                      Report
+                      {language === "english" ? "Report" : "रिपोर्ट"}
                     </th>
                   </tr>
                 </thead>

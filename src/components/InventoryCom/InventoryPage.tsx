@@ -5,6 +5,7 @@ import { useMemo, useState, useEffect } from "react";
 import { Edit2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Loading from "../Loading";
+import { useLanguage } from "@/hooks/LanguageContext";
 
 interface RowData {
   _id: string;
@@ -24,6 +25,9 @@ const MedicalInventory = () => {
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [expandedBases, setExpandedBases] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // language:-
+  const { language } = useLanguage();
 
   const fetchData = async () => {
     setLoading(true);
@@ -322,7 +326,7 @@ const MedicalInventory = () => {
           {/* Heading */}
           <h2 className="text-2xl font-bold text-[#1e4d4f] tracking-wide">
             <span className="border-b border-[#18564e] inline-block pb-1">
-              Gel Inventory
+              {language === "english" ? "Gel Inventory" : "जेल इन्वेंटरी"}
             </span>
           </h2>
 
@@ -333,19 +337,19 @@ const MedicalInventory = () => {
                 <thead className="bg-[#0b968d] sticky top-0 z-10">
                   <tr className="text-left font-semibold">
                     <th className="w-[10%] px-4 py-3 text-left text-sm text-white tracking-wide font-semibold">
-                      Item
+                      {language === "english" ? "Item" : "आइटम"}
                     </th>
                     <th className="w-[20%] text-center px-4 py-3 text-sm text-white tracking-wide font-semibold">
-                      Date
+                      {language === "english" ? "Date" : "तारीख़"}
                     </th>
                     <th className="p-4 w-[20%] text-center px-4 py-3 text-sm text-white tracking-wide font-semibold">
-                      Time
+                      {language === "english" ? "Time" : "समय"}
                     </th>
                     <th className="p-4 w-[20%] text-center px-4 py-3 text-sm text-white tracking-wide font-semibold">
-                      Spent
+                      {language === "english" ? "Spent" : "खर्च"}
                     </th>
                     <th className="p-4 w-[20%] px-4 py-3 text-center text-sm text-white tracking-wide font-semibold">
-                      Quantity
+                      {language === "english" ? "Quantity" : "मात्रा"}
                     </th>
                   </tr>
                 </thead>
@@ -375,7 +379,7 @@ const MedicalInventory = () => {
                             {row.item}
                             {row.isBase && (
                               <span className="text-[10px] px-2 py-1 bg-[#0b968d] text-white font-semibold rounded-full cursor-pointer">
-                                Base
+                                {language === "english" ? "Base" : "बेस"}
                               </span>
                             )}
                           </td>
@@ -386,10 +390,12 @@ const MedicalInventory = () => {
                             {row.time}
                           </td>
                           <td className="px-4 py-3 text-center text-gray-700 text-sm tracking-wide">
-                            {row.spent} Piece
+                            {row.spent}{" "}
+                            {language === "english" ? "Piece" : "पीस"}
                           </td>
                           <td className="px-4 py-3 text-center text-gray-700 text-sm relative">
-                            {row.quantity} Piece
+                            {row.quantity}{" "}
+                            {language === "english" ? "Piece" : "पीस"}
                             {!row.isBase && i === rows.length - 1 && (
                               <button
                                 onClick={() => handleEditRow(i)}
@@ -418,9 +424,15 @@ const MedicalInventory = () => {
                       name="spentItem"
                       value={inputValue}
                       onChange={(e) => setInputValue(e.target.value)}
-                      placeholder={`Enter ${
-                        isBaseActive ? "spent" : "initial"
-                      } quantity`}
+                      placeholder={`${
+                        language === "english"
+                          ? `Enter ${
+                              isBaseActive ? "spent" : "initial"
+                            } quantity`
+                          : `कृपया ${
+                              isBaseActive ? "खर्च" : "प्रारंभिक"
+                            } मात्रा दर्ज करें`
+                      }`}
                       autoComplete="off"
                       className="border border-[#c4e3df] rounded-md px-3 py-1 text-sm text-[#18564e] focus:outline-none placeholder:tracking-wide"
                     />
@@ -433,19 +445,25 @@ const MedicalInventory = () => {
                           : handleAddQuantity
                       }
                       className="px-3 py-1 bg-[#0b968d] text-white rounded-sm hover:bg-[#097c74] transition font-semibold text-sm cursor-pointer tracking-wide">
-                      OK
+                      {language === "english" ? "OK" : "ठीक है"}
                     </button>
                     <button
                       onClick={resetInput}
                       className="px-3 py-1 bg-[#0b968d] text-white rounded-sm hover:bg-[#097c74] transition font-semibold text-sm cursor-pointer">
-                      Cancel
+                      {language === "english" ? "Cancel" : "रद्द करें"}
                     </button>
                   </>
                 ) : (
                   <button
                     onClick={() => setIsAdding(true)}
                     className="px-3 py-1 bg-[#0b968d] text-white rounded-sm hover:bg-[#097c74] transition font-semibold text-sm cursor-pointer tracking-wide">
-                    {isBaseActive ? "Add Spent" : "Add Quantity"}
+                    {isBaseActive
+                      ? language === "english"
+                        ? "Add Spent"
+                        : "खर्च जोड़ें"
+                      : language === "english"
+                      ? "Add Quantity"
+                      : "मात्रा जोड़ें"}
                   </button>
                 )}
               </div>
@@ -453,7 +471,9 @@ const MedicalInventory = () => {
               {/* Total Usage */}
               <div className="px-3 py-1 rounded-md bg-[#0b968d]">
                 <span className="text-sm font-semibold text-white tracking-wide">
-                  Total Gel Usage:{" "}
+                  {language === "english"
+                    ? "Total Gel Usage:"
+                    : "कुल जेल उपयोग:"}{" "}
                 </span>
                 <span className="text-sm font-semibold text-white">
                   {totalUsage}

@@ -90,13 +90,19 @@ const LoginPage: React.FC = () => {
     e.preventDefault();
     if (role === "admin") {
       setLoading(true);
-      const toastId = toast.loading("Logging in...", {
-        description: "Please wait...",
-        style: {
-          background: "#42998d",
-          color: "#ffffff",
-        },
-      });
+      const toastId = toast.loading(
+        language === "english" ? "Logging in..." : "लॉगिन हो रहा है...",
+        {
+          description:
+            language === "english"
+              ? "Please wait..."
+              : "कृपया प्रतीक्षा करें...",
+          style: {
+            background: "#42998d",
+            color: "#ffffff",
+          },
+        }
+      );
       try {
         const res = await fetch("/api/admin", {
           method: "POST",
@@ -110,48 +116,73 @@ const LoginPage: React.FC = () => {
 
         if (res.ok) {
           console.log("Admin saved:", data);
-          toast.success(data.message, {
-            id: toastId,
-            description: `Welcome ${data.admin.adminName}`,
-            style: {
-              background: "#42998d",
-              color: "#ffffff",
-            },
-          });
+          toast.success(
+            language === "english" ? data.message : "सफलतापूर्वक लॉगिन हो गया",
+            {
+              id: toastId,
+              description: `${
+                language === "english" ? "Welcome" : "आपका स्वागत है"
+              } ${data.admin.adminName}`,
+              style: {
+                background: "#42998d",
+                color: "#ffffff",
+              },
+            }
+          );
           //* Redirect to dashboard
           router.push("/dashboard");
         } else {
-          toast.error(`Error: ${data.message}`, {
+          toast.error(
+            language === "english"
+              ? `Error: ${data.message}`
+              : `त्रुटि: ${data.message}`,
+            {
+              id: toastId,
+              description:
+                language === "english"
+                  ? "Please check and try again."
+                  : "कृपया जाँच करें और पुनः प्रयास करें।",
+              style: {
+                background: "#ff4d4f",
+                color: "#ffffff",
+              },
+            }
+          );
+        }
+      } catch (error) {
+        console.error("Error saving admin:", error);
+        toast.error(
+          language === "english" ? "Something went wrong!" : "कुछ गलत हो गया!",
+          {
             id: toastId,
-            description: "Please check and try again.",
+            description:
+              language === "english"
+                ? "Check network or try again."
+                : "नेटवर्क जांचें या पुनः प्रयास करें।",
             style: {
               background: "#ff4d4f",
               color: "#ffffff",
             },
-          });
-        }
-      } catch (error) {
-        console.error("Error saving admin:", error);
-        toast.error("Something went wrong!", {
-          id: toastId,
-          description: "Check network or try again.",
-          style: {
-            background: "#ff4d4f",
-            color: "#ffffff",
-          },
-        });
+          }
+        );
       } finally {
         setLoading(false);
       }
     } else if (role === "patient") {
       setLoading(true);
-      const toastId = toast.loading("Logging in...", {
-        description: "Please wait...",
-        style: {
-          background: "#42998d",
-          color: "#ffffff",
-        },
-      });
+      const toastId = toast.loading(
+        language === "english" ? "Logging in..." : "लॉगिन हो रहा है...",
+        {
+          description:
+            language === "english"
+              ? "Please wait..."
+              : "कृपया प्रतीक्षा करें...",
+          style: {
+            background: "#42998d",
+            color: "#ffffff",
+          },
+        }
+      );
       try {
         const res = await fetch("/api/patient", {
           method: "POST",
@@ -164,48 +195,71 @@ const LoginPage: React.FC = () => {
         if (res.ok) {
           console.log("Patient saved:", data);
           localStorage.setItem("login_patient", JSON.stringify(data.patient));
-          toast.success(data.message, {
-            id: toastId,
-            description: `Welcome ${data.patient.patientName}`,
-            style: {
-              background: "#42998d",
-              color: "#ffffff",
-            },
-          });
+          toast.success(
+            language === "english" ? data.message : "सफलतापूर्वक लॉगिन हो गया",
+            {
+              id: toastId,
+              description: `${
+                language === "english" ? "Welcome" : "आपका स्वागत है"
+              } ${data.patient.patientName}`,
+              style: {
+                background: "#42998d",
+                color: "#ffffff",
+              },
+            }
+          );
           //* Redirect to dashboard
           router.push("/appointments");
         } else {
-          toast.error("Login failed", {
+          toast.error(
+            language === "english" ? "Login failed" : "लॉगिन असफल रहा",
+            {
+              id: toastId,
+              description:
+                language === "english"
+                  ? data.message
+                  : "लॉगिन विवरण जांचें और पुनः प्रयास करें।",
+              style: {
+                background: "#ff4d4f",
+                color: "#ffffff",
+              },
+            }
+          );
+        }
+      } catch (err) {
+        console.error("Login error:", err);
+        toast.error(
+          language === "english" ? "Something went wrong!" : "कुछ गलत हो गया!",
+          {
             id: toastId,
-            description: data.message,
+            description:
+              language === "english"
+                ? "Check network or try again."
+                : "नेटवर्क जांचें या पुनः प्रयास करें।",
             style: {
               background: "#ff4d4f",
               color: "#ffffff",
             },
-          });
-        }
-      } catch (err) {
-        console.error("Login error:", err);
-        toast.error("Something went wrong", {
-          id: toastId,
-          description: "Check network or try again.",
-          style: {
-            background: "#ff4d4f",
-            color: "#ffffff",
-          },
-        });
+          }
+        );
       } finally {
         setLoading(false);
       }
     } else {
       setLoading(true);
-      const toastId = toast.loading("Logging in...", {
-        description: "Please wait...",
-        style: {
-          background: "#42998d",
-          color: "#ffffff",
-        },
-      });
+      const toastId = toast.loading(
+        language === "english" ? "Logging in..." : "लॉगिन हो रहा है...",
+        {
+          description:
+            language === "english"
+              ? "Please wait..."
+              : "कृपया प्रतीक्षा करें...",
+          style: {
+            background: "#42998d",
+            color: "#ffffff",
+          },
+        }
+      );
       try {
         const res = await fetch("/api/staff", {
           method: "POST",
@@ -216,35 +270,52 @@ const LoginPage: React.FC = () => {
         const data = await res.json();
 
         if (res.ok) {
-          toast.success(data.message, {
-            id: toastId,
-            description: `Welcome ${data.staff.staffName}`,
-            style: {
-              background: "#42998d",
-              color: "#ffffff",
-            },
-          });
+          toast.success(
+            language === "english" ? data.message : "लॉगिन सफल रहा",
+            {
+              id: toastId,
+              description: `${
+                language === "english" ? "Welcome" : "आपका स्वागत है"
+              } ${data.staff.staffName}`,
+              style: {
+                background: "#42998d",
+                color: "#ffffff",
+              },
+            }
+          );
           router.push("/dashboard");
         } else {
-          toast.error("Login failed", {
+          toast.error(
+            language === "english" ? "Login failed" : "लॉगिन असफल रहा",
+            {
+              id: toastId,
+              description:
+                language === "english"
+                  ? data.message
+                  : "कृपया अपनी जानकारी जांचें",
+              style: {
+                background: "#ff4d4f",
+                color: "#ffffff",
+              },
+            }
+          );
+        }
+      } catch (err) {
+        console.error("Staff login error:", err);
+        toast.error(
+          language === "english" ? "Something went wrong!" : "कुछ गलत हो गया!",
+          {
             id: toastId,
-            description: data.message,
+            description:
+              language === "english"
+                ? "Check network or try again."
+                : "नेटवर्क जांचें या पुनः प्रयास करें।",
             style: {
               background: "#ff4d4f",
               color: "#ffffff",
             },
-          });
-        }
-      } catch (err) {
-        console.error("Staff login error:", err);
-        toast.error("Something went wrong", {
-          id: toastId,
-          description: "Check network or try again.",
-          style: {
-            background: "#ff4d4f",
-            color: "#ffffff",
-          },
-        });
+          }
+        );
       } finally {
         setLoading(false);
       }
@@ -390,7 +461,9 @@ const LoginPage: React.FC = () => {
                       value={patientForm.patientName}
                       onChange={handlePatientChange}
                       required
-                      placeholder="Patient Name"
+                      placeholder={
+                        language === "english" ? "Patient Name" : "मरीज का नाम"
+                      }
                       className="text-sm mt-1 p-5 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0 tracking-wide"
                     />
                   </div>
@@ -409,7 +482,11 @@ const LoginPage: React.FC = () => {
                       value={patientForm.phone}
                       onChange={handlePatientChange}
                       required
-                      placeholder="Enter phone number"
+                      placeholder={
+                        language === "english"
+                          ? "Enter phone number"
+                          : "फ़ोन नंबर दर्ज करें"
+                      }
                       maxLength={10}
                       className="text-sm mt-1 p-5 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0 tracking-wide"
                     />
@@ -457,7 +534,11 @@ const LoginPage: React.FC = () => {
                       value={adminForm.adminName}
                       onChange={handleAdminChange}
                       required
-                      placeholder="Enter admin name"
+                      placeholder={
+                        language === "english"
+                          ? "Enter admin name"
+                          : "एडमिन का नाम"
+                      }
                       className="text-sm mt-1 p-5 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0 tracking-wide"
                     />
                   </div>
@@ -476,7 +557,11 @@ const LoginPage: React.FC = () => {
                       value={adminForm.password}
                       onChange={handleAdminChange}
                       required
-                      placeholder="Enter your password"
+                      placeholder={
+                        language === "english"
+                          ? "Enter your password"
+                          : "पासवर्ड दर्ज करें"
+                      }
                       className="text-sm mt-1 p-5 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0 tracking-wide"
                     />
                     <div
@@ -503,7 +588,11 @@ const LoginPage: React.FC = () => {
                       value={staffForm.staffName}
                       onChange={handleStaffChange}
                       required
-                      placeholder="Enter staff name"
+                      placeholder={
+                        language === "english"
+                          ? "Enter staff name"
+                          : "स्टाफ का नाम"
+                      }
                       className="text-sm mt-1 p-5 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0 tracking-wide"
                     />
                   </div>
@@ -522,7 +611,11 @@ const LoginPage: React.FC = () => {
                       value={staffForm.phone}
                       onChange={handleStaffChange}
                       required
-                      placeholder="Enter phone number"
+                      placeholder={
+                        language === "english"
+                          ? "Enter phone number"
+                          : "फोन नंबर"
+                      }
                       maxLength={10}
                       className="text-sm mt-1 p-5 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0 tracking-wide"
                     />
@@ -542,7 +635,11 @@ const LoginPage: React.FC = () => {
                       value={staffForm.password}
                       onChange={handleStaffChange}
                       required
-                      placeholder="Enter your password"
+                      placeholder={
+                        language === "english"
+                          ? "Enter your password"
+                          : "अपना पासवर्ड दर्ज करें"
+                      }
                       className="text-sm mt-1 p-5 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0 tracking-wide"
                     />
                     <div
@@ -560,7 +657,7 @@ const LoginPage: React.FC = () => {
                   type="submit"
                   disabled={loading}
                   size="sm"
-                  className="bg-[#0b968d] hover:bg-[#0b968d]/90 text-white text-base font-semibold pb-0.5 rounded-md shadow transition cursor-pointer mt-2 tracking-wide"
+                  className="bg-[#0b968d] hover:bg-[#0b968d]/90 text-white text-base font-semibold rounded-md shadow transition cursor-pointer mt-2 tracking-wide"
                   title="Login">
                   {loading ? (
                     <Loader2 className="animate-spin h-5 w-5" />

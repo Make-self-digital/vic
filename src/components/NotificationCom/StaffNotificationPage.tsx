@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import Loading from "../Loading";
 import NoDataFound from "../No-Records/NoRecordCom";
 import { useRouter } from "next/navigation";
+import { useLanguage } from "@/hooks/LanguageContext";
 
 type Appointment = {
   _id: string;
@@ -66,6 +67,9 @@ const StaffNotificationList = () => {
   >({});
 
   const router = useRouter();
+
+  // language:-
+  const { language } = useLanguage();
 
   // ? fetch notifications:-
   useEffect(() => {
@@ -123,13 +127,19 @@ const StaffNotificationList = () => {
   const handleDeleteAllNotifications = async () => {
     setDeleteAllLoading(true);
 
-    const toastId = toast.loading("Deleting all notifications...", {
-      description: "Please wait...",
-      style: {
-        background: "#42998d",
-        color: "#ffffff",
-      },
-    });
+    const toastId = toast.loading(
+      language === "english"
+        ? "Deleting all notifications..."
+        : "सभी नोटिफिकेशन डिलीट हो रहे हैं...",
+      {
+        description:
+          language === "english" ? "Please wait..." : "कृपया प्रतीक्षा करें...",
+        style: {
+          background: "#42998d",
+          color: "#ffffff",
+        },
+      }
+    );
 
     try {
       const res = await fetch("/api/delete-all-notification", {
@@ -139,34 +149,55 @@ const StaffNotificationList = () => {
 
       if (data.success) {
         setNotifications([]);
-        toast.success("All notifications deleted successfully", {
-          id: toastId, // loading toast को replace करेगा
-          description: "Done",
-          style: {
-            background: "#42998d",
-            color: "#ffffff",
-          },
-        });
+        toast.success(
+          language === "english"
+            ? "All notifications deleted successfully"
+            : "सभी नोटिफिकेशन सफलतापूर्वक डिलीट हो गया",
+          {
+            id: toastId, // loading toast को replace करेगा
+            description: language === "english" ? "Done" : "सफल",
+            style: {
+              background: "#42998d",
+              color: "#ffffff",
+            },
+          }
+        );
       } else {
-        toast.error(data.message || "Failed to delete notifications", {
-          id: toastId,
-          description: "Please try again",
+        toast.error(
+          language === "english"
+            ? data.message || "Failed to delete notifications"
+            : "नोटिफिकेशन डिलीट करने में विफल रहा",
+          {
+            id: toastId, // loading toast को replace करेगा
+            description:
+              language === "english"
+                ? "Please try again"
+                : "कृपया पुनः प्रयास करें",
+            style: {
+              background: "#ff4d4f",
+              color: "#ffffff",
+            },
+          }
+        );
+      }
+    } catch (error) {
+      console.error("Error deleting:", error);
+      toast.error(
+        language === "english"
+          ? "Something went wrong while deleting notifications"
+          : "नोटिफिकेशन डिलीट करते समय कुछ गड़बड़ हो गई",
+        {
+          id: toastId, // loading toast को replace करेगा
+          description:
+            language === "english"
+              ? "Please try again"
+              : "कृपया पुनः प्रयास करें",
           style: {
             background: "#ff4d4f",
             color: "#ffffff",
           },
-        });
-      }
-    } catch (error) {
-      console.error("Error deleting:", error);
-      toast.error("Something went wrong while deleting notifications", {
-        id: toastId,
-        description: "Please try again",
-        style: {
-          background: "#ff4d4f",
-          color: "#ffffff",
-        },
-      });
+        }
+      );
     } finally {
       setDeleteAllLoading(false);
     }
@@ -219,20 +250,30 @@ const StaffNotificationList = () => {
           {/* Heading */}
           <h2
             className="text-2xl font-bold text-[#1e4d4f] tracking-wide"
-            title="Notifications">
+            title={language === "english" ? "Notifications" : "नोटिफिकेशन"}>
             <span className="border-b-2 border-[#18564e] inline-block pb-1">
-              Notifications
+              {language === "english" ? "Notifications" : "नोटिफिकेशन"}
             </span>
           </h2>
           {/* Clear Button */}
           <Button
             variant="outline"
             size="sm"
-            title="Delete all notifications"
+            title={
+              language === "english"
+                ? "Delete all notifications"
+                : "सभी नोटिफिकेशन हटाएँ"
+            }
             onClick={handleDeleteAllNotifications}
             disabled={deleteAllLoading}
             className="border-gray-300 text-gray-800 hover:border-[#509f94] cursor-pointer tracking-wide text-sm font-semibold">
-            {deleteAllLoading ? "Deleting..." : "Clear All"}
+            {deleteAllLoading
+              ? language === "english"
+                ? "Deleting..."
+                : "हटाया जा रहा है..."
+              : language === "english"
+              ? "Clear All"
+              : "सभी हटाएँ"}
           </Button>
         </div>
 
@@ -254,7 +295,8 @@ const StaffNotificationList = () => {
                     handleDeleteNotification(notification.patientId);
                   }}
                   className="absolute top-2 right-2 p-1 rounded-full 
-                  hover:bg-[#0b968d] text-[#1e4d4f] hover:text-white opacity-0 group-hover:opacity-100 transition duration-200 cursor-pointer">
+                  bg-[#0b968d] text-white opacity-0 group-hover:opacity-100 transition duration-200 cursor-pointer"
+                  title={language === "english" ? "Delete" : "हटाएँ"}>
                   <X size={16} />
                 </button>
 
@@ -278,10 +320,18 @@ const StaffNotificationList = () => {
                           .slice(1)
                           .toLowerCase()}
                     {"'s "}
-                    Appointment Notifications
+                    {language === "english"
+                      ? "Appointment Notifications"
+                      : "अपॉइंटमेंट नोटिफिकेशन"}
                     {previousAppointments.length > 0 && (
                       <span className="ml-2 text-[10px] sm:text-xs text-gray-200">
-                        {isCollapsed ? "(Hide Previous)" : "(Show Previous)"}
+                        {isCollapsed
+                          ? language === "english"
+                            ? "(Hide Previous)"
+                            : "(पिछला छुपाएँ)"
+                          : language === "english"
+                          ? "(Show Previous)"
+                          : "(पिछला दिखाएँ)"}
                       </span>
                     )}
                   </CardTitle>
@@ -298,12 +348,18 @@ const StaffNotificationList = () => {
                               word.slice(1).toLowerCase()
                           )
                           .join(" ")}{" "}
-                        has booked an appointment for{" "}
-                        <b>{latestAppointment.service}</b>.
+                        {language === "english"
+                          ? "has booked an appointment for"
+                          : "ने अपॉइंटमेंट बुक किया है"}{" "}
+                        <b>{latestAppointment.service} </b>
+                        {language === "hindi" && <span>के लिए</span>}.
                       </CardDescription>
                       <span className="text-xs text-[#2e6f6b] font-semibold tracking-wide">
-                        Booking Date: {latestAppointment.appointmentDate} |
-                        Time:{" "}
+                        {language === "english"
+                          ? "Booking Date:"
+                          : "बुकिंग की तारीख:"}{" "}
+                        {latestAppointment.appointmentDate} |{" "}
+                        {language === "english" ? "Time:" : "समय:"}{" "}
                         <span className="ml-1">
                           {latestAppointment.appointmentTime}
                         </span>
@@ -326,11 +382,18 @@ const StaffNotificationList = () => {
                                 word.slice(1).toLowerCase()
                             )
                             .join(" ")}{" "}
-                          had booked an appointment for{" "}
-                          <b>{appointment.service}</b>.
+                          {language === "english"
+                            ? "had booked an appointment for"
+                            : "ने अपॉइंटमेंट बुक किया था"}{" "}
+                          <b>{appointment.service}</b>{" "}
+                          {language === "hindi" && <span>के लिए</span>}.
                         </CardDescription>
                         <span className="text-xs text-gray-500 tracking-wide">
-                          Booking Date: {appointment.appointmentDate} | Time:{" "}
+                          {language === "english"
+                            ? "Booking Date:"
+                            : "बुकिंग की तारीख:"}{" "}
+                          {appointment.appointmentDate} |{" "}
+                          {language === "english" ? "Time:" : "समय:"}{" "}
                           <span className="ml-1">
                             {appointment.appointmentTime}
                           </span>

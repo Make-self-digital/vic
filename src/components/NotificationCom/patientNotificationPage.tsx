@@ -12,6 +12,7 @@ import Loading from "../Loading";
 import NoDataFound from "../No-Records/NoRecordCom";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useLanguage } from "@/hooks/LanguageContext";
 
 interface LoginPatientData {
   _id: string;
@@ -76,6 +77,9 @@ const PatientNotificationList = () => {
   >({});
 
   const router = useRouter();
+
+  // language:-
+  const { language } = useLanguage();
 
   // ? get login patient:-
   useEffect(() => {
@@ -171,9 +175,9 @@ const PatientNotificationList = () => {
           {/* Heading */}
           <h2
             className="text-2xl font-bold text-[#1e4d4f] tracking-wide"
-            title="Notifications">
+            title={language === "english" ? "Notifications" : "नोटिफिकेशन"}>
             <span className="border-b-2 border-[#18564e] inline-block pb-1">
-              Notifications
+              {language === "english" ? "Notifications" : "नोटिफिकेशन"}
             </span>
           </h2>
         </div>
@@ -209,10 +213,18 @@ const PatientNotificationList = () => {
                           .slice(1)
                           .toLowerCase()}
                     {"'s "}
-                    Appointment Notifications
+                    {language === "english"
+                      ? "Appointment Notifications"
+                      : "अपॉइंटमेंट नोटिफिकेशन"}
                     {previousAppointments.length > 0 && (
                       <span className="ml-2 text-[10px] sm:text-xs text-gray-200">
-                        {isCollapsed ? "(Hide Previous)" : "(Show Previous)"}
+                        {isCollapsed
+                          ? language === "english"
+                            ? "(Hide Previous)"
+                            : "(पिछला छुपाएँ)"
+                          : language === "english"
+                          ? "(Show Previous)"
+                          : "(पिछला दिखाएँ)"}
                       </span>
                     )}
                   </CardTitle>
@@ -229,12 +241,18 @@ const PatientNotificationList = () => {
                               word.slice(1).toLowerCase()
                           )
                           .join(" ")}{" "}
-                        has booked an appointment for{" "}
-                        <b>{latestAppointment.service}</b>.
+                        {language === "english"
+                          ? "has booked an appointment for"
+                          : "ने अपॉइंटमेंट बुक किया है"}{" "}
+                        <b>{latestAppointment.service}</b>{" "}
+                        {language === "hindi" && <span>के लिए</span>}.
                       </CardDescription>
                       <span className="text-xs text-[#2e6f6b] font-semibold tracking-wide">
-                        Booking Date: {latestAppointment.appointmentDate} |
-                        Time:{" "}
+                        {language === "english"
+                          ? "Booking Date:"
+                          : "बुकिंग की तारीख:"}{" "}
+                        {latestAppointment.appointmentDate} |{" "}
+                        {language === "english" ? "Time:" : "समय:"}{" "}
                         <span className="ml-1">
                           {latestAppointment.appointmentTime}
                         </span>
@@ -257,11 +275,18 @@ const PatientNotificationList = () => {
                                 word.slice(1).toLowerCase()
                             )
                             .join(" ")}{" "}
-                          had booked an appointment for{" "}
-                          <b>{appointment.service}</b>.
+                          {language === "english"
+                            ? "had booked an appointment for"
+                            : "ने अपॉइंटमेंट बुक किया था"}{" "}
+                          <b>{appointment.service}</b>{" "}
+                          {language === "hindi" && <span>के लिए</span>}.
                         </CardDescription>
                         <span className="text-xs text-gray-500 tracking-wide">
-                          Booking Date: {appointment.appointmentDate} | Time:{" "}
+                          {language === "english"
+                            ? "Booking Date:"
+                            : "बुकिंग की तारीख:"}{" "}
+                          {appointment.appointmentDate} |{" "}
+                          {language === "english" ? "Time:" : "समय:"}{" "}
                           <span className="ml-1">
                             {appointment.appointmentTime}
                           </span>

@@ -12,7 +12,6 @@ export default function LanguageToggle() {
   const handleSelect = (lang: "hindi" | "english") => {
     setLanguage(lang);
     setOpen(false);
-    console.log("Selected Language:", lang);
   };
 
   return (

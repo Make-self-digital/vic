@@ -17,6 +17,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { useLanguage } from "@/hooks/LanguageContext";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -39,32 +40,79 @@ export default function AdminSidebar({
   const pathname = usePathname();
   const { name, role } = useAuth();
 
+  // language:-
+  const { language } = useLanguage();
+
   // Conditional item (Login or Dashboard)
   const navItems: NavItem[] = [
     ...(role === "admin" || role === "staff"
-      ? [{ name: "Dashboard", href: "/dashboard", icon: LayoutDashboard }]
+      ? [
+          {
+            name: language === "english" ? "Dashboard" : "डैशबोर्ड",
+            href: "/dashboard",
+            icon: LayoutDashboard,
+          },
+        ]
       : []),
 
     ...(role === "patient"
-      ? [{ name: "Appointments", href: "/appointments", icon: CalendarCheck }]
+      ? [
+          {
+            name: language === "english" ? "Appointments" : "अपॉइंटमेंट",
+            href: "/appointments",
+            icon: CalendarCheck,
+          },
+        ]
       : []),
 
-    { name: "Notifications", href: "/notifications", icon: Bell },
+    {
+      name: language === "english" ? "Notifications" : "नोटिफिकेशन",
+      href: "/notifications",
+      icon: Bell,
+    },
 
-    { name: "Patients", href: "/patients", icon: Users },
+    {
+      name: language === "english" ? "Patients" : "मरीज देखें",
+      href: "/patients",
+      icon: Users,
+    },
 
-    { name: "Reports", href: "/reports", icon: FileText },
+    {
+      name: language === "english" ? "Reports" : "रिपोर्ट",
+      href: "/reports",
+      icon: FileText,
+    },
 
-    // { name: "Billing", href: "/billing", icon: BadgeDollarSign },
+    // {
+    //   name: language === "english" ? "Billing" : "बिलिंग",
+    //   href: "/billing",
+    //   icon: BadgeDollarSign,
+    // },
 
     ...(role === "admin"
-      ? [{ name: "Revenue", href: "/revenue", icon: Banknote }]
+      ? [
+          {
+            name: language === "english" ? "Revenue" : "आय",
+            href: "/revenue",
+            icon: Banknote,
+          },
+        ]
       : []),
 
-    // { name: "Staff", href: "/staff", icon: UserCog },
+    // {
+    //   name: language === "english" ? "Staff" : "स्टाफ",
+    //   href: "/staff",
+    //   icon: UserCog,
+    // },
 
     ...(role === "admin" || role === "staff"
-      ? [{ name: "Inventory", href: "/inventory", icon: Boxes }]
+      ? [
+          {
+            name: language === "english" ? "Inventory" : "इन्वेंटरी",
+            href: "/inventory",
+            icon: Boxes,
+          },
+        ]
       : []),
   ];
 

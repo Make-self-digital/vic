@@ -8,6 +8,7 @@ import { StatusDropdown } from "./SelectStatus";
 import { motion, AnimatePresence } from "framer-motion";
 import Loading from "../Loading";
 import NoDataFound from "../No-Records/NoRecordCom";
+import { useLanguage } from "@/hooks/LanguageContext";
 
 type PatientStatus = "Pending" | "Completed" | "Cancelled";
 
@@ -62,6 +63,9 @@ const PatientTable = ({
   const [loading, setLoading] = useState(true);
   const { role } = useAuth();
   const printRef = useRef<HTMLDivElement>(null);
+
+  // language:-
+  const { language } = useLanguage();
 
   // ? Fetch patients list
   useEffect(() => {
@@ -153,30 +157,32 @@ const PatientTable = ({
                     <thead className="bg-[#0b968d] sticky top-0 z-10">
                       <tr>
                         <th className="w-18 px-4 py-3 text-left text-sm font-semibold text-white tracking-wide">
-                          Sr.
+                          {language === "english" ? "Sr." : "क्रमांक"}
                         </th>
                         <th className="w-40 px-4 py-3 text-center text-sm font-semibold text-white truncate tracking-wide">
-                          Patient Name
+                          {language === "english"
+                            ? "Patient Name"
+                            : "मरीज का नाम"}
                         </th>
                         <th className="w-48 px-4 py-3 text-sm font-semibold text-white text-center truncate tracking-wide">
-                          Service
+                          {language === "english" ? "Services" : "सेवाएं"}
                         </th>
                         <th className="w-28 px-4 py-3 text-sm font-semibold text-white text-center tracking-wide">
-                          Count
+                          {language === "english" ? "Count" : "काउंट"}
                         </th>
                         {role !== "patient" && (
                           <th className="w-40 px-4 py-3 text-sm font-semibold text-white text-center tracking-wide">
-                            Phone
+                            {language === "english" ? "Phone" : "फोन नंबर"}
                           </th>
                         )}
                         <th className="w-40 px-4 py-3 text-center text-sm font-semibold text-white tracking-wide">
-                          Date
+                          {language === "english" ? "Date" : "तारीख़"}
                         </th>
                         <th className="w-32 px-4 py-3 text-center text-sm font-semibold text-white tracking-wide">
-                          Time
+                          {language === "english" ? "Time" : "समय"}
                         </th>
                         <th className="w-40 px-4 py-3 text-center text-sm font-semibold text-white tracking-wide">
-                          Status
+                          {language === "english" ? "Status" : "स्थिति"}
                         </th>
                       </tr>
                     </thead>
@@ -271,13 +277,15 @@ const PatientTable = ({
       </div>
 
       {/* PRINT */}
-      <div className="flex justify-center mt-4 ">
-        <button
-          onClick={handlePrint}
-          className="px-3 py-1 bg-[#0b968d] text-white font-semibold rounded-sm hover:bg-[#097c74] transition text-sm cursor-pointer tracking-wide">
-          Print
-        </button>
-      </div>
+      {role !== "patient" && (
+        <div className="flex justify-center mt-4 ">
+          <button
+            onClick={handlePrint}
+            className="px-3 py-1 bg-[#0b968d] text-white font-semibold rounded-sm hover:bg-[#097c74] transition text-sm cursor-pointer tracking-wide">
+            {language === "english" ? "Print" : "प्रिंट"}
+          </button>
+        </div>
+      )}
     </>
   );
 };
