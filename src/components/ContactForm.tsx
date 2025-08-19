@@ -32,13 +32,17 @@ export default function ContactForm() {
     setLoading(true);
 
     // Show loading toast
-    const toastId = toast.loading("Sending message...", {
-      description: "Please wait...",
-      style: {
-        background: "#42998d",
-        color: "#ffffff",
-      },
-    });
+    const toastId = toast.loading(
+      language === "english" ? "Sending message..." : "संदेश भेजा जा रहा है...",
+      {
+        description:
+          language === "english" ? "Please wait..." : "कृपया प्रतीक्षा करें...",
+        style: {
+          background: "#42998d",
+          color: "#ffffff",
+        },
+      }
+    );
 
     try {
       const res = await fetch("/api/contact", {
@@ -51,38 +55,55 @@ export default function ContactForm() {
 
       if (res.ok) {
         // Success: update toast
-        toast.success(data.message, {
-          id: toastId, // Replace loading toast
-          description: "Done",
-          style: {
-            background: "#42998d",
-            color: "#ffffff",
-          },
-        });
+        toast.success(
+          language === "english" ? data.message : "संदेश सफलतापूर्वक भेजा गया",
+          {
+            id: toastId, // Replace loading toast
+            description: language === "english" ? "Done" : "संपन्न",
+            style: {
+              background: "#42998d",
+              color: "#ffffff",
+            },
+          }
+        );
 
         // Reset form
         setForm({ name: "", phone: "", message: "" });
       } else {
         // Error: update toast
-        toast.error(data.message, {
+        toast.error(
+          language === "english" ? data.message : "कृपया पुनः प्रयास करें।",
+          {
+            id: toastId,
+            description:
+              language === "english"
+                ? "Please try again."
+                : "कृपया पुनः प्रयास करें।",
+            style: {
+              background: "#ff4d4f",
+              color: "#ffffff",
+            },
+          }
+        );
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error(
+        language === "english"
+          ? "Server error. Please try again."
+          : "सर्वर त्रुटि। कृपया पुनः प्रयास करें।",
+        {
           id: toastId,
-          description: "Please try again.",
+          description:
+            language === "english"
+              ? "Please try again."
+              : "कृपया पुनः प्रयास करें।",
           style: {
             background: "#ff4d4f",
             color: "#ffffff",
           },
-        });
-      }
-    } catch (err) {
-      console.error(err);
-      toast.error("Server error. Please try again.", {
-        id: toastId,
-        description: "Please try again.",
-        style: {
-          background: "#ff4d4f",
-          color: "#ffffff",
-        },
-      });
+        }
+      );
     } finally {
       setLoading(false); // Stop loading state
     }
