@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/select";
 import { servicePrices } from "@/constants/servicePrices";
 import { toast } from "sonner";
+import { useLanguage } from "@/hooks/LanguageContext";
 
 interface LoginPatientData {
   _id: string;
@@ -59,6 +60,9 @@ export default function AddAppointmentForm() {
   const [loginPatient, setLoginPatient] = useState<LoginPatientData | null>(
     null
   );
+
+  // language:-
+  const { language } = useLanguage();
 
   // ? get login patient:-
   useEffect(() => {
@@ -164,24 +168,42 @@ export default function AddAppointmentForm() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        toast.error("Booking failed", {
-          description: errorData.error,
-          style: {
-            background: "#ff4d4f",
-            color: "#ffffff",
-          },
-        });
-        throw new Error(errorData.error || "Booking failed");
+        toast.error(
+          language === "english" ? "Booking failed" : "बुकिंग असफल रही",
+          {
+            description:
+              errorData?.error ||
+              (language === "english"
+                ? "Something went wrong. Please try again."
+                : "कुछ गलत हो गया। कृपया पुनः प्रयास करें।"),
+            style: {
+              background: "#ff4d4f",
+              color: "#ffffff",
+            },
+          }
+        );
+        throw new Error(
+          errorData.error || language === "english"
+            ? "Booking failed"
+            : "बुकिंग असफल रही"
+        );
       }
 
       const result = await response.json();
-      toast.success("Appointment booked successfully", {
-        description: `Booking ID: ${result._id}`,
-        style: {
-          background: "#42998d",
-          color: "#ffffff",
-        },
-      });
+      toast.success(
+        language === "english"
+          ? "Appointment booked successfully"
+          : "अपॉइंटमेंट सफलतापूर्वक बुक हो गया",
+        {
+          description: `${
+            language === "english" ? "Booking ID" : "बुकिंग आईडी"
+          }: ${result._id}`,
+          style: {
+            background: "#42998d",
+            color: "#ffffff",
+          },
+        }
+      );
       // invoke patient notifications:-
       await createPatientNotification(
         patientId,
@@ -192,13 +214,22 @@ export default function AddAppointmentForm() {
       );
     } catch (error: any) {
       console.error("Error booking appointment:", error.message);
-      toast.error("Error booking appointment", {
-        description: error.message,
-        style: {
-          background: "#ff4d4f",
-          color: "#ffffff",
-        },
-      });
+      toast.error(
+        language === "english"
+          ? "Error booking appointment"
+          : "अपॉइंटमेंट बुक करने में त्रुटि",
+        {
+          description: error?.message
+            ? error.message
+            : language === "english"
+            ? "Something went wrong"
+            : "कुछ गलत हो गया",
+          style: {
+            background: "#ff4d4f",
+            color: "#ffffff",
+          },
+        }
+      );
       // Optionally show error toast
     } finally {
       setIsLoading(false);
@@ -249,240 +280,307 @@ export default function AddAppointmentForm() {
   ];
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="w-full max-w-2xl bg-[#f9fafb] px-6 py-8 rounded-xl space-y-6">
-      {/* Name */}
-      <div className="space-y-2">
-        <Label htmlFor="name" className="text-black font-medium">
-          Patient Name
-        </Label>
-        <Input
-          type="text"
-          name="name"
-          id="name"
-          value={formData.name
-            .split(" ")
-            .map(
-              (word) =>
-                word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
-            )
-            .join(" ")}
-          onChange={handleChange}
-          placeholder="Enter full name"
-          className="text-sm mt-1 p-5 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0"
-          required
-          readOnly
-          autoComplete="off"
-        />
-      </div>
-
-      {/* Phone */}
-      <div className="space-y-2">
-        <Label htmlFor="phone" className="text-black font-medium">
-          Phone Number
-        </Label>
-        <Input
-          type="tel"
-          name="phone"
-          id="phone"
-          value={formData.phone}
-          onChange={(e) => {
-            let input = e.target.value.replace(/\s+/g, "");
-            if (/^\d*$/.test(input) && input.length <= 10) {
-              setFormData((prev) => ({
-                ...prev,
-                phone: input,
-              }));
-            }
-          }}
-          placeholder="Enter phone number"
-          className="text-sm mt-1 p-5 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0"
-          required
-          readOnly
-          autoComplete="off"
-        />
-      </div>
-
-      {/* Patient age */}
-      <div>
-        <Label htmlFor="age" className="text-sm font-medium text-gray-800">
-          Patient Age
-        </Label>
-        <Input
-          type="text"
-          id="age"
-          name="age"
-          value={formData.age}
-          onChange={handleChange}
-          required
-          placeholder="Patient Age"
-          autoComplete="off"
-          className="text-sm mt-1 p-5 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0"
-        />
-      </div>
-
-      {/* Gender */}
-      <div className="space-y-2">
-        <Label className="text-black font-medium">Select Gender</Label>
-        <Select
-          value={formData.gender}
-          onValueChange={handleGenderChange}
-          required>
-          <SelectTrigger className="border-gray-300 p-5 pl-3 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 cursor-pointer outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0">
-            <SelectValue placeholder="Choose a gender" />
-          </SelectTrigger>
-          <SelectContent className="bg-white border-gray-300 shadow-md z-[100]">
-            {["Male", "Female", "Other"].map((item) => (
-              <CustomSelectItem key={item} value={item}>
-                {item}
-              </CustomSelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-
-      {/* Service */}
-      <div className="space-y-2">
-        <Label className="text-black font-medium">Select Service</Label>
-        <Select
-          value={formData.service}
-          onValueChange={handleSelectChange}
-          required>
-          <SelectTrigger className="border-gray-300 p-5 pl-3 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 cursor-pointer outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0">
-            <SelectValue placeholder="Choose a service" />
-          </SelectTrigger>
-          <SelectContent className="bg-white border-gray-300 shadow-md z-[100]">
-            {Object.keys(servicePrices).map((item) => (
-              <CustomSelectItem key={item} value={item}>
-                {item}
-              </CustomSelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-
-      {/* Date Picker */}
-      <div className="space-y-2">
-        <Label className="text-black font-medium">Select Date</Label>
-        <Popover open={isOpen} onOpenChange={setIsOpen}>
-          <PopoverTrigger asChild>
-            <Button
-              variant="outline"
-              onClick={() => setIsOpen(!isOpen)}
-              className={cn(
-                "w-full justify-start text-left font-normal p-5 pl-3 border-gray-300 cursor-pointer",
-                !date && "text-muted-foreground"
-              )}>
-              <CalendarIcon className="mr-2 h-4 w-4 text-[#42998d]" />
-              {date ? format(date, "PPP") : <span>Pick a date</span>}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="z-[100] w-auto p-0 mt-2 bg-[#f9fafb] border border-[#42998d] rounded-md shadow-lg">
-            <Calendar
-              mode="single"
-              selected={date}
-              onSelect={handleDateSelect} // 👈 custom handler
-              className={cn(
-                // Selected date style
-                "[&_.rdp-day_selected]:bg-[#18564e]",
-                "[&_.rdp-day_selected]:text-white",
-
-                // Hover style
-                "[&_.rdp-day:hover]:bg-[#cceee8]",
-                "[&_.rdp-day:hover]:cursor-pointer",
-
-                // Transition and rounding
-                "[&_.rdp-day]:transition-all",
-                "[&_.rdp-day]:rounded-md",
-
-                // Full focus/active/visible reset (👇 ye most important hain)
-                "[&_.rdp-day]:outline-none",
-                "[&_.rdp-day]:ring-0",
-                "[&_.rdp-day]:border-none",
-                "[&_.rdp-day]:shadow-none",
-                "[&_.rdp-day]:focus:outline-none",
-                "[&_.rdp-day]:focus:ring-0",
-                "[&_.rdp-day]:focus:border-none",
-                "[&_.rdp-day]:focus:shadow-none",
-                "[&_.rdp-day]:focus-visible:outline-none",
-                "[&_.rdp-day]:focus-visible:ring-0",
-                "[&_.rdp-day]:focus-visible:border-none",
-                "[&_.rdp-day]:focus-visible:shadow-none",
-                "[&_.rdp-day]:active:outline-none",
-                "[&_.rdp-day]:active:ring-0",
-                "[&_.rdp-day]:active:border-none",
-                "[&_.rdp-day]:active:shadow-none"
-              )}
-            />
-          </PopoverContent>
-        </Popover>
-      </div>
-
-      {/* Time Picker */}
-      <div className="space-y-2">
-        <Label className="text-black font-medium">Select Time</Label>
-        <Select value={time} onValueChange={setTime} required>
-          <SelectTrigger className="w-full border-gray-300 p-5 pl-3 cursor-pointer">
-            <SelectValue placeholder="Select a time" />
-          </SelectTrigger>
-          <SelectContent
-            className="bg-white z-[100] max-h-48 w-60 overflow-y-auto rounded-md border-gray-300"
-            align="start">
-            {timeOptions.map((t) => (
-              <SelectItem
-                key={t}
-                value={t}
-                className="hover:bg-[#e6f4f3] cursor-pointer text-sm px-3 py-1.5 rounded-md">
-                <Clock className="w-4 h-4 mr-2 text-[#42998d]" />
-                {t}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-
-      {/* Notes */}
-      <div className="space-y-2">
-        <Label htmlFor="notes" className="text-black font-medium">
-          Notes
-        </Label>
-        <Textarea
-          itemType="text"
-          id="notes"
-          name="notes"
-          value={formData.notes}
-          className="resize-none overflow-hidden text-sm mt-1 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0"
-          onChange={handleChange}
-          placeholder="Add any notes here..."
-          autoComplete="off"
-        />
-      </div>
-
-      {/* Payment UI */}
-      <div className="flex justify-between items-center border border-gray-300 rounded-md px-4 py-3">
-        <div className="text-sm font-semibold text-black">Payment</div>
-
-        <div className="flex items-center gap-1 text-sm font-semibold px-3 py-1 rounded-full border border-gray-600 text-gray-600 bg-gray-50">
-          <IndianRupee className="w-4 h-4" />
-          {typeof payment === "number" && payment}
+    <>
+      <div className="w-full bg-[#fff] px-6 py-6 rounded-lg border border-[#c4e3df]">
+        {/* Heading */}
+        <div className="mb-6 text-center">
+          <h2
+            className="text-2xl font-bold text-[#1e4d4f] tracking-wide"
+            title={
+              language === "english" ? "Appointment Form" : "अपॉइंटमेंट फॉर्म"
+            }>
+            <span className="border-b-2 border-[#18564e] inline-block pb-1">
+              {language === "english" ? "Appointment Form" : "अपॉइंटमेंट फॉर्म"}
+            </span>
+          </h2>
         </div>
-      </div>
 
-      {/* Submit */}
-      <Button
-        type="submit"
-        className="w-full bg-[#42998d] hover:bg-[#357e73] text-white text-base font-semibold cursor-pointer"
-        disabled={isLoading}>
-        {isLoading ? (
-          <span className="flex items-center gap-2">
-            <Loader2 className="animate-spin h-4 w-4" /> Booking...
-          </span>
-        ) : (
-          "Book Appointment"
-        )}
-      </Button>
-    </form>
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Name */}
+          <div className="space-y-2">
+            <Label htmlFor="name" className="text-black font-medium">
+              {language === "english" ? "Patient Name" : "मरीज का नाम"}
+            </Label>
+            <Input
+              type="text"
+              name="name"
+              id="name"
+              value={formData.name
+                .split(" ")
+                .map(
+                  (word) =>
+                    word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+                )
+                .join(" ")}
+              onChange={handleChange}
+              placeholder={
+                language === "english"
+                  ? "Enter full name"
+                  : "पूरा नाम दर्ज करें"
+              }
+              className="text-sm mt-1 p-5 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0"
+              required
+              disabled
+              autoComplete="off"
+            />
+          </div>
+
+          {/* Phone */}
+          <div className="space-y-2">
+            <Label htmlFor="phone" className="text-black font-medium">
+              {language === "english" ? "Phone Number" : "फोन नंबर"}
+            </Label>
+            <Input
+              type="tel"
+              name="phone"
+              id="phone"
+              value={formData.phone}
+              onChange={(e) => {
+                let input = e.target.value.replace(/\s+/g, "");
+                if (/^\d*$/.test(input) && input.length <= 10) {
+                  setFormData((prev) => ({
+                    ...prev,
+                    phone: input,
+                  }));
+                }
+              }}
+              placeholder={
+                language === "english"
+                  ? "Enter phone number"
+                  : "फोन नंबर दर्ज करें"
+              }
+              className="text-sm mt-1 p-5 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0"
+              required
+              disabled
+              autoComplete="off"
+            />
+          </div>
+
+          {/* Patient age */}
+          <div>
+            <Label htmlFor="age" className="text-sm font-medium text-gray-800">
+              {language === "english" ? "Patient Age" : "मरीज का उम्र"}
+            </Label>
+            <Input
+              type="text"
+              id="age"
+              name="age"
+              value={formData.age}
+              onChange={handleChange}
+              required
+              placeholder={
+                language === "english"
+                  ? "Patient Age"
+                  : "मरीज का उम्र दर्ज करें"
+              }
+              autoComplete="off"
+              className="text-sm mt-1 p-5 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0"
+            />
+          </div>
+
+          {/* Gender */}
+          <div className="space-y-2">
+            <Label className="text-black font-medium">
+              {language === "english" ? "Select Gender" : "लिंग चुनें"}
+            </Label>
+            <Select
+              value={formData.gender}
+              onValueChange={handleGenderChange}
+              required>
+              <SelectTrigger className="border-gray-300 p-5 pl-3 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 cursor-pointer outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0">
+                <SelectValue
+                  placeholder={
+                    language === "english" ? "Choose a gender" : "लिंग चुनें"
+                  }
+                />
+              </SelectTrigger>
+              <SelectContent className="bg-white border-gray-300 shadow-md z-[100]">
+                {["Male", "Female", "Other"].map((item) => (
+                  <CustomSelectItem key={item} value={item}>
+                    {item}
+                  </CustomSelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Service */}
+          <div className="space-y-2">
+            <Label className="text-black font-medium">
+              {language === "english" ? "Select Service" : "सेवा चुनें"}
+            </Label>
+            <Select
+              value={formData.service}
+              onValueChange={handleSelectChange}
+              required>
+              <SelectTrigger className="border-gray-300 p-5 pl-3 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 cursor-pointer outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0">
+                <SelectValue
+                  placeholder={
+                    language === "english" ? "Choose a service" : "सेवा चुनें"
+                  }
+                />
+              </SelectTrigger>
+              <SelectContent className="bg-white border-gray-300 shadow-md z-[100]">
+                {Object.keys(servicePrices).map((item) => (
+                  <CustomSelectItem key={item} value={item}>
+                    {item}
+                  </CustomSelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Date Picker */}
+          <div className="space-y-2">
+            <Label className="text-black font-medium">
+              {language === "english" ? "Select Date" : "तारीख चुनें"}
+            </Label>
+            <Popover open={isOpen} onOpenChange={setIsOpen}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  onClick={() => setIsOpen(!isOpen)}
+                  className={cn(
+                    "w-full justify-start text-left font-normal p-5 pl-3 border-gray-300 cursor-pointer",
+                    !date && "text-muted-foreground"
+                  )}>
+                  <CalendarIcon className="mr-2 h-4 w-4 text-[#42998d]" />
+                  {date ? (
+                    format(date, "PPP")
+                  ) : (
+                    <span>
+                      {language === "english" ? "Pick a date" : "तारीख चुनें"}
+                    </span>
+                  )}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="z-[100] w-auto p-0 mt-2 bg-[#f9fafb] border border-[#42998d] rounded-md shadow-lg">
+                <Calendar
+                  mode="single"
+                  selected={date}
+                  onSelect={handleDateSelect} // 👈 custom handler
+                  className={cn(
+                    // Selected date style
+                    "[&_.rdp-day_selected]:bg-[#18564e]",
+                    "[&_.rdp-day_selected]:text-white",
+
+                    // Hover style
+                    "[&_.rdp-day:hover]:bg-[#cceee8]",
+                    "[&_.rdp-day:hover]:cursor-pointer",
+
+                    // Transition and rounding
+                    "[&_.rdp-day]:transition-all",
+                    "[&_.rdp-day]:rounded-md",
+
+                    // Full focus/active/visible reset (👇 ye most important hain)
+                    "[&_.rdp-day]:outline-none",
+                    "[&_.rdp-day]:ring-0",
+                    "[&_.rdp-day]:border-none",
+                    "[&_.rdp-day]:shadow-none",
+                    "[&_.rdp-day]:focus:outline-none",
+                    "[&_.rdp-day]:focus:ring-0",
+                    "[&_.rdp-day]:focus:border-none",
+                    "[&_.rdp-day]:focus:shadow-none",
+                    "[&_.rdp-day]:focus-visible:outline-none",
+                    "[&_.rdp-day]:focus-visible:ring-0",
+                    "[&_.rdp-day]:focus-visible:border-none",
+                    "[&_.rdp-day]:focus-visible:shadow-none",
+                    "[&_.rdp-day]:active:outline-none",
+                    "[&_.rdp-day]:active:ring-0",
+                    "[&_.rdp-day]:active:border-none",
+                    "[&_.rdp-day]:active:shadow-none"
+                  )}
+                />
+              </PopoverContent>
+            </Popover>
+          </div>
+
+          {/* Time Picker */}
+          <div className="space-y-2">
+            <Label className="text-black font-medium">
+              {language === "english" ? "Select Time" : "समय चुनें"}
+            </Label>
+            <Select value={time} onValueChange={setTime} required>
+              <SelectTrigger className="border-gray-300 p-5 pl-3 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 cursor-pointer outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0">
+                <SelectValue
+                  placeholder={
+                    language === "english" ? "Select a time" : "समय चुनें"
+                  }
+                />
+              </SelectTrigger>
+              <SelectContent
+                className="bg-white z-[100] max-h-48 w-60 overflow-y-auto rounded-md border-gray-300"
+                align="start">
+                {timeOptions.map((t) => (
+                  <SelectItem
+                    key={t}
+                    value={t}
+                    className="hover:bg-[#e6f4f3] cursor-pointer text-sm px-3 py-1.5 rounded-md">
+                    <Clock className="w-4 h-4 mr-2 text-[#42998d]" />
+                    {t}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Notes */}
+          <div className="space-y-2">
+            <Label htmlFor="notes" className="text-black font-medium">
+              {language === "english" ? "Notes" : "संदेश"}
+            </Label>
+            <Textarea
+              itemType="text"
+              id="notes"
+              name="notes"
+              value={formData.notes}
+              className="resize-none overflow-hidden text-sm mt-1 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0"
+              onChange={handleChange}
+              placeholder={
+                language === "english"
+                  ? "Add any notes here..."
+                  : "संदेश यहां लिखे..."
+              }
+              autoComplete="off"
+            />
+          </div>
+
+          {/* Payment UI */}
+          <div className="flex justify-between items-center border border-gray-300 rounded-md px-4 py-3">
+            <div className="text-sm font-semibold text-black">
+              {language === "english" ? "Payment" : "भुगतान"}
+            </div>
+
+            <div className="flex items-center gap-1 text-sm font-semibold px-3 py-1 rounded-full border border-gray-600 text-gray-600 bg-gray-50">
+              <IndianRupee className="w-4 h-4" />
+              {typeof payment === "number" && payment}
+            </div>
+          </div>
+
+          {/* Submit */}
+          <div className="text-center">
+            <Button
+              type="submit"
+              className=" bg-[#42998d] hover:bg-[#357e73] text-white text-base font-semibold cursor-pointer"
+              disabled={isLoading}>
+              {isLoading ? (
+                <span className="flex items-center gap-2">
+                  <Loader2 className="animate-spin h-4 w-4" />{" "}
+                  {language === "english" ? "Booking..." : "बुकिंग..."}
+                </span>
+              ) : (
+                <span>
+                  {language === "english"
+                    ? "Book Appointment"
+                    : "अपॉइंटमेंट बुक करें"}
+                </span>
+              )}
+            </Button>
+          </div>
+        </form>
+      </div>
+    </>
   );
 }
 

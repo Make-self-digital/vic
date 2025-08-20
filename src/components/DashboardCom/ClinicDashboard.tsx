@@ -9,6 +9,18 @@ import {
   FileClock,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+import { CustomTooltip } from "../RevenueCom/CustomTooltip";
+import CountsRadialChart from "./PieChartDashboard";
+import CountsRadialTextChart from "./RadialTextChart";
 
 interface IAppointmentPatient {
   _id: string;
@@ -94,6 +106,27 @@ const ClinicDashboard = () => {
     {
       key: "paymentStatus",
       label: language === "english" ? "Payment Status" : "भुगतान स्थिति",
+    },
+  ];
+
+  // Convert your counts object into an array suitable for Recharts
+  const data = [
+    {
+      name: language === "english" ? "Appointments" : "अपॉइंटमेंट",
+      value: counts.total,
+    },
+    { name: language === "english" ? "Paid" : "भुगतान", value: counts.paid },
+    {
+      name: language === "english" ? "Unpaid" : "अभुगतान",
+      value: counts.unpaid,
+    },
+    {
+      name: language === "english" ? "Pending" : "लंबित",
+      value: counts.pending,
+    },
+    {
+      name: language === "english" ? "Completed" : "पूर्ण",
+      value: counts.completed,
     },
   ];
 
@@ -396,6 +429,70 @@ const ClinicDashboard = () => {
               )}
           </div>
         )}
+
+        {/* show today data using pie charts and Radial text charts */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* show today data using pie charts */}
+          <div>
+            <CountsRadialChart counts={appointments} />
+          </div>
+
+          {/* show today data using bar charts */}
+          <div>
+            <CountsRadialTextChart value={patients.length || 0} max={50} />
+          </div>
+        </div>
+
+        {/* show today data using area charts */}
+        <div className="mt-10">
+          {/* Heading */}
+          <h2
+            className="text-xl mb-6 font-bold text-[#1e4d4f] tracking-wide"
+            title={
+              language === "english"
+                ? "Area Chart"
+                : "एरिया चार्ट के माध्यम से देखें"
+            }>
+            <span className="border-b-2 border-[#18564e] inline-block pb-1">
+              {language === "english"
+                ? "Area Chart"
+                : "एरिया चार्ट के माध्यम से देखें"}
+            </span>
+          </h2>
+          <div className="w-full h-64 md:h-96 p-4 bg-white rounded-lg border border-gray-300">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart
+                data={data}
+                margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+                className="[&>*]:outline-none">
+                <defs>
+                  <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#42998d" stopOpacity={0.8} />
+                    <stop offset="95%" stopColor="#42998d" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <XAxis
+                  dataKey="name"
+                  tick={{ fill: "#3f4a5a", fontSize: 12 }}
+                  axisLine={{ stroke: "#81c7ba" }}
+                />
+                <YAxis
+                  tick={{ fill: "#3f4a5a", fontSize: 12 }}
+                  axisLine={{ stroke: "#81c7ba" }}
+                />
+                <CartesianGrid strokeDasharray="3 3" stroke="#81c7ba" />
+                <Tooltip content={<CustomTooltip />} />
+                <Area
+                  type="monotone"
+                  dataKey="value"
+                  stroke="#42998d"
+                  fillOpacity={1}
+                  fill="url(#colorCount)"
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
       </div>
     </>
   );

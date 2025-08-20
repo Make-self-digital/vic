@@ -169,10 +169,9 @@ const PatientNotificationList = () => {
 
   return (
     <>
-      <div className="border border-[#c4e3df] bg-none rounded-lg bg-white p-4">
+      <div className="border border-[#c4e3df] rounded-lg bg-white p-4">
         {/* Heading */}
         <div className="mb-6">
-          {/* Heading */}
           <h2
             className="text-2xl font-bold text-[#1e4d4f] tracking-wide"
             title={language === "english" ? "Notifications" : "नोटिफिकेशन"}>
@@ -217,7 +216,7 @@ const PatientNotificationList = () => {
                       ? "Appointment Notifications"
                       : "अपॉइंटमेंट नोटिफिकेशन"}
                     {previousAppointments.length > 0 && (
-                      <span className="ml-2 text-[10px] sm:text-xs text-gray-200">
+                      <span className="ml-2 text-[10px] sm:text-xs text-gray-200 truncate">
                         {isCollapsed
                           ? language === "english"
                             ? "(Hide Previous)"
@@ -242,8 +241,8 @@ const PatientNotificationList = () => {
                           )
                           .join(" ")}{" "}
                         {language === "english"
-                          ? "has booked an appointment for"
-                          : "ने अपॉइंटमेंट बुक किया है"}{" "}
+                          ? "your appointment has booked for"
+                          : "आपने अपॉइंटमेंट बुक किया है"}{" "}
                         <b>{latestAppointment.service}</b>{" "}
                         {language === "hindi" && <span>के लिए</span>}.
                       </CardDescription>
@@ -276,8 +275,8 @@ const PatientNotificationList = () => {
                             )
                             .join(" ")}{" "}
                           {language === "english"
-                            ? "had booked an appointment for"
-                            : "ने अपॉइंटमेंट बुक किया था"}{" "}
+                            ? "your appointment had booked for"
+                            : "आपने अपॉइंटमेंट बुक किया था"}{" "}
                           <b>{appointment.service}</b>{" "}
                           {language === "hindi" && <span>के लिए</span>}.
                         </CardDescription>
