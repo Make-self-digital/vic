@@ -159,8 +159,6 @@ export const PatientFilters = ({
           )}
         </div>
       </div>
-
-      {/* Right Side Filter Category Dropdown */}
     </div>
   );
 };

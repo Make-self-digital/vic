@@ -9,6 +9,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Loading from "../Loading";
 import NoDataFound from "../No-Records/NoRecordCom";
 import { useLanguage } from "@/hooks/LanguageContext";
+import PatientData from "./PatientData";
 
 type PatientStatus = "Pending" | "Completed" | "Cancelled";
 
@@ -138,9 +139,17 @@ const PatientTable = ({
 
   return (
     <>
+      {/* Patient data */}
+      {role !== "patient" && (
+        <div className="mb-7">
+          <PatientData />
+        </div>
+      )}
+
+      {/* Patient list */}
       <div ref={printRef} id="printable-report">
-        <section className="w-full bg-gray-50 flex justify-center items-start">
-          <div className="w-full border border-[#42998d] transition-colors">
+        <section className="w-full flex justify-center items-start">
+          <div className="w-full border border-[#c4e3df] transition-colors">
             <CardContent className="p-0 overflow-hidden">
               <div className="relative w-full">
                 {/* Horizontal Scroll Wrapper */}
@@ -198,7 +207,7 @@ const PatientTable = ({
                       ) : patients.length === 0 ? (
                         <tr>
                           <td
-                            colSpan={7}
+                            colSpan={8}
                             className="py-6 text-center text-gray-500">
                             <NoDataFound />
                           </td>

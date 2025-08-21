@@ -22,7 +22,7 @@ export default function Navbar() {
   // pathname and auth:-
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, role } = useAuth();
   const { language } = useLanguage();
 
   // scroll navbar fixed:-
@@ -64,7 +64,7 @@ export default function Navbar() {
   const authNavItem = isAuthenticated
     ? {
         name: `${language === "english" ? "Dashboard" : "डैशबोर्ड"}`,
-        href: "/dashboard",
+        href: `${role === "patient" ? "/appointments" : "/dashboard"}`,
         icon: LayoutDashboard,
       }
     : {
