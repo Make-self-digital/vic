@@ -26,6 +26,7 @@ export const StatusDropdown = ({ patient, onStatusChange }: Props) => {
   // language:-
   const { language } = useLanguage();
 
+  // ? Handle status change:-
   const handleChange = async (
     newStatus: "Pending" | "Completed" | "Cancelled"
   ) => {
@@ -46,7 +47,8 @@ export const StatusDropdown = ({ patient, onStatusChange }: Props) => {
         }
       );
     }
-    if (status === "Completed")
+
+    if (status === "Completed") {
       return toast.error(
         language === "english"
           ? "Patient reports already completed"
@@ -58,6 +60,8 @@ export const StatusDropdown = ({ patient, onStatusChange }: Props) => {
           },
         }
       );
+    }
+
     if (patient.lastDate) {
       setStatus(newStatus);
       onStatusChange(newStatus);
@@ -76,23 +80,40 @@ export const StatusDropdown = ({ patient, onStatusChange }: Props) => {
           description: data.error,
           style: { background: "#ff4d4f", color: "#ffffff" },
         });
-      // console.log(data.patient.lastDate);
 
-      toast.success("Status updated successfully", {
-        description: data.message,
-        style: {
-          background: "#42998d",
-          color: "#ffffff",
-        },
-      });
+      toast.success(
+        language === "english"
+          ? "Status updated successfully"
+          : "स्थिति सफलतापूर्वक अपडेट हो गई",
+        {
+          description:
+            language === "english"
+              ? data?.message || "The status has been changed."
+              : data?.message || "स्थिति बदल दी गई है।",
+          style: {
+            background: "#42998d",
+            color: "#ffffff",
+          },
+        }
+      );
     } catch (err: any) {
-      toast.error("Failed to update status", {
-        description: err.message,
-        style: {
-          background: "#ff4d4f",
-          color: "#ffffff",
-        },
-      });
+      toast.error(
+        language === "english"
+          ? "Failed to update status"
+          : "स्थिति अपडेट करने में विफल",
+        {
+          description:
+            language === "english"
+              ? err?.message || "Something went wrong"
+              : err?.message || "कुछ गलत हो गया",
+          style: {
+            background: "#ff4d4f",
+            color: "#ffffff",
+            borderRadius: "8px",
+            fontWeight: "500",
+          },
+        }
+      );
       console.error("Status update error:", err);
     }
   };

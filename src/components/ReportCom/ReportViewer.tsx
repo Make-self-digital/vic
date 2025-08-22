@@ -443,7 +443,7 @@ export default function ReportViewer() {
 
   return (
     <>
-      {/* OPEN & CLOSE EDITABLE REPORT */}
+      {/* OPEN & CLOSE EDITABLE REPORT BUTTON */}
       <div className="w-full flex justify-end items-center max-w-3xl mx-auto rounded-md">
         <Button
           variant="outline"
@@ -587,6 +587,12 @@ export default function ReportViewer() {
                     name="findings"
                     value={newFinding}
                     onChange={(e) => setNewFinding(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        addFinding();
+                      }
+                    }}
                     placeholder="Add finding"
                     className="border rounded-md focus:ring-[#42998d] focus:outline-none transition-all duration-150 border-[#42998d] outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0 text-sm"
                     autoComplete="off"
@@ -658,6 +664,12 @@ export default function ReportViewer() {
                     name="impression"
                     value={newImpression}
                     onChange={(e) => setNewImpression(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        addImpression();
+                      }
+                    }}
                     placeholder="Add impression"
                     className="border rounded-md focus:ring-[#42998d] focus:outline-none transition-all duration-150 border-[#42998d] outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0 text-sm"
                     autoComplete="off"
@@ -748,7 +760,7 @@ export default function ReportViewer() {
             <Card className="relative border border-[#42998d] rounded-md p-0 overflow-hidden">
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0 print:opacity-15 opacity-15">
                 <Image
-                  src="/logo.png"
+                  src="/logo-2.png"
                   alt="VIC LOGO"
                   width={400}
                   height={400}
@@ -773,7 +785,7 @@ export default function ReportViewer() {
 
                   <QRCodeSVG
                     key={qrValue}
-                    value={qrValue || "javascript:void(0)"}
+                    value={qrValue || "https://vaishnaviimagingcenter.com/"}
                     size={70}
                     level="H"
                   />

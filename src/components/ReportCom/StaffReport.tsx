@@ -2,13 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { CardContent } from "@/components/ui/card";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
-import { Check, X } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
 import Loading from "../Loading";
 import NoDataFound from "../No-Records/NoRecordCom";
+import ConditionWisePatientReport from "./ConditionWisePatientReport";
 import { useLanguage } from "@/hooks/LanguageContext";
+import { Button } from "../ui/button";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/use-auth";
+
+type PatientStatus = "Pending" | "Completed" | "Cancelled";
 
 interface Patient {
   _id: string;
@@ -18,10 +20,13 @@ interface Patient {
   gender: string;
   service: string;
   phone: string;
-  status: "Pending" | "Completed";
+  status: PatientStatus;
+  bookingCount: number;
+  lastDate: string;
   reportStatus: "pending" | "ready";
   payment: number;
   paymentStatus: "paid" | "unpaid";
+  createdAt: string;
   doctorName: string;
   reportUrl: string[];
   patientReport: {
@@ -37,14 +42,13 @@ export default function ReportTable() {
   const [data, setData] = useState<Patient[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // ? Doctor Name update:-
-  const [editing, setEditing] = useState<string | false>(false);
-  const [inputValue, setInputValue] = useState("");
-
-  const router = useRouter();
-
   // language:-
   const { language } = useLanguage();
+
+  // auth:-
+  const { role } = useAuth();
+
+  const router = useRouter();
 
   // ? Fetch Patients:
   useEffect(() => {
@@ -63,114 +67,6 @@ export default function ReportTable() {
 
     fetchPatients();
   }, []);
-
-  // ? Handle Edit Click For Doctor Name:-
-  const handleEditClick = (id: string, currentValue: string) => {
-    setEditing(id);
-    setInputValue(currentValue || "");
-  };
-
-  // ? Handle Doctor Name Change:-
-  const handleSaveClick = async (id: string) => {
-    const trimmedName = inputValue.trim();
-
-    if (trimmedName.length < 2) {
-      toast.error(
-        language === "english"
-          ? "Doctor name is too short"
-          : "डॉक्टर का नाम बहुत छोटा है",
-        {
-          description:
-            language === "english"
-              ? "Please enter at least 2 characters"
-              : "कृपया कम से कम 2 अक्षर दर्ज करें",
-          style: { background: "#ef4444", color: "#ffffff" },
-        }
-      );
-      return;
-    }
-
-    const updated = [...data];
-    const idx = data.findIndex((p) => p._id === id);
-    updated[idx].doctorName = trimmedName;
-    setData(updated);
-    setEditing(false);
-
-    try {
-      await fetch("/api/update_doctor", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id, doctorName: trimmedName }),
-      });
-
-      toast.success(
-        language === "english"
-          ? "Doctor name updated"
-          : "डॉक्टर का नाम अपडेट हुआ",
-        {
-          description:
-            language === "english"
-              ? "Saved successfully"
-              : "सफलतापूर्वक सेव हुआ",
-          style: { background: "#42998d", color: "#ffffff" },
-        }
-      );
-    } catch (error) {
-      toast.error(language === "english" ? "Update failed" : "अपडेट असफल हुआ", {
-        description:
-          language === "english"
-            ? "Try again later"
-            : "बाद में पुनः प्रयास करें",
-        style: { background: "#ef4444", color: "#ffffff" },
-      });
-    }
-  };
-
-  // ? Handle Payment Status Toggle:-
-  const handleStatusToggle = async (index: number) => {
-    const id = data[index]._id; // ? Get the ID of the patient
-    const updated = [...data];
-    const currentStatus = updated[index].paymentStatus;
-    const newStatus = currentStatus === "paid" ? "unpaid" : "paid";
-
-    // ? Optimistically update UI:-
-    updated[index].paymentStatus = newStatus;
-    setData(updated);
-
-    // ? Update DB:-
-    try {
-      await fetch("/api/payment_status", {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          id,
-          paymentStatus: newStatus,
-        }),
-      });
-      toast.success("Payment Status updated", {
-        description: "Payment marked.",
-        style: {
-          background: "#42998d",
-          color: "#ffffff",
-        },
-      });
-    } catch (err) {
-      console.error("Update failed:", err);
-      // Optional rollback
-      updated[index].paymentStatus = currentStatus;
-      setData(updated);
-
-      toast.error("Failed to update payment status", {
-        description: "Failed to update payment status",
-        style: {
-          background: "#ff4d4f",
-          color: "#ffffff",
-        },
-      });
-    }
-  };
 
   // ? for full page loader:-
   useEffect(() => {
@@ -193,187 +89,72 @@ export default function ReportTable() {
     );
   }
 
-  return (
-    <section className="w-full min-h-screen bg-gray-50 flex justify-center items-start">
-      <div className="w-full border border-[#42998d] transition-colors">
-        <CardContent className="p-0 overflow-hidden">
-          <div className="relative w-full">
-            <div
-              className="w-full overflow-x-auto scrollbar-hide"
-              id="table-wrapper">
-              <table className="min-w-[700px] w-full table-fixed">
-                <thead className="bg-[#0b968d] sticky top-0 z-10">
-                  <tr>
-                    <th className="px-4 py-3 w-[5%] text-left text-sm font-semibold text-white tracking-wide">
-                      {language === "english" ? "Sr." : "क्रमांक"}
-                    </th>
-                    <th className="w-[18%] px-4 py-3 text-center text-sm font-semibold text-white truncate tracking-wide">
-                      {language === "english" ? "Name" : "मरीज का नाम"}
-                    </th>
-                    <th className="w-[10%] px-4 py-3 text-center text-sm font-semibold text-white truncate tracking-wide">
-                      {language === "english" ? "Age" : "उम्र"}
-                    </th>
-                    <th className="w-[12%] px-4 py-3 text-center text-sm font-semibold text-white truncate tracking-wide">
-                      {language === "english" ? "Gender" : "लिंग"}
-                    </th>
-                    <th className="w-[20%] px-4 py-3 text-center text-sm font-semibold text-white truncate tracking-wide">
-                      {language === "english" ? "Phone" : "फोन नंबर"}
-                    </th>
-                    <th className="w-[20%] px-4 py-3 text-center text-sm font-semibold text-white truncate tracking-wide">
-                      {language === "english" ? "Services" : "सेवाएं"}
-                    </th>
-                    <th className="w-[15%] px-4 py-3 text-center text-sm font-semibold text-white truncate tracking-wide">
-                      {language === "english" ? "Payment" : "भुगतान"}
-                    </th>
-                    <th className="w-[15%] px-4 py-3 text-center text-sm font-semibold text-white truncate tracking-wide">
-                      {language === "english" ? "Doctor" : "डॉक्टर का नाम"}
-                    </th>
-                    <th className="w-[20%] px-4 py-3 text-center text-sm font-semibold text-white truncate tracking-wide">
-                      {language === "english" ? "Report" : "रिपोर्ट"}
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-100 text-sm">
-                  {
-                    // ? Loading:-
-                    loading ? (
-                      <tr>
-                        <td
-                          colSpan={7}
-                          className="py-6 text-center text-gray-500">
-                          <Loading />
-                        </td>
-                      </tr>
-                    ) : data.length === 0 ? (
-                      <tr>
-                        <td
-                          colSpan={7}
-                          className="py-6 text-center text-gray-500">
-                          <NoDataFound />
-                        </td>
-                      </tr>
-                    ) : (
-                      <AnimatePresence mode="sync">
-                        {data.map((item, idx) => (
-                          <motion.tr key={idx} className="hover:bg-gray-50">
-                            <td className="px-4 py-3 text-gray-700">
-                              {idx + 1}
-                            </td>
-                            <td className="px-4 py-3 text-gray-800 text-center tracking-wide truncate">
-                              {item.patientName
-                                ? item.patientName
-                                    .trim()
-                                    .split(" ")
-                                    .filter(Boolean)
-                                    .map(
-                                      (w) =>
-                                        w[0].toUpperCase() +
-                                        w.slice(1).toLowerCase()
-                                    )
-                                    .join(" ")
-                                : ""}
-                            </td>
-                            <td className="px-4 py-3 text-gray-700 text-center tracking-wide">
-                              {item.age}
-                            </td>
-                            <td className="px-4 py-3 text-gray-700 text-center tracking-wide">
-                              {item.gender}
-                            </td>
-                            <td className="px-4 py-3 text-gray-700 text-center tracking-wide">
-                              {item.phone}
-                            </td>
-                            <td className="px-4 py-3 text-gray-700 truncate text-center tracking-wide">
-                              {item.service}
-                            </td>
-                            {/* Payment Status */}
-                            <td
-                              className={`px-4 py-3 text-center cursor-pointer tracking-wide select-none ${
-                                item.paymentStatus === "paid"
-                                  ? "text-green-600"
-                                  : "text-red-500"
-                              }`}
-                              onClick={() => handleStatusToggle(idx)}>
-                              {item.paymentStatus}
-                            </td>
-                            {/* Doctor Name */}
-                            <td className="px-4 py-3 text-center text-gray-700 truncate tracking-wide">
-                              {editing === item._id ? (
-                                <div className="relative w-[120px]">
-                                  <input
-                                    type="text"
-                                    name="doctorName"
-                                    id="doctorName"
-                                    value={inputValue}
-                                    onChange={(e) =>
-                                      setInputValue(e.target.value)
-                                    }
-                                    className="border border-[#c4e3df] rounded-md px-3 py-1 text-sm text-[#18564e] focus:outline-none w-full max-w-[120px] tracking-wide placeholder:tracking-wide"
-                                    placeholder="Enter name"
-                                    autoComplete="off"
-                                  />
-                                  {inputValue.length < 2 ? (
-                                    <button
-                                      onClick={() => setEditing(false)}
-                                      className="absolute right-2 top-1/2 -translate-y-1/2 text-[#18564e] hover:text-[#18564e]/80 cursor-pointer"
-                                      title="Cancel">
-                                      <X size={16} />
-                                    </button>
-                                  ) : (
-                                    <button
-                                      onClick={() => handleSaveClick(item._id)}
-                                      className="absolute right-2 top-1/2 -translate-y-1/2 text-green-600 hover:text-green-800 cursor-pointer"
-                                      title="Save">
-                                      <Check size={16} />
-                                    </button>
-                                  )}
-                                </div>
-                              ) : (
-                                <span
-                                  onClick={() =>
-                                    handleEditClick(item._id, item.doctorName)
-                                  }
-                                  className="cursor-pointer hover:underline text-sm">
-                                  {item.doctorName || "Enter Name"}
-                                </span>
-                              )}
-                            </td>
-
-                            <td className="px-4 py-3 text-center tracking-wide">
-                              {/* Report */}
-                              <button
-                                onClick={() => {
-                                  const patientSlug =
-                                    `${item.patientName}-report`.replace(
-                                      /\s+/g,
-                                      "-"
-                                    );
-                                  if (typeof window !== "undefined") {
-                                    sessionStorage.setItem(
-                                      "patient-phone",
-                                      item.phone
-                                    );
-                                    sessionStorage.setItem(
-                                      "patient-id",
-                                      item._id
-                                    );
-                                  }
-                                  router.push(`/reports/${patientSlug}`);
-                                }}
-                                className="text-[#06968d] underline transition cursor-pointer">
-                                Make Report
-                              </button>
-                            </td>
-                          </motion.tr>
-                        ))}
-                      </AnimatePresence>
-                    )
-                  }
-                </tbody>
-              </table>
-            </div>
+  // ? No notifications found screen:-
+  if (data.length === 0)
+    return (
+      <div className="flex flex-col min-h-screen justify-center items-center gap-4">
+        <NoDataFound />
+        {role === "patient" && (
+          <div className="text-center text-gray-500 tracking-wide text-sm font-semibold italic">
+            <p>
+              {language === "english"
+                ? "No reports found. Please visit your appointments page and book appointment to make reports."
+                : "कोई रिपोर्ट नहीं मिला । कृपया अपॉइंटमेंट पेज पर जाएं और अपॉइंटमेंट बुक करें ताकि रिपोर्ट बनें।"}
+            </p>
+            <Button
+              onClick={() => router.push("/appointments")}
+              title="Book Appointment"
+              className="px-3 py-1 bg-[#0b968d] text-white rounded-sm hover:bg-[#097c74] transition font-semibold text-sm cursor-pointer mt-3">
+              {language === "english"
+                ? "Book Appointment"
+                : "अपॉइंटमेंट बुक करें"}
+            </Button>
           </div>
-        </CardContent>
+        )}
       </div>
-    </section>
+    );
+
+  return (
+    <>
+      <div className="border border-[#c4e3df] bg-none rounded-lg bg-white p-4">
+        {/* Heading */}
+        <h2
+          className={`text-xl ${"mb-4"} font-bold text-[#1e4d4f] tracking-wide`}
+          title={
+            language === "english"
+              ? "Patient Report List"
+              : "मरीज के रिपोर्ट सूची"
+          }>
+          <span className="border-b-2 border-[#18564e] inline-block pb-1">
+            {language === "english"
+              ? "Patient Report List"
+              : "मरीज के रिपोर्ट सूची"}
+          </span>
+        </h2>
+
+        <section className="w-full flex justify-center items-start">
+          <div className="w-full border border-[#42998d] transition-colors">
+            <CardContent className="p-0 overflow-hidden">
+              <div className="relative w-full">
+                <div
+                  className="w-full overflow-x-auto scrollbar-hide group relative"
+                  id="table-wrapper"
+                  onScroll={(e) => {
+                    const shadow = document.getElementById("scroll-shadow");
+                    if (!shadow) return;
+                    shadow.style.opacity =
+                      e.currentTarget.scrollLeft > 0 ? "1" : "0";
+                  }}>
+                  <ConditionWisePatientReport
+                    patients={data}
+                    setPatients={setData}
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </div>
+        </section>
+      </div>
+    </>
   );
 }
