@@ -24,6 +24,7 @@ import {
 import { servicePrices } from "@/constants/servicePrices";
 import { toast } from "sonner";
 import { useLanguage } from "@/hooks/LanguageContext";
+import { useRouter } from "next/navigation";
 
 interface LoginPatientData {
   _id: string;
@@ -63,6 +64,9 @@ export default function AddAppointmentForm() {
 
   // language:-
   const { language } = useLanguage();
+
+  // Router:-
+  const router = useRouter();
 
   // ? get login patient:-
   useEffect(() => {
@@ -204,6 +208,7 @@ export default function AddAppointmentForm() {
           },
         }
       );
+
       // invoke patient notifications:-
       await createPatientNotification(
         patientId,
@@ -212,6 +217,9 @@ export default function AddAppointmentForm() {
         `Your appointment for ${formattedDate} at ${time} has been booked successfully`,
         `/dashboard/appointments`
       );
+
+      // redirect to report pages:-
+      router.push("/reports");
     } catch (error: any) {
       console.error("Error booking appointment:", error.message);
       toast.error(

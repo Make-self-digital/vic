@@ -7,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useLanguage } from "@/hooks/LanguageContext";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -22,25 +23,41 @@ type Props = {
 export const StatusDropdown = ({ patient, onStatusChange }: Props) => {
   const [status, setStatus] = useState(patient.status);
 
+  // language:-
+  const { language } = useLanguage();
+
   const handleChange = async (
     newStatus: "Pending" | "Completed" | "Cancelled"
   ) => {
     if (!patient.lastDate) {
-      return toast.info("Patient reports not found", {
-        description: "Please make reports first",
-        style: {
-          background: "#ff4d4f",
-          color: "#ffffff",
-        },
-      });
+      return toast.info(
+        language === "english"
+          ? "Patient reports not found"
+          : "मरीज की रिपोर्ट नहीं मिली",
+        {
+          description:
+            language === "english"
+              ? "Please make reports first"
+              : "कृपया पहले रिपोर्ट बनाएँ",
+          style: {
+            background: "#ff4d4f",
+            color: "#ffffff",
+          },
+        }
+      );
     }
     if (status === "Completed")
-      return toast.error("Patient reports already completed", {
-        style: {
-          background: "#ff4d4f",
-          color: "#ffffff",
-        },
-      });
+      return toast.error(
+        language === "english"
+          ? "Patient reports already completed"
+          : "मरीज की रिपोर्ट पहले ही पूरी हो चुकी है",
+        {
+          style: {
+            background: "#ff4d4f",
+            color: "#ffffff",
+          },
+        }
+      );
     if (patient.lastDate) {
       setStatus(newStatus);
       onStatusChange(newStatus);

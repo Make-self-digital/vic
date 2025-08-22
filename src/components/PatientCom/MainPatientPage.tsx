@@ -19,23 +19,27 @@ const MainPatientPage: React.FC = () => {
 
   return (
     <>
-      {/* Heading */}
-      <div className="mb-6 text-center">
+      <div className="border border-[#c4e3df] bg-none rounded-lg bg-white p-4">
         {/* Heading */}
-        <h2
-          className="text-2xl font-bold text-[#1e4d4f] tracking-wide"
-          title={language === "english" ? "Patients List" : "मरीज की सूची"}>
-          <span className="border-b-2 border-[#18564e] inline-block pb-1">
-            {language === "english" ? "Patients List" : "मरीज की सूची"}
-          </span>
-        </h2>
-      </div>
+        <div className="mb-6">
+          {/* Heading */}
+          <h2
+            className="text-2xl font-bold text-[#1e4d4f] tracking-wide"
+            title={language === "english" ? "Patients List" : "मरीज की सूची"}>
+            <span className="border-b-2 border-[#18564e] inline-block pb-1">
+              {language === "english" ? "Patients List" : "मरीज की सूची"}
+            </span>
+          </h2>
+        </div>
 
-      {/* Patient Table and Filters */}
-      <div>
-        {role === "admin" ||
-          (role === "staff" && <PatientFilters onFilterChange={setFilters} />)}
-        <PatientTable filters={filters} />
+        {/* Patient Table and Filters */}
+        <div>
+          {role === "admin" ||
+            (role === "staff" && (
+              <PatientFilters onFilterChange={setFilters} />
+            ))}
+          <PatientTable filters={filters} />
+        </div>
       </div>
     </>
   );
