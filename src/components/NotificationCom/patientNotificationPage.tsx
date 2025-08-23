@@ -97,10 +97,9 @@ const PatientNotificationList = () => {
     const { _id: patientId } = loginPatient;
 
     const fetchNotifications = async () => {
-      setLoading(true);
       try {
         const res = await fetch(
-          `/api/patient-wise-notification?patientId=${patientId}`
+          `/api/Patient-wise-notification?patientId=${patientId}`
         );
         const data = await res.json();
 
@@ -150,18 +149,20 @@ const PatientNotificationList = () => {
   if (notifications.length === 0)
     return (
       <div className="flex flex-col min-h-screen justify-center items-center gap-4">
-        {" "}
-        <NoDataFound />{" "}
+        <NoDataFound />
         <div className="text-center text-gray-500 tracking-wide text-sm font-semibold italic">
           <p>
-            No notifications found. Please visit your appointments page to make
-            notifications.
+            {language === "english"
+              ? "No notifications found. Please visit your appointments page to make new notifications."
+              : "अभी कोई नोटिफिकेशन नहीं है। नई नोटिफिकेशन पाने के लिए अपॉइंटमेंट पेज पर जाएं।"}
           </p>
           <Button
             onClick={() => router.push("/appointments")}
             title="Book Appointment"
             className="px-3 py-1 bg-[#0b968d] text-white rounded-sm hover:bg-[#097c74] transition font-semibold text-sm cursor-pointer mt-3">
-            Book Appointment
+            {language === "english"
+              ? "Book Appointment"
+              : "अपॉइंटमेंट बुक करें"}
           </Button>
         </div>
       </div>

@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/mongodb";
-import PatientNotification from "@/lib/models/patientNotification.model";
 import mongoose from "mongoose";
+import PatientNotification from "@/lib/models/patientNotification.model";
 
+// get patient wise notifications:-
 export async function GET(req: Request) {
   try {
     await connectToDatabase();
@@ -18,6 +19,13 @@ export async function GET(req: Request) {
       );
     }
 
+    // // पहले notifications को read:true कर दो
+    // await PatientNotification.updateMany(
+    //   { patientId: new mongoose.Types.ObjectId(patientId) },
+    //   { $set: { "notifications.$[].read": true } }
+    // );
+
+    // उसी patientId के notifications को लाना
     const notifications = await PatientNotification.aggregate([
       { $match: { patientId: new mongoose.Types.ObjectId(patientId) } }, // सिर्फ उसी patientId का data लाना
       { $sort: { createdAt: -1 } },
@@ -42,6 +50,39 @@ export async function GET(req: Request) {
     console.error("Error fetching notifications:", error);
     return NextResponse.json(
       { success: false, message: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PUT(req: Request) {
+  try {
+    await connectToDatabase();
+
+    const { patientId } = await req.json();
+
+    if (!patientId) {
+      return NextResponse.json(
+        { error: "patientId is required" },
+        { status: 400 }
+      );
+    }
+
+    // ✅ Update notifications array: set read=true for all notifications
+    const result = await PatientNotification.updateMany(
+      { patientId: new mongoose.Types.ObjectId(patientId) },
+      { $set: { "notifications.$[].read": true } }
+    );
+
+    return NextResponse.json({
+      success: true,
+      message: "All notifications marked as read",
+      result,
+    });
+  } catch (error) {
+    console.error("Error updating notifications:", error);
+    return NextResponse.json(
+      { error: "Failed to update notifications" },
       { status: 500 }
     );
   }

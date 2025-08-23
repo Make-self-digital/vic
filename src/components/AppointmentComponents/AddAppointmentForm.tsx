@@ -25,6 +25,7 @@ import { servicePrices } from "@/constants/servicePrices";
 import { toast } from "sonner";
 import { useLanguage } from "@/hooks/LanguageContext";
 import { useRouter } from "next/navigation";
+import { useNotifications } from "@/hooks/NotificationContext";
 
 interface LoginPatientData {
   _id: string;
@@ -68,6 +69,9 @@ export default function AddAppointmentForm() {
   // Router:-
   const router = useRouter();
 
+  // notifications:-
+  const { addNotification } = useNotifications();
+
   // ? get login patient:-
   useEffect(() => {
     const storedPatient = localStorage.getItem("login_patient");
@@ -106,7 +110,7 @@ export default function AddAppointmentForm() {
   }
 
   // ? for the patient notifications:-
-  const createPatientNotification = async (
+  const createStaffNotification = async (
     patientId: string,
     type: string,
     title: string,
@@ -114,7 +118,7 @@ export default function AddAppointmentForm() {
     url: string
   ) => {
     try {
-      const res = await fetch("/api/patientNotification", {
+      const res = await fetch("/api/StaffNotification", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -210,13 +214,24 @@ export default function AddAppointmentForm() {
       );
 
       // invoke patient notifications:-
-      await createPatientNotification(
+      await createStaffNotification(
         patientId,
         "appointment_confirmation",
         "Appointment",
         `Your appointment for ${formattedDate} at ${time} has been booked successfully`,
         `/dashboard/appointments`
       );
+
+      addNotification({
+        _id: result._id,
+        patientId: patientId,
+        type: "appointment_confirmation",
+        title: "Appointment Booked",
+        message: `Your appointment for ${formattedDate} at ${time} has been booked`,
+        read: false,
+        url: `/dashboard/appointments`,
+        createdAt: new Date().toISOString(),
+      });
 
       // redirect to report pages:-
       router.push("/reports");
@@ -289,7 +304,7 @@ export default function AddAppointmentForm() {
 
   return (
     <>
-      <div className="w-full bg-[#fff] px-6 py-6 rounded-lg border border-[#c4e3df]">
+      <div className="w-full bg-white px-6 py-6 rounded-lg border border-[#c4e3df]">
         {/* Heading */}
         <div className="mb-6 text-center">
           <h2
@@ -463,7 +478,7 @@ export default function AddAppointmentForm() {
                   )}
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="z-[100] w-auto p-0 mt-2 bg-[#f9fafb] border border-[#42998d] rounded-md shadow-lg">
+              <PopoverContent className="z-[100] w-auto p-0 mt-2 bg-[#fff] border border-[#42998d] rounded-md shadow-lg">
                 <Calendar
                   mode="single"
                   selected={date}

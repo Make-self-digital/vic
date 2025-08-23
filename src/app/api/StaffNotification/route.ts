@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/mongodb";
+import StaffNotification from "@/lib/models/staffNotification.model";
 import PatientNotification from "@/lib/models/patientNotification.model";
 
-// create a patient notification:-
+// create a staff notification:-
 export async function POST(req: Request) {
   try {
     await connectToDatabase();
@@ -16,7 +17,8 @@ export async function POST(req: Request) {
       );
     }
 
-    const updatedNotification = await PatientNotification.findOneAndUpdate(
+    // create a new Staff notification:-
+    const updatedNotification = await StaffNotification.findOneAndUpdate(
       { patientId },
       {
         $push: {
@@ -34,8 +36,32 @@ export async function POST(req: Request) {
       { new: true, upsert: true, setDefaultsOnInsert: true }
     );
 
+    // create a new patient notification:-
+    const updatedPatientNotification =
+      await PatientNotification.findOneAndUpdate(
+        { patientId },
+        {
+          $push: {
+            notifications: {
+              type,
+              title,
+              message,
+              url,
+              read: false,
+              createdAt: new Date(),
+            },
+          },
+          $set: { createdAt: new Date() }, // 👈 हर बार अपडेट
+        },
+        { new: true, upsert: true, setDefaultsOnInsert: true }
+      );
+
     return NextResponse.json(
-      { success: true, data: updatedNotification },
+      {
+        success: true,
+        data: updatedNotification,
+        patientDataNotification: updatedPatientNotification,
+      },
       { status: 201 }
     );
   } catch (error) {
@@ -52,7 +78,7 @@ export async function GET() {
   try {
     await connectToDatabase();
 
-    const notifications = await PatientNotification.aggregate([
+    const notifications = await StaffNotification.aggregate([
       { $sort: { createdAt: -1 } },
       {
         $lookup: {
@@ -94,7 +120,7 @@ export async function DELETE(req: Request) {
       );
     }
 
-    const result = await PatientNotification.deleteMany({ patientId });
+    const result = await StaffNotification.deleteMany({ patientId });
 
     return NextResponse.json(
       { success: true, deletedCount: result.deletedCount },
@@ -104,6 +130,31 @@ export async function DELETE(req: Request) {
     console.error("Error deleting notifications:", error);
     return NextResponse.json(
       { success: false, message: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
+}
+
+// update read marked notifications:-
+export async function PUT(req: Request) {
+  try {
+    await connectToDatabase();
+
+    // ✅ Update all notifications for the patient
+    const result = await StaffNotification.updateMany(
+      {},
+      { $set: { "notifications.$[].read": true } } // <- sabhi notifications ko read = true kar dega
+    );
+
+    return NextResponse.json({
+      success: true,
+      message: "All notifications marked as read",
+      result,
+    });
+  } catch (error) {
+    console.error("Error updating notifications:", error);
+    return NextResponse.json(
+      { error: "Failed to update notifications" },
       { status: 500 }
     );
   }

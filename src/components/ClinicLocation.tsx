@@ -31,8 +31,8 @@ const ClinicLocation: React.FC = () => {
           </div>
           <p className="text-[#1e4d4f] text-sm font-medium tracking-wide">
             {language === "english"
-              ? "NH-139, Tiwari Mohalla, Daudnagar, Aurangabad, Bihar"
-              : "एनएच-139, तिवारी मोहल्ला, दाउदनगर, औरंगाबाद, बिहार"}
+              ? "NH-139, Tiwari Mohalla Bhakharua, Daudnagar, Aurangabad, Bihar"
+              : "एनएच-139, तिवारी मोहल्ला भखरुआ, दाउदनगर, औरंगाबाद, बिहार"}
           </p>
         </div>
 

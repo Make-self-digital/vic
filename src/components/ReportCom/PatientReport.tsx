@@ -286,7 +286,7 @@ export default function PatientReport() {
               </div>
 
               {/* Last Visit */}
-              {patientReport[patientReport.length - 1]?.lastDate && (
+              {patientReport[0]?.lastDate && (
                 <div className="bg-[#e6f4f2] rounded-xl p-4 flex items-start gap-4">
                   <CalendarClock className="w-6 h-6 text-[#18564e] mt-1" />
                   <div>
@@ -295,9 +295,7 @@ export default function PatientReport() {
                     </p>
                     <p className="text-base font-semibold text-[#18564e]">
                       {patientReport.length > 0
-                        ? formatDate(
-                            patientReport[patientReport.length - 1].lastDate
-                          )
+                        ? formatDate(patientReport[0]?.lastDate)
                         : language === "english"
                         ? "No Data Found"
                         : "कोई डेटा नहीं मिला"}

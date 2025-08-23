@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/mongodb";
-import PatientNotification from "@/lib/models/patientNotification.model";
+import PatientNotification from "@/lib/models/staffNotification.model";
 
 // delete all notifications:-
 export async function DELETE() {

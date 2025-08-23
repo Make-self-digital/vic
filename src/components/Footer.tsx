@@ -107,8 +107,8 @@ const Footer: React.FC = () => {
               <span>
                 {" "}
                 {language === "english"
-                  ? "NH-139, Tiwari Mohalla, Daudnagar, Bihar"
-                  : "एनएच-139, तिवारी मोहला, दाउदनगर, बिहार"}{" "}
+                  ? "NH-139, Tiwari Mohalla Bhakharua, Daudnagar, Bihar"
+                  : "एनएच-139, तिवारी मोहला भखरुआ, दाउदनगर, बिहार"}{" "}
               </span>
             </li>
           </ul>

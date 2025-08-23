@@ -396,7 +396,7 @@ const ClinicDashboard = () => {
                     <table className="min-w-[700px] w-full table-fixed border-collapse">
                       <thead className="bg-[#0b968d] sticky top-0 z-10">
                         <tr>
-                          <th className="w-12 px-4 py-3 text-sm font-semibold text-white tracking-wide text-left">
+                          <th className="w-12 px-4 py-3 text-sm font-semibold text-white tracking-wide text-center">
                             {language === "english" ? "Sr." : "क्रमांक"}
                           </th>
                           {visibleColumns.map((col) => (
@@ -412,7 +412,9 @@ const ClinicDashboard = () => {
                       <tbody className="bg-white divide-y divide-gray-100 text-sm">
                         {selectedTable.data.map((item, index) => (
                           <tr key={item._id} className="hover:bg-gray-50">
-                            <td className="px-4 py-3 text-left">{index + 1}</td>
+                            <td className="px-4 py-3 text-center">
+                              {index + 1}
+                            </td>
                             {visibleColumns.map((col) => (
                               <td
                                 key={col.key}

@@ -7,9 +7,7 @@ import {
   CalendarCheck,
   Users,
   FileText,
-  BadgeDollarSign,
   Banknote,
-  UserCog,
   Bell,
   Boxes,
   User,
@@ -18,6 +16,8 @@ import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useLanguage } from "@/hooks/LanguageContext";
+import { useEffect, useState } from "react";
+import { useNotifications } from "@/hooks/NotificationContext";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -31,19 +31,31 @@ type NavItem = {
   icon: React.ElementType;
 };
 
+interface LoginPatientData {
+  _id: string;
+  patientName: string;
+  phone: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
 export default function AdminSidebar({
   isOpen,
   onToggleSidebar,
   topbarHeight = 72,
 }: SidebarProps) {
-  // pathname and auth:-
+  const [loginPatient, setLoginPatient] = useState<LoginPatientData | null>(
+    null
+  );
+
   const pathname = usePathname();
   const { name, role } = useAuth();
-
-  // language:-
   const { language } = useLanguage();
 
-  // Conditional item (Login or Dashboard)
+  const { allNotifications, setNotifications, markAllRead } =
+    useNotifications();
+
   const navItems: NavItem[] = [
     ...(role === "admin" || role === "staff"
       ? [
@@ -54,7 +66,6 @@ export default function AdminSidebar({
           },
         ]
       : []),
-
     ...(role === "patient"
       ? [
           {
@@ -64,31 +75,21 @@ export default function AdminSidebar({
           },
         ]
       : []),
-
     {
       name: language === "english" ? "Notifications" : "नोटिफिकेशन",
       href: "/notifications",
       icon: Bell,
     },
-
     {
       name: language === "english" ? "Patients" : "मरीज देखें",
       href: "/patients",
       icon: Users,
     },
-
     {
       name: language === "english" ? "Reports" : "रिपोर्ट",
       href: "/reports",
       icon: FileText,
     },
-
-    // {
-    //   name: language === "english" ? "Billing" : "बिलिंग",
-    //   href: "/billing",
-    //   icon: BadgeDollarSign,
-    // },
-
     ...(role === "admin"
       ? [
           {
@@ -98,13 +99,6 @@ export default function AdminSidebar({
           },
         ]
       : []),
-
-    // {
-    //   name: language === "english" ? "Staff" : "स्टाफ",
-    //   href: "/staff",
-    //   icon: UserCog,
-    // },
-
     ...(role === "admin" || role === "staff"
       ? [
           {
@@ -115,6 +109,69 @@ export default function AdminSidebar({
         ]
       : []),
   ];
+
+  // get login patient
+  useEffect(() => {
+    const storedPatient = localStorage.getItem("login_patient");
+    if (storedPatient) {
+      setLoginPatient(JSON.parse(storedPatient));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!loginPatient?._id || role !== "patient") return;
+
+    // update read patient notifications:-
+    const fetchPatientNotifications = async () => {
+      try {
+        const res = await fetch(
+          `/api/Patient-wise-notification?patientId=${loginPatient._id}`
+        );
+        const data = await res.json();
+        if (data.success && Array.isArray(data.data)) {
+          setNotifications(data.data); // flatten logic context me already handle
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchPatientNotifications();
+  }, [loginPatient?._id, role]);
+
+  // update read staff notifications:-
+  useEffect(() => {
+    if (!(role === "admin" || role === "staff")) return;
+
+    const fetchStaffNotifications = async () => {
+      try {
+        const res = await fetch("/api/StaffNotification");
+        const data = await res.json();
+        if (data.success && Array.isArray(data.data)) {
+          setNotifications(data.data);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchStaffNotifications();
+  }, [role]);
+
+  // handle notification click
+  const handleNotificationClick = async () => {
+    if (window.innerWidth < 768) onToggleSidebar?.();
+
+    try {
+      if (role === "patient" && loginPatient?._id) {
+        await markAllRead(loginPatient._id);
+      } else if (role === "admin" || role === "staff") {
+        await markAllRead();
+      }
+    } catch (err) {
+      console.error("Failed to mark notifications read", err);
+    }
+  };
 
   return (
     <>
@@ -132,29 +189,39 @@ export default function AdminSidebar({
             height: `calc(100vh - ${topbarHeight}px)`,
           }}>
           <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
-            {navItems.map(({ name, href, icon: Icon }) => (
-              <Link
-                key={name}
-                href={href}
-                className={cn(
-                  "group flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-gray-700 hover:bg-[#e6f4f3] hover:text-[#42998d] tracking-wide transition-all duration-150",
-                  pathname === href &&
-                    "bg-[#d4f0ec] text-[#42998d] font-semibold"
-                )}
-                title={name}
-                onClick={() => {
-                  // Only trigger onToggleSidebar on small screens (<768px)
-                  if (window.innerWidth < 768) {
-                    onToggleSidebar?.();
-                  }
-                }}>
-                <Icon className="h-5 w-5" />
-                {name}
-              </Link>
-            ))}
+            {navItems.map(({ name, href, icon: Icon }) => {
+              const isActive = pathname === href;
+              const isNotification =
+                name ===
+                (language === "english" ? "Notifications" : "नोटिफिकेशन");
+
+              return (
+                <Link
+                  key={name}
+                  href={href}
+                  className={cn(
+                    "group relative flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-gray-700 hover:bg-[#e6f4f3] hover:text-[#42998d] tracking-wide transition-all duration-150",
+                    isActive && "bg-[#d4f0ec] text-[#42998d] font-semibold"
+                  )}
+                  title={name}
+                  onClick={
+                    isNotification ? handleNotificationClick : undefined
+                  }>
+                  <Icon className="h-5 w-5" />
+                  <span>{name}</span>
+
+                  {/* Notification Badge */}
+                  {isNotification && allNotifications.some((n) => !n.read) && (
+                    <span className="absolute right-3 top-3 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-[#0b968d] px-1.5 text-xs font-semibold text-white">
+                      {allNotifications.filter((n) => !n.read).length}
+                    </span>
+                  )}
+                </Link>
+              );
+            })}
           </nav>
 
-          {/* profile related */}
+          {/* Profile */}
           <div
             className="flex items-center gap-3 p-4 md:hidden"
             title={`${role?.charAt(0).toUpperCase() + role?.slice(1)} Name`}>
@@ -167,16 +234,15 @@ export default function AdminSidebar({
               <p className="text-[#0b968d] tracking-wide text-md font-semibold">
                 {name
                   ? name
-                      ?.trim()
+                      .trim()
                       .split(" ")
-                      .filter(Boolean)
                       .map((w) => w[0].toUpperCase() + w.slice(1).toLowerCase())
                       .join(" ")
                   : ""}
               </p>
               <p className="text-gray-700 text-sm font-medium tracking-wide">
                 {role
-                  ? "Exclusive" + " " + role[0].toUpperCase() + role.slice(1)
+                  ? "Exclusive " + role[0].toUpperCase() + role.slice(1)
                   : ""}
               </p>
             </div>

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const PatientNotificationSchema = new mongoose.Schema({
+const StaffNotificationSchema = new mongoose.Schema({
   patientId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "PatientOf2025",
@@ -23,5 +23,5 @@ const PatientNotificationSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
-export default mongoose.models.PatientNotification ||
-  mongoose.model("PatientNotification", PatientNotificationSchema);
+export default mongoose.models.StaffNotification ||
+  mongoose.model("StaffNotification", StaffNotificationSchema);

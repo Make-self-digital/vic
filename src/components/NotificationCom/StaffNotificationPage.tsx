@@ -14,6 +14,7 @@ import Loading from "../Loading";
 import NoDataFound from "../No-Records/NoRecordCom";
 import { useRouter } from "next/navigation";
 import { useLanguage } from "@/hooks/LanguageContext";
+import { useAuth } from "@/hooks/use-auth";
 
 type Appointment = {
   _id: string;
@@ -71,11 +72,14 @@ const StaffNotificationList = () => {
   // language:-
   const { language } = useLanguage();
 
+  // auth:-
+  const { role } = useAuth();
+
   // ? fetch notifications:-
   useEffect(() => {
     async function fetchNotifications() {
       try {
-        const res = await fetch("/api/patientNotification");
+        const res = await fetch("/api/StaffNotification");
         const data = await res.json();
         if (data.success) {
           setNotifications(data.data);
@@ -99,7 +103,7 @@ const StaffNotificationList = () => {
     try {
       setLoading(true);
 
-      const res = await fetch("/api/patientNotification", {
+      const res = await fetch("/api/StaffNotification", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -225,20 +229,24 @@ const StaffNotificationList = () => {
   if (notifications.length === 0)
     return (
       <div className="flex flex-col min-h-screen justify-center items-center gap-4">
-        {" "}
-        <NoDataFound />{" "}
-        <div className="text-center text-gray-500 tracking-wide text-sm font-semibold italic">
-          <p>
-            No notifications found. Please visit your appointments page to make
-            notifications.
-          </p>
-          <Button
-            onClick={() => router.push("/appointments")}
-            title="Book Appointment"
-            className="px-3 py-1 bg-[#0b968d] text-white rounded-sm hover:bg-[#097c74] transition font-semibold text-sm cursor-pointer mt-3">
-            Book Appointment
-          </Button>
-        </div>
+        <NoDataFound />
+        {role === "patient" && (
+          <div className="text-center text-gray-500 tracking-wide text-sm font-semibold italic">
+            <p>
+              {language === "english"
+                ? "No notifications found. Please visit your appointments page to make new notifications."
+                : "अभी कोई नोटिफिकेशन नहीं है। नई नोटिफिकेशन पाने के लिए अपॉइंटमेंट पेज पर जाएं।"}
+            </p>
+            <Button
+              onClick={() => router.push("/appointments")}
+              title="Book Appointment"
+              className="px-3 py-1 bg-[#0b968d] text-white rounded-sm hover:bg-[#097c74] transition font-semibold text-sm cursor-pointer mt-3">
+              {language === "english"
+                ? "Book Appointment"
+                : "अपॉइंटमेंट बुक करें"}
+            </Button>
+          </div>
+        )}
       </div>
     );
 

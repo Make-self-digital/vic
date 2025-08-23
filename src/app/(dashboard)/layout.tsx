@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "../(public)/globals.css";
 import DashboardWrapper from "./dashboardWrapper";
 import { LanguageProvider } from "@/hooks/LanguageContext";
+import { NotificationProvider } from "@/hooks/NotificationContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,7 +32,9 @@ export default function DashboardLayout({
       className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
       <body className="bg-gray-50">
         <LanguageProvider>
-          <DashboardWrapper>{children}</DashboardWrapper>
+          <NotificationProvider>
+            <DashboardWrapper>{children}</DashboardWrapper>
+          </NotificationProvider>
           <Toaster
             position="top-center"
             toastOptions={{
