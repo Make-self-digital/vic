@@ -99,7 +99,7 @@ const PatientNotificationList = () => {
     const fetchNotifications = async () => {
       try {
         const res = await fetch(
-          `/api/Patient-wise-notification?patientId=${patientId}`
+          `/api/patient-wise-notification?patientId=${patientId}`
         );
         const data = await res.json();
 

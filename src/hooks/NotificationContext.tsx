@@ -56,7 +56,7 @@ export const NotificationProvider = ({
   const markAllRead = async (patientId?: string) => {
     try {
       if (patientId) {
-        await fetch("/api/Patient-wise-notification", {
+        await fetch("/api/patient-wise-notification", {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ patientId }),

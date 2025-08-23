@@ -125,7 +125,7 @@ export default function AdminSidebar({
     const fetchPatientNotifications = async () => {
       try {
         const res = await fetch(
-          `/api/Patient-wise-notification?patientId=${loginPatient._id}`
+          `/api/patient-wise-notification?patientId=${loginPatient._id}`
         );
         const data = await res.json();
         if (data.success && Array.isArray(data.data)) {
