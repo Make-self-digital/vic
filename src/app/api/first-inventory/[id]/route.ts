@@ -4,13 +4,43 @@ import FirstInventory from "@/lib/models/firstInventory.model";
 import { NextResponse } from "next/server";
 import mongoose from "mongoose";
 
+export async function GET(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return NextResponse.json(
+        { success: false, message: "Invalid ID" },
+        { status: 400 }
+      );
+    }
+
+    await connectToDatabase();
+
+    const doc = await FirstInventory.findById(id);
+    if (!doc) {
+      return NextResponse.json(
+        { success: false, message: "Item not found" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({ success: true, data: doc }, { status: 200 });
+  } catch (error) {
+    console.error("GET Error:", error);
+    return NextResponse.json(
+      { success: false, message: "Fetch failed" },
+      { status: 500 }
+    );
+  }
+}
+
 export async function PATCH(
   req: Request,
-  {
-    params,
-  }: {
-    params: Promise<{ id: string }>;
-  }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;
@@ -40,11 +70,15 @@ export async function PATCH(
       );
     }
 
-    // Update spent & quantity
+    // ✅ Calculate difference in spent
+    const oldSpent = doc.history[historyIndex].spent || 0;
+    const diff = spent - oldSpent;
+
+    // ✅ Update spent
     doc.history[historyIndex].spent = spent;
-    const prevQuantity =
-      historyIndex > 0 ? doc.history[historyIndex - 1].quantity : 0;
-    doc.history[historyIndex].quantity = prevQuantity - spent;
+
+    // ✅ Adjust quantity
+    doc.history[historyIndex].quantity -= diff;
 
     await doc.save();
 

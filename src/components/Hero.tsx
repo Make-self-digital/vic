@@ -100,7 +100,7 @@ const Hero = () => {
             <div className="flex flex-row items-center gap-4 mt-6">
               {/* Button to Book Appointment */}
               <Link href={targetPath}>
-                <Button className="px-5 sm:px-6 py-3 rounded-full bg-[#0b968d] text-white font-semibold shadow-lg hover:scale-105 transition-transform cursor-pointer">
+                <Button className="px-5 sm:px-6 py-3 rounded-full bg-[#0b968d] text-white font-semibold shadow-lg hover:scale-105 transition-transform cursor-pointer tracking-wide">
                   {language === "english"
                     ? "Book Appointment"
                     : "अपॉइंटमेंट बुक करें"}
@@ -110,7 +110,7 @@ const Hero = () => {
               <Link href="/services">
                 <Button
                   variant="outline"
-                  className="text-[#0b968d] rounded-full px-5 sm:px-6 py-3 font-semibold shadow-lg border-[#0b968d] hover:bg-[#0b968d]/10 hover:scale-105 transition-transform cursor-pointer">
+                  className="text-[#0b968d] rounded-full px-5 sm:px-6 py-3 font-semibold shadow-lg border-[#0b968d] hover:bg-[#0b968d]/10 hover:scale-105 transition-transform cursor-pointer trwicking-wide">
                   {language === "english" ? "View Services" : "सेवाएं देखें"}
                 </Button>
               </Link>
