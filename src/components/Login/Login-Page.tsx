@@ -354,7 +354,7 @@ const LoginPage: React.FC = () => {
             <Link href={"/"}>
               <div>
                 <Image
-                  src="/logo-2.png"
+                  src="/logo-3.png"
                   alt="VIC Logo"
                   width={100}
                   height={100}
@@ -364,7 +364,7 @@ const LoginPage: React.FC = () => {
                 />
               </div>
             </Link>
-            <CardDescription className="tracking-wide leading-1 text-gray-500">
+            <CardDescription className="tracking-wide text-gray-500 mt-2">
               {language === "english"
                 ? "Please enter your details to login."
                 : "कृपया लॉगिन करने के लिए अपनी जानकारी दर्ज करें।"}

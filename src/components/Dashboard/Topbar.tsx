@@ -88,10 +88,10 @@ const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar }: TopbarProps) => {
         {/* Logo */}
         <Link href={"/"}>
           <div
-            className="w-full max-w-[60px] mr-10"
+            className="w-full max-w-[80px] mr-10"
             title="Vaishnavi Imaging Center Logo">
             <Image
-              src="/logo-2.png"
+              src="/logo-3.png"
               alt="Vaishnavi Imaging Center Logo"
               priority
               width="100"

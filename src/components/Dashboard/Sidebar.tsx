@@ -160,8 +160,6 @@ export default function AdminSidebar({
 
   // handle notification click
   const handleNotificationClick = async () => {
-    if (window.innerWidth < 768) onToggleSidebar?.();
-
     try {
       if (role === "patient" && loginPatient?._id) {
         await markAllRead(loginPatient._id);
@@ -200,13 +198,18 @@ export default function AdminSidebar({
                   key={name}
                   href={href}
                   className={cn(
-                    "group relative flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-gray-700 hover:bg-[#e6f4f3] hover:text-[#42998d] tracking-wide transition-all duration-150",
+                    "group relative flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-gray-700 hover:bg-[#e6f4f3] hover:text-[#42998d] tracking-wide transition-all duration-150 cursor-pointer",
                     isActive && "bg-[#d4f0ec] text-[#42998d] font-semibold"
                   )}
                   title={name}
-                  onClick={
-                    isNotification ? handleNotificationClick : undefined
-                  }>
+                  onClick={() => {
+                    if (isNotification) {
+                      handleNotificationClick(); // ✅ अब ये चलेगा
+                    }
+                    if (window.innerWidth < 768) {
+                      onToggleSidebar(); // ✅ अब mobile (<768px) पर ही चलेगा
+                    }
+                  }}>
                   <Icon className="h-5 w-5" />
                   <span>{name}</span>
 

@@ -89,7 +89,7 @@ export default function Navbar() {
           title="Vaishnavi Imaging Center Logo">
           <Link href="/">
             <Image
-              src="/logo-2.png"
+              src="/logo-3.png"
               alt="Vaishnavi Imaging Center Logo"
               priority
               width="100"

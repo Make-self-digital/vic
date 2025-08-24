@@ -25,7 +25,7 @@ const Footer: React.FC = () => {
             <Link href="/">
               <div className="relative">
                 <Image
-                  src="/logo-2.png"
+                  src="/logo-3.png"
                   alt="Vaishnavi Imaging Center Logo"
                   width={160}
                   height={160}
@@ -108,7 +108,7 @@ const Footer: React.FC = () => {
                 {" "}
                 {language === "english"
                   ? "NH-139, Tiwari Mohalla Bhakharua, Daudnagar, Bihar"
-                  : "एनएच-139, तिवारी मोहला भखरुआ, दाउदनगर, बिहार"}{" "}
+                  : "एनएच-139, तिवारी मोहल्ला भखरुआ, दाउदनगर, बिहार"}{" "}
               </span>
             </li>
           </ul>

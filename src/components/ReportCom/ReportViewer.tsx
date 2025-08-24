@@ -760,7 +760,7 @@ export default function ReportViewer() {
             <Card className="relative border border-[#42998d] rounded-md p-0 overflow-hidden">
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0 print:opacity-15 opacity-15">
                 <Image
-                  src="/logo-2.png"
+                  src="/logo-3.png"
                   alt="VIC LOGO"
                   width={400}
                   height={400}
@@ -775,7 +775,7 @@ export default function ReportViewer() {
                       Vaishnavi <span>Imaging Center</span>
                     </h2>
                     <p className="text-muted-foreground">
-                      Tiwari Mohalla, Daudnagar, Bihar
+                      NH-139, Tiwari Mohalla Bhakharua, Daudnagar, Bihar
                     </p>
                     <p className="text-muted-foreground text-sm">
                       Dr. Abhay (MBBS, DMRD) | Reg. No: 12345678910
