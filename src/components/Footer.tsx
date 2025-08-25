@@ -85,6 +85,22 @@ const Footer: React.FC = () => {
                 </Link>
               )}
             </li>
+            <li>
+              <Link
+                href="/privacy-policy"
+                className="hover:underline tracking-wide">
+                {language === "english"
+                  ? "Privacy Policy & Terms"
+                  : "गोपनीयता नीति और शर्त"}
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/refund-policy"
+                className="hover:underline tracking-wide">
+                {language === "english" ? "Refund Policy" : "रिफंड नीति"}
+              </Link>
+            </li>
           </ul>
         </div>
 
@@ -96,7 +112,7 @@ const Footer: React.FC = () => {
           <ul className="space-y-3 text-sm text-gray-500">
             <li className="flex items-start gap-2 tracking-wide">
               <Phone className="w-4 h-4 mt-1 text-gray-500" />
-              <span>+91-9876543210</span>
+              <span>+91-7004787351</span>
             </li>
             <li className="flex items-start gap-2 tracking-wide">
               <Mail className="w-4 h-4 mt-1 text-gray-500" />

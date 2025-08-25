@@ -1,6 +1,6 @@
 "use client";
 
-import { LogOut, Settings, Home, User } from "lucide-react";
+import { LogOut, Home, User } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { useRouter } from "next/navigation";
@@ -173,15 +173,6 @@ const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar }: TopbarProps) => {
             </p>
           </div>
         </div>
-
-        {/* Settings */}
-        <button
-          className="rounded-xl p-2 hover:bg-[#d4f0ec] transition-all duration-150 ease-in-out cursor-pointer"
-          title="Settings">
-          <div className="w-6 h-6 text-[#42998d] flex items-center justify-center">
-            <Settings className="w-full h-full" strokeWidth={2.2} />
-          </div>
-        </button>
 
         {/* Logout */}
         <button

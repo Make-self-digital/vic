@@ -26,6 +26,16 @@ export const metadataConfig: Record<
     description:
       "Login to Vaishnavi Imaging Center to book appointments, track reports, and manage patient records easily.",
   },
+  "/privacy-policy": {
+    title: "Privacy Policy - Vaishnavi Imaging Center",
+    description:
+      "Read the Privacy Policy of Vaishnavi Imaging Center. Learn how we collect, use, and protect your personal information to ensure confidentiality and trust in our healthcare services.",
+  },
+  "/refund-policy": {
+    title: "Refund Policy - Vaishnavi Imaging Center",
+    description:
+      "Read the Refund Policy of Vaishnavi Imaging Center. Understand the conditions for refunds, how to request them, and our commitment to providing transparent and fair refund practices for our ultrasound and healthcare services.",
+  },
   "/appointments": {
     title: "Appointment - Vaishnavi Imaging Center",
     description:
