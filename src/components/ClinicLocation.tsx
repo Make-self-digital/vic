@@ -42,9 +42,9 @@ const ClinicLocation: React.FC = () => {
             <Phone className="w-6 h-6 text-[#42998d]" />
           </div>
           <a
-            href="tel:+919876543210"
+            href="tel:+917004787351"
             className="text-[#1e4d4f] text-sm font-medium tracking-wide hover:text-[#0b968d] transition">
-            +91 9876543210
+            +91 7004787351
           </a>
         </div>
 
