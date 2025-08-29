@@ -7,7 +7,14 @@ import Image from "next/image";
 import { QRCodeSVG } from "qrcode.react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Pencil, Trash2, Save, ImagePlus } from "lucide-react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { cn } from "@/lib/utils";
+import { Trash2, ImagePlus, Printer, CalendarIcon } from "lucide-react";
 import { uploadToCloudinary } from "@/lib/cloudinary";
 import { toast } from "sonner";
 import { toPng } from "html-to-image";
@@ -25,10 +32,8 @@ interface Patient {
   doctorName: string;
   reportUrl: string[];
   patientReport: {
-    Scan: string;
-    ClinicalHistory: string;
-    Findings: string[];
-    Impression: string[];
+    MakingDate: string;
+    Sections: { heading: string; description: string }[];
     ImageUrls: string[];
   };
 }
@@ -39,24 +44,17 @@ export default function ReportViewer() {
   const [phone, setPhone] = useState<string | null>(null);
   const [patientId, setPatientId] = useState<string | null>(null);
   const [currentDate, setCurrentDate] = useState<string>("");
-  const [scan, setScan] = useState<string>("");
-  const [history, setHistory] = useState<string>("");
 
-  // ? findings
-  const [findings, setFindings] = useState<string[]>([]);
-  const [newFinding, setNewFinding] = useState("");
-  const [editingFindingIndex, setEditingFindingIndex] = useState<number | null>(
-    null
-  );
-  const [editFindingValue, setEditFindingValue] = useState("");
+  // New State
+  const [sections, setSections] = useState<
+    { heading: string; description: string }[]
+  >([]);
+  const [newHeading, setNewHeading] = useState("");
 
-  // ? impressions
-  const [impressions, setImpressions] = useState<string[]>([]);
-  const [newImpression, setNewImpression] = useState("");
-  const [editingImpressionIndex, setEditingImpressionIndex] = useState<
-    number | null
-  >(null);
-  const [editImpressionValue, setEditImpressionValue] = useState("");
+  // Report Making date:-
+  const [reportMakingDate, setReportMakingDate] = useState<Date | null>(null);
+
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   // ? Image upload
   const [images, setImages] = useState<string[]>([]);
@@ -106,10 +104,7 @@ export default function ReportViewer() {
 
   useEffect(() => {
     if (patient?.patientReport) {
-      setScan(patient.patientReport.Scan || "");
-      setHistory(patient.patientReport.ClinicalHistory || "");
-      setFindings(patient.patientReport.Findings || []);
-      setImpressions(patient.patientReport.Impression || []);
+      setSections(patient.patientReport.Sections || []);
       setImages(patient.patientReport.ImageUrls || []);
     }
   }, [patient]);
@@ -140,62 +135,6 @@ export default function ReportViewer() {
     }
   };
 
-  // ? handle add finding:
-  const addFinding = () => {
-    if (newFinding.trim()) {
-      setFindings([...findings, newFinding]);
-      setNewFinding("");
-    }
-  };
-
-  // ? handle delete finding:
-  const deleteFinding = (index: number) => {
-    setFindings(findings.filter((_, i) => i !== index));
-  };
-
-  // ? handle edit finding:
-  const startFindingEdit = (index: number, value: string) => {
-    setEditingFindingIndex(index);
-    setEditFindingValue(value);
-  };
-
-  // ? handle save finding:
-  const saveFindingEdit = (index: number) => {
-    const updated = [...findings];
-    updated[index] = editFindingValue;
-    setFindings(updated);
-    setEditingFindingIndex(null);
-    setEditFindingValue("");
-  };
-
-  // ? handle add impression:
-  const addImpression = () => {
-    if (newImpression.trim()) {
-      setImpressions([...impressions, newImpression]);
-      setNewImpression("");
-    }
-  };
-
-  // ? handle delete impression:
-  const deleteImpression = (index: number) => {
-    setImpressions(impressions.filter((_, i) => i !== index));
-  };
-
-  // ? handle edit impression:
-  const startImpressionEdit = (index: number, value: string) => {
-    setEditingImpressionIndex(index);
-    setEditImpressionValue(value);
-  };
-
-  // ? handle save impression:
-  const saveImpressionEdit = (index: number) => {
-    const updated = [...impressions];
-    updated[index] = editImpressionValue;
-    setImpressions(updated);
-    setEditingImpressionIndex(null);
-    setEditImpressionValue("");
-  };
-
   // ? handle image upload:
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
@@ -220,7 +159,7 @@ export default function ReportViewer() {
 
       toast.success("Report uploaded successfully!", {
         id: toastId,
-        description: "Done ✔️",
+        description: "Done",
         style: {
           background: "#42998d",
           color: "#ffffff",
@@ -350,7 +289,7 @@ export default function ReportViewer() {
       if (data.success) {
         toast.success("Report URL uploaded successfully", {
           id: toastId,
-          description: "Done ✔️",
+          description: "Done",
           style: {
             background: "#42998d",
             color: "#ffffff",
@@ -406,10 +345,10 @@ export default function ReportViewer() {
         body: JSON.stringify({
           patientId,
           phone,
-          scan,
-          history,
-          findings,
-          impressions,
+          reportMakingDate: reportMakingDate
+            ? format(reportMakingDate, "dd-MM-yyyy")
+            : null,
+          sections,
           images,
           currentDate,
         }),
@@ -420,7 +359,7 @@ export default function ReportViewer() {
 
       toast.success("Report saved successfully!", {
         id: toastId,
-        description: "Done ✔️",
+        description: "Done",
         style: {
           background: "#42998d",
           color: "#ffffff",
@@ -441,14 +380,33 @@ export default function ReportViewer() {
     }
   };
 
+  // ? Add Section
+  const addSection = () => {
+    if (!newHeading.trim()) return;
+    setSections([...sections, { heading: newHeading, description: "" }]);
+    setNewHeading("");
+  };
+
+  // ? Update description
+  const updateDescription = (index: number, value: string) => {
+    const updated = [...sections];
+    updated[index].description = value;
+    setSections(updated);
+  };
+
+  const handleDateSelect = (selectedDate: Date | undefined) => {
+    setReportMakingDate(selectedDate || null);
+    setIsOpen(false);
+  };
+
   return (
     <>
       {/* OPEN & CLOSE EDITABLE REPORT BUTTON */}
-      <div className="w-full flex justify-end items-center max-w-3xl mx-auto rounded-md">
+      <div className="w-full flex justify-end items-center max-w-7xl mx-auto rounded-md">
         <Button
           variant="outline"
           onClick={() => setShowEditableReport(!showEditableReport)}
-          className={`cursor-pointer text-[#42998d] hover:text-white hover:bg-[#42998d] transition duration-300 ease-in-out ${
+          className={`cursor-pointer bg-white text-[#42998d] hover:text-white hover:bg-[#42998d] transition duration-300 ease-in-out ${
             showEditableReport ? "mb-4" : "mb-0"
           }`}>
           {showEditableReport
@@ -458,10 +416,10 @@ export default function ReportViewer() {
       </div>
 
       {/* EDITABLE REPORT & REPORT VIEWER */}
-      <div className="w-full flex flex-col justify-between items-center">
+      <div className="w-full max-w-7xl mx-auto flex flex-col justify-between items-center rounded-md">
         {/* EDITABLE CONTENT FOR THE REPORT */}
         {showEditableReport && (
-          <div className="w-full max-w-[765px] p-4 space-y-4 border border-[#42998d] rounded-md">
+          <Card className="w-full bg-white p-4 space-y-4 border border-[#42998d] rounded-md">
             <div>
               {/* REPORT TO IMAGE CONVERTER AND SAVE IN QR BUTTON */}
               {/* SAVE REPORT */}
@@ -492,198 +450,106 @@ export default function ReportViewer() {
               </div>
             </div>
 
-            {/* SCAN & CLINICAL HISTORY */}
-            <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
-              {/* SCAN */}
-              <div>
-                <label
-                  htmlFor="scan"
-                  className="text-sm font-semibold mb-1 block">
-                  Scan:
-                </label>
-                <Input
-                  type="text"
-                  name="scan"
-                  id="scan"
-                  value={scan}
-                  onChange={(e) => setScan(e.target.value)}
-                  placeholder="Enter scan"
-                  autoComplete="off"
-                  className="border rounded-md focus:ring-[#42998d] focus:outline-none transition-all duration-150 border-[#42998d] outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0 text-sm"
+            {/* Report Date Input */}
+            <div className="flex flex-col gap-2 mb-4">
+              <label className="text-sm font-semibold text-gray-700">
+                Date
+              </label>
+              <Popover open={isOpen} onOpenChange={setIsOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsOpen(!isOpen)}
+                    className={cn(
+                      "w-full justify-start text-left font-normal p-3 pl-3 border-gray-300 cursor-pointer",
+                      !reportMakingDate && "text-muted-foreground"
+                    )}>
+                    <CalendarIcon className="mr-2 h-4 w-4 text-[#42998d]" />
+                    {reportMakingDate
+                      ? format(reportMakingDate, "dd-MM-yyyy")
+                      : currentDate}
+                  </Button>
+                </PopoverTrigger>
+
+                <PopoverContent className="z-[100] w-auto p-0 mt-2 bg-[#fff] border border-[#42998d] rounded-md shadow-lg">
+                  <Calendar
+                    mode="single"
+                    selected={reportMakingDate || undefined}
+                    onSelect={handleDateSelect}
+                    className={cn(
+                      // Selected date style
+                      "[&_.rdp-day_selected]:bg-[#18564e]",
+                      "[&_.rdp-day_selected]:text-white",
+
+                      // Hover style
+                      "[&_.rdp-day:hover]:bg-[#cceee8]",
+                      "[&_.rdp-day:hover]:cursor-pointer",
+
+                      // Transition and rounding
+                      "[&_.rdp-day]:transition-all",
+                      "[&_.rdp-day]:rounded-md",
+
+                      // Full focus/active/visible reset (👇 ye most important hain)
+                      "[&_.rdp-day]:outline-none",
+                      "[&_.rdp-day]:ring-0",
+                      "[&_.rdp-day]:border-none",
+                      "[&_.rdp-day]:shadow-none",
+                      "[&_.rdp-day]:focus:outline-none",
+                      "[&_.rdp-day]:focus:ring-0",
+                      "[&_.rdp-day]:focus:border-none",
+                      "[&_.rdp-day]:focus:shadow-none",
+                      "[&_.rdp-day]:focus-visible:outline-none",
+                      "[&_.rdp-day]:focus-visible:ring-0",
+                      "[&_.rdp-day]:focus-visible:border-none",
+                      "[&_.rdp-day]:focus-visible:shadow-none",
+                      "[&_.rdp-day]:active:outline-none",
+                      "[&_.rdp-day]:active:ring-0",
+                      "[&_.rdp-day]:active:border-none",
+                      "[&_.rdp-day]:active:shadow-none"
+                    )}
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+
+            {/* Add Heading Input */}
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-3 mb-4">
+              <Input
+                type="text"
+                value={newHeading}
+                onChange={(e) => setNewHeading(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault(); // form submit ya reload hone se bachaega
+                    addSection();
+                  }
+                }}
+                placeholder="Enter Heading"
+                className="text-sm mt-1 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0 tracking-wide leading-relaxed"
+              />
+              <Button
+                type="button"
+                onClick={addSection}
+                className="bg-[#42998d] hover:bg-[#357c72] text-white rounded-md px-4 py-1 cursor-pointer font-semibold text-sm transition-colors duration-200">
+                Add
+              </Button>
+            </div>
+
+            {/* Render Sections */}
+            {sections.map((section, index) => (
+              <div
+                key={index}
+                className="mb-4 border border-gray-300 p-3 rounded-md">
+                <h3 className="font-semibold text-sm">{section.heading}</h3>
+                <textarea
+                  value={section.description}
+                  onChange={(e) => updateDescription(index, e.target.value)}
+                  placeholder="Enter description..."
+                  className="w-full rounded-md p-2 mt-2 text-sm pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0"
+                  rows={3}
                 />
               </div>
-
-              {/* CLINICAL HISTORY */}
-              <div>
-                <label
-                  htmlFor="history"
-                  className="text-sm font-semibold mb-1 block">
-                  Clinical History:
-                </label>
-                <Input
-                  type="text"
-                  name="history"
-                  id="history"
-                  value={history}
-                  onChange={(e) => setHistory(e.target.value)}
-                  placeholder="Enter clinical history"
-                  autoComplete="off"
-                  className="border rounded-md focus:ring-[#42998d] focus:outline-none transition-all duration-150 border-[#42998d] outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0 text-sm"
-                />
-              </div>
-            </div>
-
-            {/* FINDINGS */}
-            <div>
-              <label htmlFor="findings" className="text-sm font-semibold block">
-                Findings:
-              </label>
-              <div className="space-y-2 mt-2">
-                {findings.map((item, index) => (
-                  <div
-                    key={index}
-                    className="group flex items-center justify-between gap-2 w-full">
-                    {editingFindingIndex === index ? (
-                      <Input
-                        type="text"
-                        id="Edit Findings"
-                        name="Edit Findings"
-                        value={editFindingValue}
-                        onChange={(e) => setEditFindingValue(e.target.value)}
-                        placeholder="Edit finding"
-                        autoComplete="off"
-                        className="border rounded-md focus:ring-[#42998d] focus:outline-none transition-all duration-150 border-[#42998d] outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0 text-sm"
-                      />
-                    ) : (
-                      <p className="text-sm flex-1">- {item}</p>
-                    )}
-
-                    {/* Icons container, visible on hover */}
-                    <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition">
-                      {editingFindingIndex === index ? (
-                        <Save
-                          className="text-[#295c57] cursor-pointer w-4 h-4"
-                          onClick={() => saveFindingEdit(index)}
-                        />
-                      ) : (
-                        <Pencil
-                          className="text-[#295c57] cursor-pointer w-4 h-4"
-                          onClick={() => startFindingEdit(index, item)}
-                        />
-                      )}
-                      <Trash2
-                        className="text-[#295c57] cursor-pointer w-4 h-4"
-                        onClick={() => deleteFinding(index)}
-                      />
-                    </div>
-                  </div>
-                ))}
-
-                {/* Add New Finding */}
-                <div className="flex gap-2">
-                  <Input
-                    type="text"
-                    id="findings"
-                    name="findings"
-                    value={newFinding}
-                    onChange={(e) => setNewFinding(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        e.preventDefault();
-                        addFinding();
-                      }
-                    }}
-                    placeholder="Add finding"
-                    className="border rounded-md focus:ring-[#42998d] focus:outline-none transition-all duration-150 border-[#42998d] outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0 text-sm"
-                    autoComplete="off"
-                  />
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={addFinding}
-                    className="text-[#42998d] hover:text-white hover:bg-[#42998d] rounded-md cursor-pointer transition duration-300 ease-in-out">
-                    Add
-                  </Button>
-                </div>
-              </div>
-            </div>
-
-            {/* IMPRESSION */}
-            <div>
-              <label
-                htmlFor="impression"
-                className="text-sm font-semibold block">
-                Impression:
-              </label>
-              <div className="space-y-2 mt-2">
-                {impressions.map((item, index) => (
-                  <div
-                    key={index}
-                    className="group flex items-center justify-between gap-2 w-full">
-                    {editingImpressionIndex === index ? (
-                      <Input
-                        type="text"
-                        id="Edit Impression"
-                        name="Edit Impression"
-                        value={editImpressionValue}
-                        onChange={(e) => setEditImpressionValue(e.target.value)}
-                        placeholder="Edit impression"
-                        className="border rounded-md focus:ring-[#42998d] focus:outline-none transition-all duration-150 border-[#42998d] outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0 text-sm"
-                        autoComplete="off"
-                      />
-                    ) : (
-                      <p className="text-sm flex-1">- {item}</p>
-                    )}
-
-                    {/* Icons container, visible on hover */}
-                    <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition">
-                      {editingImpressionIndex === index ? (
-                        <Save
-                          className="text-[#295c57] cursor-pointer w-4 h-4"
-                          onClick={() => saveImpressionEdit(index)}
-                        />
-                      ) : (
-                        <Pencil
-                          className="text-[#295c57] cursor-pointer w-4 h-4"
-                          onClick={() => startImpressionEdit(index, item)}
-                        />
-                      )}
-                      <Trash2
-                        className="text-[#295c57] cursor-pointer w-4 h-4"
-                        onClick={() => deleteImpression(index)}
-                      />
-                    </div>
-                  </div>
-                ))}
-
-                {/* Add New Impression */}
-                <div className="flex gap-2">
-                  <Input
-                    type="text"
-                    id="impression"
-                    name="impression"
-                    value={newImpression}
-                    onChange={(e) => setNewImpression(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        e.preventDefault();
-                        addImpression();
-                      }
-                    }}
-                    placeholder="Add impression"
-                    className="border rounded-md focus:ring-[#42998d] focus:outline-none transition-all duration-150 border-[#42998d] outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0 text-sm"
-                    autoComplete="off"
-                  />
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={addImpression}
-                    className="text-[#42998d] hover:text-white hover:bg-[#42998d] rounded-md cursor-pointer">
-                    Add
-                  </Button>
-                </div>
-              </div>
-            </div>
+            ))}
 
             {/* IMAGE */}
             <div className="w-full max-w-sm">
@@ -748,153 +614,155 @@ export default function ReportViewer() {
                 })}
               </div>
             </div>
-          </div>
+          </Card>
         )}
 
         {/* PRINTABLE REPORT */}
-        <div className="p-4 w-full max-w-[800px]">
-          <div
-            className="print:bg-white bg-muted"
-            ref={printRef}
-            id="printable-report">
-            <Card className="relative border border-[#42998d] rounded-md p-0 overflow-hidden">
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0 print:opacity-15 opacity-15">
-                <Image
-                  src="/logo-3.png"
-                  alt="VIC LOGO"
-                  width={400}
-                  height={400}
-                  priority
-                  className="w-auto h-auto object-contain"
+        <div
+          className="print:bg-white bg-white mt-4 mb-4"
+          ref={printRef}
+          id="printable-report">
+          <Card className="relative border border-[#42998d] rounded-md p-0 overflow-hidden">
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0 print:opacity-15 opacity-15">
+              <Image
+                src="/logo-3.png"
+                alt="VIC LOGO"
+                width={400}
+                height={400}
+                priority
+                className="w-auto h-auto object-contain"
+              />
+            </div>
+            <CardContent className="p-4 space-y-4 text-sm print:text-xs">
+              <div className="border-b border-b-[#42998d] pb-4 flex justify-between items-center tracking-wide">
+                <div>
+                  <h2 className="text-xl font-bold uppercase tracking-[0.04rem]">
+                    Vaishnavi <span>Imaging Center</span>
+                  </h2>
+                  <p className="text-muted-foreground max-w-sm break-words">
+                    Aurangabad Road, In front of Dr. Mrs. Ranju, Tiwari Mohalla,
+                    Bhakharua Daudnagar, Aurangabad, Bihar
+                  </p>
+                  <p className="text-muted-foreground text-sm">
+                    Dr. Chandan Bharti (MBBS, DMRD) | Reg. No:
+                    0605202209B9166E3B
+                  </p>
+                </div>
+                {/* QR CODE */}
+
+                <QRCodeSVG
+                  key={qrValue}
+                  value={qrValue || "https://vaishnaviimagingcenter.com/"}
+                  size={85}
+                  level="H"
                 />
               </div>
-              <CardContent className="p-4 space-y-4 text-sm print:text-xs">
-                <div className="border-b border-b-[#42998d] pb-4 flex justify-between items-center">
-                  <div>
-                    <h2 className="text-xl font-bold uppercase tracking-[0.04rem]">
-                      Vaishnavi <span>Imaging Center</span>
-                    </h2>
-                    <p className="text-muted-foreground">
-                      NH-139, Tiwari Mohalla Bhakharua, Daudnagar, Bihar
-                    </p>
-                    <p className="text-muted-foreground text-sm">
-                      Dr. Abhay (MBBS, DMRD) | Reg. No: 12345678910
-                    </p>
-                  </div>
-                  {/* QR CODE */}
 
-                  <QRCodeSVG
-                    key={qrValue}
-                    value={qrValue || "https://vaishnaviimagingcenter.com/"}
-                    size={70}
-                    level="H"
-                  />
-                </div>
-
-                {/* PATIENT DETAILS */}
-                <div className="grid grid-cols-2 gap-4 border-b border-b-[#42998d] pb-4">
-                  <div>
-                    <p>
-                      <span className="font-semibold">Patient:</span>{" "}
-                      {patient?.patientName
-                        ?.split(" ")
-                        .map(
-                          (word) =>
-                            word.charAt(0).toUpperCase() +
-                            word.slice(1).toLowerCase()
-                        )
-                        .join(" ")}
-                    </p>
-                    <p>
-                      <span className="font-semibold">Age:</span> {patient?.age}{" "}
-                      | {patient?.gender}
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <p>
-                      <span className="font-semibold">Date:</span> {currentDate}
-                    </p>
-                    <p>
-                      <span className="font-semibold">Ref. by:</span>{" "}
-                      {patient?.doctorName}
-                    </p>
-                  </div>
-                </div>
-
-                {/* SCAN & HISTORY */}
-                <div className="space-y-1">
+              {/* PATIENT DETAILS */}
+              <div className="grid grid-cols-2 gap-4 border-b border-b-[#42998d] pb-4 tracking-wide leading-relaxed">
+                <div>
                   <p>
-                    <span className="font-semibold">Scan:</span> {scan}
+                    <span className="font-semibold">Patient:</span>{" "}
+                    {patient?.patientName
+                      ?.split(" ")
+                      .map(
+                        (word) =>
+                          word.charAt(0).toUpperCase() +
+                          word.slice(1).toLowerCase()
+                      )
+                      .join(" ")}
                   </p>
                   <p>
-                    <span className="font-semibold">Clinical History:</span>{" "}
-                    {history}
+                    <span className="font-semibold">Age:</span> {patient?.age} |{" "}
+                    {patient?.gender}
                   </p>
                 </div>
-
-                {/* FINDINGS */}
-                <div>
-                  <h3 className="font-semibold mt-4 mb-2">Findings:</h3>
-                  <ul className="list-disc pl-5 space-y-1">
-                    {findings.map((item, index) => (
-                      <li key={index}>{item}</li>
-                    ))}
-                  </ul>
+                <div className="text-right">
+                  <p>
+                    <span className="font-semibold">Date:</span>{" "}
+                    {patient?.patientReport.MakingDate
+                      ? patient?.patientReport.MakingDate
+                      : format(reportMakingDate || new Date(), "dd-MM-yyyy")}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Ref. by:</span>{" "}
+                    {patient?.doctorName}
+                  </p>
                 </div>
+              </div>
 
-                {/* IMPRESSIONS */}
+              {/* Scan Name */}
+              <div className="text-center">
+                <h4 className="font-semibold text-base leading-relaxed tracking-wide">
+                  {patient?.service}
+                </h4>
+              </div>
+
+              {sections.length > 0 && (
                 <div>
-                  <h3 className="font-semibold mt-4 mb-2">Impression:</h3>
-                  <ul className="list-disc pl-5 space-y-1">
-                    {impressions.map((item, index) => (
-                      <li key={index}>{item}</li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* IMAGE PREVIEW */}
-                <div className="flex flex-wrap justify-center gap-4">
-                  {images.map((img, index) => {
-                    return (
-                      <div
-                        key={index}
-                        className="relative group w-[150px] h-[150px] border border-[#42998d] rounded overflow-hidden">
-                        <Image
-                          src={`${img}?f_auto&q_auto&dpr_auto`}
-                          alt={`Report-${index}`}
-                          width={150}
-                          height={150}
-                          className="object-cover w-full h-full"
-                        />
+                  <div className="space-y-3">
+                    {sections.map((sec, index) => (
+                      <div key={index}>
+                        <h4 className="font-semibold leading-relaxed tracking-wide">
+                          {sec.heading}
+                        </h4>
+                        <p className="text-sm leading-relaxed tracking-wide">
+                          {sec.description}
+                        </p>
                       </div>
-                    );
-                  })}
+                    ))}
+                  </div>
                 </div>
+              )}
 
-                {/* REPORTED BY & DATE */}
-                <div className="text-right mt-6">
-                  <p className="font-medium">
-                    🖊️ Reported by: {patient?.doctorName}
-                  </p>
-                  <p className="text-muted-foreground">Date: {currentDate}</p>
-                </div>
+              {/* IMAGE PREVIEW */}
+              <div className="flex flex-wrap justify-center gap-4">
+                {images.map((img, index) => {
+                  return (
+                    <div
+                      key={index}
+                      className="relative group w-[150px] h-[150px] border border-[#42998d] rounded overflow-hidden">
+                      <Image
+                        src={`${img}?f_auto&q_auto&dpr_auto`}
+                        alt={`Report-${index}`}
+                        width={150}
+                        height={150}
+                        className="object-cover w-full h-full"
+                      />
+                    </div>
+                  );
+                })}
+              </div>
 
-                {/* WARNING MESSAGE */}
-                <div className="mt-6 border-t pt-4 text-center text-xs text-red-600 font-medium">
-                  🚫 Sex determination is a punishable offence under the law
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+              {/* REPORTED BY & DATE */}
+              <div className="text-right mt-6 tracking-wide leading-relaxed">
+                <p className="font-medium">
+                  🖊️ Reported by: {patient?.doctorName}
+                </p>
+                <p className="text-muted-foreground">
+                  Date:{" "}
+                  {patient?.patientReport.MakingDate
+                    ? patient?.patientReport.MakingDate
+                    : format(reportMakingDate || new Date(), "dd-MM-yyyy")}
+                </p>
+              </div>
+
+              {/* WARNING MESSAGE */}
+              <div className="mt-6 border-t pt-4 text-center text-xs text-red-600 font-medium tracking-wide leading-relaxed">
+                🚫 Sex determination is a punishable offence under the law
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
 
       {/* PRINT BUTTON */}
-      <div className="flex justify-center ">
+      <div className="flex justify-center">
         <button
           onClick={handlePrint}
-          className="px-4 py-2 bg-[#0b968d] text-white rounded-sm hover:bg-[#097c74] transition text-sm cursor-pointer">
-          Print List
+          className="flex items-center gap-2 px-4 py-2 bg-[#0b968d] text-white rounded-md hover:bg-[#097c74] transition-colors duration-200 font-medium tracking-wide text-sm shadow-sm cursor-pointer">
+          <Printer className="h-4 w-4" />
+          Print Report
         </button>
       </div>
     </>

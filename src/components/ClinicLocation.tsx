@@ -31,8 +31,8 @@ const ClinicLocation: React.FC = () => {
           </div>
           <p className="text-[#1e4d4f] text-sm font-medium tracking-wide">
             {language === "english"
-              ? "NH-139, Tiwari Mohalla Bhakharua, Daudnagar, Aurangabad, Bihar"
-              : "एनएच-139, तिवारी मोहल्ला भखरुआ, दाउदनगर, औरंगाबाद, बिहार"}
+              ? "Aurangabad Road, In front of Dr. Mrs. Ranju, Tiwari Mohalla, Bhakharua Daudnagar, Aurangabad, Bihar"
+              : "औरंगाबाद रोड, डॉ. श्रीमती रंजु के सामने, तिवारी मोहल्ला, भखरुआ दाउदनगर, औरंगाबाद, बिहार"}
           </p>
         </div>
 
@@ -82,19 +82,14 @@ const ClinicLocation: React.FC = () => {
           <div className="text-[#1e4d4f] text-sm font-medium tracking-wide">
             <p>
               {language === "english"
-                ? "Mon - Sat: 7:30 AM - 8:00 PM"
-                : "सोमवार - शनिवार: सुबह 7:30 बजे - रात 8:00 बजे"}
-            </p>
-            <p>
-              {language === "english"
-                ? "Sunday: 9:00 AM - 1:00 PM"
-                : "रविवार: सुबह 9:00 बजे - दोपहर 1:00 बजे"}
+                ? "Mon - Sun: 7:00 AM - 8:00 PM"
+                : "सोमवार - रविवार: सुबह 7:00 बजे - रात 8:00 बजे"}
             </p>
           </div>
         </div>
 
         {/* CTA Buttons - span full width */}
-        <div className="flex items-center gap-3 bg-white rounded-xl p-4 shadow-sm transition border border-[#42998d]">
+        <div className="flex justify-center items-center gap-3 bg-white rounded-xl p-4 shadow-sm transition border border-[#42998d]">
           <a
             href="https://maps.google.com/?q=Vaishnavi+Imaging+Center"
             target="_blank"
@@ -105,7 +100,7 @@ const ClinicLocation: React.FC = () => {
               : "मार्गदर्शन पाने के लिए"}
           </a>
           <a
-            href="tel:+919876543210"
+            href="tel:+917004787351"
             className="px-6 py-2 border border-[#0b968d] text-[#0b968d] hover:bg-[#0b968d] hover:text-white rounded-md text-sm transition tracking-wide font-semibold">
             {language === "english" ? "Call Now" : "अभी कॉल करें"}
           </a>

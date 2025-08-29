@@ -24,6 +24,13 @@ const AppointmentSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    village: {
+      type: String,
+      required: true,
+    },
+    referBy: {
+      type: String,
+    },
     service: {
       type: String,
       required: true,
@@ -71,16 +78,13 @@ const AppointmentSchema = new mongoose.Schema(
       default: [],
     },
     patientReport: {
-      Scan: { type: String },
-      ClinicalHistory: { type: String },
-      Findings: {
-        type: [String],
-        default: [],
-      },
-      Impression: {
-        type: [String],
-        default: [],
-      },
+      MakingDate: { type: String },
+      Sections: [
+        {
+          heading: { type: String },
+          description: { type: String },
+        },
+      ],
       ImageUrls: {
         type: [String],
         default: [],

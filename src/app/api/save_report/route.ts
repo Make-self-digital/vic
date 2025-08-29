@@ -5,38 +5,29 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   try {
     await connectToDatabase();
-    let {
-      patientId,
-      phone,
-      scan,
-      history,
-      findings,
-      impressions,
-      images,
-      currentDate,
-    } = await req.json();
+
+    let { patientId, phone, reportMakingDate, sections, images, currentDate } =
+      await req.json();
 
     if (!phone || !patientId) {
       return NextResponse.json(
-        { error: "Phone and patientId number are required" },
+        { error: "Phone and patientId are required" },
         { status: 400 }
       );
     }
 
-    // Clean input
-    scan = scan.trim();
-    history = history.trim();
-    findings = findings?.trim?.() ?? findings;
-    impressions = impressions?.trim?.() ?? impressions;
+    // Clean input (optional)
+    sections = sections?.map((s: any) => ({
+      heading: s.heading?.trim?.() ?? "",
+      description: s.description?.trim?.() ?? "",
+    }));
 
     const updatedPatient = await AppointmentOf2025.findOneAndUpdate(
       { phone, _id: patientId },
       {
         $set: {
-          "patientReport.Scan": scan,
-          "patientReport.ClinicalHistory": history,
-          "patientReport.Findings": findings,
-          "patientReport.Impression": impressions,
+          "patientReport.MakingDate": reportMakingDate,
+          "patientReport.Sections": sections,
           "patientReport.ImageUrls": images,
           reportStatus: "ready",
           lastDate: currentDate,
@@ -51,11 +42,11 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.json({
-      message: "Report updated",
+      message: "Report updated successfully",
       patient: updatedPatient,
     });
   } catch (error) {
-    console.error(error);
+    console.error("Error saving report:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }

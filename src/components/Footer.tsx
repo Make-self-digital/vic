@@ -119,12 +119,14 @@ const Footer: React.FC = () => {
               <span>info@vaishnaviultrasound.com</span>
             </li>
             <li className="flex items-start gap-2 tracking-wide">
-              <MapPin className="w-4 h-4 mt-1 text-gray-500" />
+              <span>
+                <MapPin className="w-4 h-4 mt-1 text-gray-500" />
+              </span>
               <span>
                 {" "}
                 {language === "english"
-                  ? "NH-139, Tiwari Mohalla Bhakharua, Daudnagar, Bihar"
-                  : "एनएच-139, तिवारी मोहल्ला भखरुआ, दाउदनगर, बिहार"}{" "}
+                  ? "Aurangabad Road, In front of Dr. Mrs. Ranju, Tiwari Mohalla, Bhakharua Daudnagar, Aurangabad, Bihar"
+                  : "औरंगाबाद रोड, डॉ. श्रीमती रंजु के सामने, तिवारी मोहल्ला, भखरुआ दाउदनगर, औरंगाबाद, बिहार"}{" "}
               </span>
             </li>
           </ul>
@@ -139,13 +141,8 @@ const Footer: React.FC = () => {
             <li>
               {" "}
               {language === "english"
-                ? "Mon - Sat: 7:30 AM - 8:00 PM"
-                : "सोमवार - शनिवार: सुबह 7:30 बजे - रात 8:00 बजे"}
-            </li>
-            <li>
-              {language === "english"
-                ? "Sunday: 9:00 AM - 1:00 PM"
-                : "रविवार: सुबह 9:00 बजे - दोपहर 1:00 बजे"}
+                ? "Mon - Sun: 7:00 AM - 8:00 PM"
+                : "सोमवार - रविवार: सुबह 7:00 बजे - रात 8:00 बजे"}
             </li>
           </ul>
         </div>

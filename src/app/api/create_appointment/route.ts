@@ -9,14 +9,12 @@ export async function POST(req: Request) {
 
     let {
       patientId,
-      formData: { name, phone, age, gender, service, notes },
+      formData: { name, phone, age, village, gender, service, notes },
       formattedDate, // appointmentDate
       time, // appointmentTime
       bookingTime, // time of booking
       payment, // amount
     } = body;
-
-    console.log({ name, phone, age, gender, service, notes });
 
     age = age?.trim();
     notes = notes?.trim();
@@ -37,6 +35,8 @@ export async function POST(req: Request) {
       patientName: name,
       phone: phone,
       age,
+      village,
+      referBy: "",
       gender,
       service,
       notes,
@@ -51,10 +51,8 @@ export async function POST(req: Request) {
       doctorName: "",
       reportUrl: [],
       patientReport: {
-        Scan: "",
-        ClinicalHistory: "",
-        Findings: [],
-        Impression: [],
+        MakingDate: "",
+        Sections: [],
         ImageUrls: [],
       },
     });

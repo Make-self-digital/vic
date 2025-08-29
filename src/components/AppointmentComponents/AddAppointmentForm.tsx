@@ -40,6 +40,7 @@ interface FormData {
   name: string;
   phone: string;
   age: string;
+  village: string;
   gender: string;
   service: string;
   notes: string;
@@ -55,6 +56,7 @@ export default function AddAppointmentForm() {
     name: "",
     phone: "",
     age: "",
+    village: "",
     gender: "",
     service: "",
     notes: "",
@@ -263,6 +265,7 @@ export default function AddAppointmentForm() {
           name: loginPatient?.patientName,
           phone: loginPatient?.phone,
           age: "",
+          village: "",
           gender: "",
           service: "",
           notes: "",
@@ -399,6 +402,28 @@ export default function AddAppointmentForm() {
               }
               autoComplete="off"
               className="text-sm mt-1 p-5 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0"
+            />
+          </div>
+
+          {/* village */}
+          <div className="space-y-2">
+            <Label htmlFor="village" className="text-black font-medium">
+              {language === "english" ? "Village" : "गाँव"}
+            </Label>
+            <Input
+              type="text"
+              name="village"
+              id="village"
+              value={formData.village}
+              onChange={handleChange}
+              placeholder={
+                language === "english"
+                  ? "Enter village name"
+                  : "गाँव का नाम दर्ज करें"
+              }
+              className="text-sm mt-1 p-5 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0 tracking-wide"
+              required
+              autoComplete="off"
             />
           </div>
 
@@ -558,7 +583,7 @@ export default function AddAppointmentForm() {
               id="notes"
               name="notes"
               value={formData.notes}
-              className="resize-none overflow-hidden text-sm mt-1 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0"
+              className="resize-none overflow-hidden text-sm mt-1 pl-3 border border-gray-300 focus:border-[#42998d] focus:ring-[#42998d] focus:outline-none transition duration-150 outline-none focus-visible:outline-none focus-visible:ring-0 focus:ring-0 tracking-wide leading-relaxed"
               onChange={handleChange}
               placeholder={
                 language === "english"
