@@ -9,7 +9,6 @@ import {
   YAxis,
   Tooltip,
   CartesianGrid,
-  Legend,
 } from "recharts";
 import { CustomTooltip } from "./CustomTooltip";
 import Loading from "../Loading";
@@ -19,13 +18,34 @@ interface DataType {
   [serviceName: string]: string | number;
 }
 
-const COLORS = {
+const COLORS: Record<string, string> = {
   "Whole Abdomen Scan": "#00c49f",
-  "Pregnancy Ultrasound": "#006d5b",
-  "Color Doppler": "#26a69a",
-  "Musculoskeletal Scan": "#4db6ac",
-  "USG-Guided Procedures": "#00897b",
-  "Diagnostic Ultrasound": "#42998d",
+  "Lower Abdomen": "#006d5b",
+  "KUB Scan": "#26a69a",
+  "Thyroid Scan": "#4db6ac",
+  "Breast Scan": "#00897b",
+  "Scrotum Scan": "#42998d",
+  "Soft Tissue Scan": "#00796b",
+  "Follicular Monitoring": "#2e7d32",
+  "TVS (Transvaginal Sonography)": "#558b2f",
+  "NT/NB Scan (11–13 Weeks)": "#9e9d24",
+  "Level-1 Scan": "#f9a825",
+  "Level-2 Scan": "#f57f17",
+  "Foetal Wellbeing Scan": "#ef6c00",
+  "BPP (Biophysical Profile)": "#d84315",
+  "Early Antenatal Scan": "#c62828",
+  "Dating Scan": "#ad1457",
+  "Whole Abdomen Doppler": "#6a1b9a",
+  "Foetal Doppler": "#283593",
+  "Venous Doppler": "#1565c0",
+  "Carotid Doppler": "#0277bd",
+  "Pleural Tapping (Diagnostic)": "#00838f",
+  "Ascitic Fluid Aspiration (Diagnostic)": "#006064",
+  "Ascitic Fluid Aspiration (Therapeutic)": "#004d40",
+  "Liver Abscess Aspiration": "#1b5e20",
+  "Plain X-Ray": "#424242",
+  "HSG (Hysterosalpingography)": "#5d4037",
+  "IVP (Intravenous Pyelography)": "#3e2723",
 };
 
 export default function RevenueLineChart({
@@ -35,16 +55,6 @@ export default function RevenueLineChart({
   data: DataType[];
   loading: boolean;
 }) {
-  // ? handle format date:-
-  // const formatDate = (dateStr: string) => {
-  //   const date = new Date(dateStr);
-  //   return date.toLocaleDateString("en-GB", {
-  //     day: "2-digit",
-  //     month: "short",
-  //     year: "numeric",
-  //   });
-  // };
-
   return (
     <div className="mt-4 w-full space-y-4">
       <Card className="bg-white border border-gray-300 rounded-md p-4">
@@ -54,6 +64,7 @@ export default function RevenueLineChart({
             Revenue Line Chart
           </span>
         </h2>
+
         <CardContent className="p-0 md:p-4">
           {loading ? (
             <div className="flex justify-center items-center h-48">
@@ -62,11 +73,11 @@ export default function RevenueLineChart({
           ) : (
             <div className="no-outline-on-focus">
               <div className="w-full overflow-x-auto">
-                <div className="min-w-[600px] h-[400px]">
+                <div className="min-w-[300px] md:min-w-[600px] h-[500px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart
                       data={data}
-                      margin={{ top: 20, right: 30, left: 10, bottom: 10 }}>
+                      margin={{ top: 20, right: 30, left: 10, bottom: 50 }}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#81c7ba" />
                       <XAxis
                         dataKey="date"
@@ -78,12 +89,6 @@ export default function RevenueLineChart({
                         axisLine={{ stroke: "#81c7ba" }}
                       />
                       <Tooltip content={<CustomTooltip />} />
-                      <Legend
-                        wrapperStyle={{
-                          paddingTop: 10,
-                          fontSize: 12,
-                        }}
-                      />
                       {Object.keys(COLORS).map((service) => (
                         <Line
                           key={service}
@@ -91,13 +96,30 @@ export default function RevenueLineChart({
                           dataKey={service}
                           stroke={COLORS[service as keyof typeof COLORS]}
                           strokeWidth={2.5}
-                          dot={{ r: 4 }}
-                          activeDot={{ r: 6 }}
+                          dot={{ r: window.innerWidth < 768 ? 3 : 4 }}
+                          activeDot={{ r: window.innerWidth < 768 ? 5 : 6 }}
                         />
                       ))}
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
+              </div>
+
+              {/* Legend outside chart for full responsiveness */}
+              <div className="flex flex-wrap justify-center gap-2 mt-2">
+                {Object.keys(COLORS).map((service) => (
+                  <div
+                    key={service}
+                    className="flex items-center gap-1 text-xs">
+                    <span
+                      className="w-2 h-2 rounded-full"
+                      style={{
+                        backgroundColor: COLORS[service as keyof typeof COLORS],
+                      }}
+                    />
+                    <span>{service}</span>
+                  </div>
+                ))}
               </div>
             </div>
           )}

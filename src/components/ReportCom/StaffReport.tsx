@@ -18,6 +18,7 @@ interface Patient {
   patientName: string;
   age: string;
   gender: string;
+  referBy: string;
   service: string;
   phone: string;
   status: PatientStatus;
@@ -28,14 +29,6 @@ interface Patient {
   paymentStatus: "paid" | "unpaid";
   createdAt: string;
   doctorName: string;
-  reportUrl: string[];
-  patientReport: {
-    Scan: string;
-    ClinicalHistory: string;
-    Findings: string[];
-    Impression: string[];
-    ImageUrls: string[];
-  };
 }
 
 export default function ReportTable() {

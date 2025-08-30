@@ -59,7 +59,7 @@ interface ChartData {
 
 type LineChartEntry = {
   date: string;
-  [serviceName: string]: number | string; // * string for date, number for revenue values
+  [serviceName: string]: number | string;
 };
 
 const filterOptions = {
@@ -106,7 +106,6 @@ export default function RevenueChart() {
   const [yearLineChartData, setYearLineChartData] = useState<LineChartEntry[]>(
     []
   );
-  const [pageLoading, setPageLoading] = useState(true);
 
   const currentOptions =
     filterOptions[category as keyof typeof filterOptions] || [];

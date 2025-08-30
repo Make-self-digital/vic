@@ -23,6 +23,7 @@ interface Patient {
   patientName: string;
   age: string;
   gender: string;
+  referBy: string;
   service: string;
   phone: string;
   status: "Pending" | "Completed";
@@ -619,7 +620,7 @@ export default function ReportViewer() {
 
         {/* PRINTABLE REPORT */}
         <div
-          className="print:bg-white bg-white mt-4 mb-4"
+          className="print:bg-white bg-white mt-4 mb-4 w-full"
           ref={printRef}
           id="printable-report">
           <Card className="relative border border-[#42998d] rounded-md p-0 overflow-hidden">
@@ -686,7 +687,7 @@ export default function ReportViewer() {
                   </p>
                   <p>
                     <span className="font-semibold">Ref. by:</span>{" "}
-                    {patient?.doctorName}
+                    {patient?.referBy ? patient?.referBy : patient?.doctorName}
                   </p>
                 </div>
               </div>

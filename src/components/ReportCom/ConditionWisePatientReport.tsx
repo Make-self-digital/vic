@@ -16,6 +16,7 @@ interface Patient {
   patientName: string;
   age: string;
   gender: string;
+  referBy: string;
   service: string;
   phone: string;
   status: PatientStatus;
@@ -26,14 +27,6 @@ interface Patient {
   paymentStatus: "paid" | "unpaid";
   createdAt: string;
   doctorName: string;
-  reportUrl: string[];
-  patientReport: {
-    Scan: string;
-    ClinicalHistory: string;
-    Findings: string[];
-    Impression: string[];
-    ImageUrls: string[];
-  };
 }
 
 export default function ConditionWisePatientReport({
@@ -43,7 +36,7 @@ export default function ConditionWisePatientReport({
   patients: Patient[];
   setPatients: React.Dispatch<React.SetStateAction<any[]>>;
 }) {
-  // 🔽open sections state:-
+  // ? open sections state:-
   const [openSections, setOpenSections] = useState({
     today: true,
     yesterday: false,
@@ -106,6 +99,41 @@ export default function ConditionWisePatientReport({
   };
 
   // ? Handle Doctor Name Change:-
+  const handleReferBySave = async (id: string, value: string) => {
+    const trimmed = value.trim();
+    if (!trimmed) return;
+
+    // Update local state
+    const updated = [...patients];
+    const idx = updated.findIndex((p) => p._id === id);
+    if (idx === -1) return;
+    updated[idx].referBy = trimmed;
+    setPatients(updated);
+    setEditing(false);
+
+    // Update MongoDB
+    try {
+      await fetch("/api/update_referBy", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id, referBy: trimmed }),
+      });
+
+      toast.success(
+        language === "english" ? "Refer By updated" : "संदर्भित नाम अपडेट हुआ",
+        {
+          style: { background: "#42998d", color: "#ffffff" },
+        }
+      );
+    } catch (error) {
+      toast.error(language === "english" ? "Update failed" : "अपडेट असफल हुआ", {
+        style: { background: "#ef4444", color: "#ffffff" },
+      });
+    }
+  };
+
   const handleSaveClick = async (id: string) => {
     const trimmedName = inputValue.trim();
 
@@ -307,6 +335,9 @@ export default function ConditionWisePatientReport({
               {language === "english" ? "Name" : "मरीज का नाम"}
             </th>
             <th className="w-[20%] px-4 py-3 text-center text-sm font-semibold text-white truncate tracking-wide">
+              {language === "english" ? "Refer By" : "संदर्भित द्वारा"}
+            </th>
+            <th className="w-[20%] px-4 py-3 text-center text-sm font-semibold text-white truncate tracking-wide">
               {language === "english" ? "Report Status" : "रिपोर्ट स्थिति"}
             </th>
             <th className="w-[20%] px-4 py-3 text-center text-sm font-semibold text-white truncate tracking-wide">
@@ -371,6 +402,49 @@ export default function ConditionWisePatientReport({
                           .join(" ")
                       : ""}
                   </td>
+
+                  {/* Refer By */}
+                  <td className="px-4 py-3 text-gray-800 text-center tracking-wide truncate">
+                    {editing === `refer-${item._id}` ? (
+                      <div className="relative w-[120px]">
+                        <input
+                          type="text"
+                          value={inputValue}
+                          onChange={(e) => setInputValue(e.target.value)}
+                          className="border border-[#c4e3df] rounded-md px-3 py-1 text-sm text-[#18564e] focus:outline-none w-full max-w-[120px] tracking-wide placeholder:tracking-wide"
+                          placeholder="Enter Name"
+                          autoComplete="off"
+                        />
+                        {inputValue.trim().length === 0 ? (
+                          <button
+                            onClick={() => setEditing(false)}
+                            className="absolute right-2 top-1/2 -translate-y-1/2 text-[#18564e] hover:text-[#18564e]/80 cursor-pointer"
+                            title="Cancel">
+                            <X size={16} />
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() =>
+                              handleReferBySave(item._id, inputValue)
+                            }
+                            className="absolute right-2 top-1/2 -translate-y-1/2 text-green-600 hover:text-green-800 cursor-pointer"
+                            title="Save">
+                            <Check size={16} />
+                          </button>
+                        )}
+                      </div>
+                    ) : (
+                      <span
+                        onClick={() => {
+                          setEditing(`refer-${item._id}`);
+                          setInputValue(item.referBy || "");
+                        }}
+                        className="cursor-pointer hover:underline text-sm">
+                        {item.referBy || "Enter Name"}
+                      </span>
+                    )}
+                  </td>
+
                   {/* Report Status */}
                   <td
                     className={`px-4 py-3 text-center tracking-wide ${
@@ -523,6 +597,49 @@ export default function ConditionWisePatientReport({
                           .join(" ")
                       : ""}
                   </td>
+
+                  {/* Refer By */}
+                  <td className="px-4 py-3 text-gray-800 text-center tracking-wide truncate">
+                    {editing === `refer-${item._id}` ? (
+                      <div className="relative w-[120px]">
+                        <input
+                          type="text"
+                          value={inputValue}
+                          onChange={(e) => setInputValue(e.target.value)}
+                          className="border border-[#c4e3df] rounded-md px-3 py-1 text-sm text-[#18564e] focus:outline-none w-full max-w-[120px] tracking-wide placeholder:tracking-wide"
+                          placeholder="Enter Name"
+                          autoComplete="off"
+                        />
+                        {inputValue.trim().length === 0 ? (
+                          <button
+                            onClick={() => setEditing(false)}
+                            className="absolute right-2 top-1/2 -translate-y-1/2 text-[#18564e] hover:text-[#18564e]/80 cursor-pointer"
+                            title="Cancel">
+                            <X size={16} />
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() =>
+                              handleReferBySave(item._id, inputValue)
+                            }
+                            className="absolute right-2 top-1/2 -translate-y-1/2 text-green-600 hover:text-green-800 cursor-pointer"
+                            title="Save">
+                            <Check size={16} />
+                          </button>
+                        )}
+                      </div>
+                    ) : (
+                      <span
+                        onClick={() => {
+                          setEditing(`refer-${item._id}`);
+                          setInputValue(item.referBy || "");
+                        }}
+                        className="cursor-pointer hover:underline text-sm">
+                        {item.referBy || "Enter Name"}
+                      </span>
+                    )}
+                  </td>
+
                   {/* Report Status */}
                   <td
                     className={`px-4 py-3 text-center tracking-wide ${
@@ -675,6 +792,49 @@ export default function ConditionWisePatientReport({
                           .join(" ")
                       : ""}
                   </td>
+
+                  {/* Refer By */}
+                  <td className="px-4 py-3 text-gray-800 text-center tracking-wide truncate">
+                    {editing === `refer-${item._id}` ? (
+                      <div className="relative w-[120px]">
+                        <input
+                          type="text"
+                          value={inputValue}
+                          onChange={(e) => setInputValue(e.target.value)}
+                          className="border border-[#c4e3df] rounded-md px-3 py-1 text-sm text-[#18564e] focus:outline-none w-full max-w-[120px] tracking-wide placeholder:tracking-wide"
+                          placeholder="Enter Name"
+                          autoComplete="off"
+                        />
+                        {inputValue.trim().length === 0 ? (
+                          <button
+                            onClick={() => setEditing(false)}
+                            className="absolute right-2 top-1/2 -translate-y-1/2 text-[#18564e] hover:text-[#18564e]/80 cursor-pointer"
+                            title="Cancel">
+                            <X size={16} />
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() =>
+                              handleReferBySave(item._id, inputValue)
+                            }
+                            className="absolute right-2 top-1/2 -translate-y-1/2 text-green-600 hover:text-green-800 cursor-pointer"
+                            title="Save">
+                            <Check size={16} />
+                          </button>
+                        )}
+                      </div>
+                    ) : (
+                      <span
+                        onClick={() => {
+                          setEditing(`refer-${item._id}`);
+                          setInputValue(item.referBy || "");
+                        }}
+                        className="cursor-pointer hover:underline text-sm">
+                        {item.referBy || "Enter Name"}
+                      </span>
+                    )}
+                  </td>
+
                   {/* Report Status */}
                   <td
                     className={`px-4 py-3 text-center tracking-wide ${

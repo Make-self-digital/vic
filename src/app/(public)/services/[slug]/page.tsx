@@ -12,93 +12,157 @@ interface ServiceDetails {
   title: string;
   slug: string;
   fullDescription: string;
-  preparation?: string;
-  procedureTime?: string;
-  safetyInfo?: string;
-  benefits?: string;
-  afterCare?: string;
-  image?: string;
 }
 
 const serviceData: ServiceDetails[] = [
   {
-    slug: "whole-abdomen-scan",
     title: "Whole Abdomen Scan",
     fullDescription:
       "This scan covers liver, kidneys, pancreas, gallbladder, and spleen to detect abnormalities like stones, cysts, or tumors. It helps in early diagnosis and monitoring of abdominal conditions.",
-    preparation: "Fast for 6-8 hours before scan.",
-    procedureTime: "Approx. 15-20 minutes.",
-    safetyInfo: "Completely safe, no radiation used.",
-    benefits:
-      "Non-invasive, quick, and helps detect internal abnormalities early.",
-    afterCare: "You can resume normal activities immediately after the scan.",
-    image: "/serviceImg/abdomen-scan.jpg",
+    slug: "whole-abdomen-scan",
   },
   {
-    slug: "pregnancy-ultrasound",
-    title: "Pregnancy Ultrasound",
+    title: "Lower Abdomen",
     fullDescription:
-      "Monitors fetal growth, checks heartbeat, and helps estimate due date. We also offer 3D/4D scans for detailed visualization of the fetus and pregnancy tracking.",
-    preparation: "Full bladder may be required in early stages.",
-    procedureTime: "15-30 minutes.",
-    safetyInfo: "Safe for mother and baby.",
-    benefits: "Essential for prenatal care and ensuring fetal well-being.",
-    afterCare: "No special aftercare needed. Discuss results with your doctor.",
-    image: "/serviceImg/pregnancy-ultrasound.jpg",
+      "Focused ultrasound scan for lower abdominal organs such as bladder and reproductive organs.",
+    slug: "lower-abdomen",
   },
   {
-    slug: "color-doppler-studies",
-    title: "Color Doppler Studies",
+    title: "KUB Scan",
     fullDescription:
       "Analyzes blood flow in veins and arteries, often used in pregnancy or vascular evaluations. Helps in detecting blockages, narrowing of vessels, and blood clots.",
-    preparation: "No special preparation needed.",
-    procedureTime: "20 minutes.",
-    safetyInfo: "Non-invasive and safe.",
-    benefits:
-      "Vital for cardiovascular assessments and fetal blood circulation checks.",
-    afterCare: "Return to normal activities right after the scan.",
-    image: "/serviceImg/color-doppler.jpg",
+    slug: "kub-scan",
   },
   {
-    slug: "musculoskeletal-scan",
-    title: "Musculoskeletal Scan",
+    title: "Thyroid Scan",
     fullDescription:
-      "Ultrasound examination of muscles, joints, tendons, and soft tissues to detect tears, inflammation, or fluid.",
-    preparation:
-      "Wear comfortable clothing. Remove jewelry from the area being examined.",
-    procedureTime: "20-30 minutes.",
-    safetyInfo: "Safe and painless imaging method.",
-    benefits: "Accurate diagnosis of musculoskeletal issues without radiation.",
-    afterCare: "Resume normal activities after the scan.",
-    image: "/serviceImg/musculoskeletal.jpg",
+      "Ultrasound evaluation of the thyroid gland to detect nodules, cysts, or enlargement.",
+    slug: "thyroid-scan",
   },
   {
-    slug: "usg-guided-procedures",
-    title: "USG-Guided Procedures",
+    title: "Breast Scan",
     fullDescription:
-      "Ultrasound-guided techniques used for FNAC, biopsies, and fluid aspirations, ensuring accurate targeting.",
-    preparation:
-      "May vary depending on the procedure. Usually requires consent.",
-    procedureTime: "30-45 minutes depending on the procedure.",
-    safetyInfo: "Minimally invasive, safer than blind techniques.",
-    benefits:
-      "Precise guidance increases safety and effectiveness of minor procedures.",
-    afterCare:
-      "Follow specific instructions provided by the doctor post-procedure.",
-    image: "/serviceImg/usg-procedures.png",
+      "Ultrasound imaging of breast tissue to detect lumps, cysts, or other abnormalities.",
+    slug: "breast-scan",
   },
   {
-    slug: "diagnostic-ultrasound",
-    title: "Diagnostic Ultrasound",
+    title: "Scrotum Scan",
     fullDescription:
-      "General high-resolution ultrasound to assess various internal organs for early detection of abnormalities.",
-    preparation:
-      "Depends on the organ being scanned (fasting, full bladder, etc).",
-    procedureTime: "15-25 minutes.",
-    safetyInfo: "Completely safe with no ionizing radiation.",
-    benefits: "Versatile and fast tool for clinical diagnosis.",
-    afterCare: "No aftercare required in most cases.",
-    image: "/serviceImg/diagnostic.png",
+      "Ultrasound of the scrotum to evaluate testicles and surrounding tissues for abnormalities.",
+    slug: "scrotum-scan",
+  },
+  {
+    title: "Soft Tissue Scan",
+    fullDescription:
+      "Ultrasound for lumps, swelling or injuries in soft tissues.",
+    slug: "soft-tissue-scan",
+  },
+  {
+    title: "Follicular Monitoring",
+    fullDescription:
+      "Track ovarian follicles for fertility evaluation and treatment planning.",
+    slug: "follicular-monitoring",
+  },
+  {
+    title: "TVS (Transvaginal Sonography)",
+    fullDescription:
+      "High-resolution scan for early pregnancy and pelvic organ assessment.",
+    slug: "tvs-scan",
+  },
+  {
+    title: "NT/NB Scan (11–13 Weeks)",
+    fullDescription:
+      "Nuchal translucency and nasal bone scan for early fetal screening.",
+    slug: "nt-nb-scan",
+  },
+  {
+    title: "Level-1 Scan",
+    fullDescription: "Basic anomaly scan in early pregnancy.",
+    slug: "level-1-scan",
+  },
+  {
+    title: "Level-2 Scan",
+    fullDescription: "Detailed anomaly scan for fetal development.",
+    slug: "level-2-scan",
+  },
+  {
+    title: "Foetal Wellbeing Scan",
+    fullDescription: "Scan to assess fetal health and growth.",
+    slug: "foetal-wellbeing-scan",
+  },
+  {
+    title: "BPP (Biophysical Profile)",
+    fullDescription:
+      "Assessment of fetal breathing, movement, tone and amniotic fluid.",
+    slug: "bpp-scan",
+  },
+  {
+    title: "Early Antenatal Scan",
+    fullDescription:
+      "Early scan to confirm pregnancy and estimate gestational age.",
+    slug: "early-antenatal-scan",
+  },
+  {
+    title: "Dating Scan",
+    fullDescription:
+      "Ultrasound to estimate gestational age and expected due date.",
+    slug: "dating-scan",
+  },
+  {
+    title: "Whole Abdomen Doppler",
+    fullDescription: "Evaluate blood flow in abdominal vessels.",
+    slug: "whole-abdomen-doppler",
+  },
+  {
+    title: "Foetal Doppler",
+    fullDescription: "Monitor blood flow in fetal vessels.",
+    slug: "foetal-doppler",
+  },
+  {
+    title: "Venous Doppler",
+    fullDescription: "Evaluate venous blood flow in extremities.",
+    slug: "venous-doppler",
+  },
+  {
+    title: "Carotid Doppler",
+    fullDescription: "Assess carotid artery blood flow and blockages.",
+    slug: "carotid-doppler",
+  },
+  {
+    title: "Pleural Tapping (Diagnostic)",
+    fullDescription: "Ultrasound-guided pleural fluid aspiration.",
+    slug: "pleural-tapping-diagnostic",
+  },
+  {
+    title: "Ascitic Fluid Aspiration (Diagnostic)",
+    fullDescription: "Diagnostic aspiration of ascitic fluid.",
+    slug: "ascitic-fluid-aspiration-diagnostic",
+  },
+  {
+    title: "Ascitic Fluid Aspiration (Therapeutic)",
+    fullDescription: "Therapeutic aspiration of ascitic fluid.",
+    slug: "ascitic-fluid-aspiration-therapeutic",
+  },
+  {
+    title: "Liver Abscess Aspiration",
+    fullDescription:
+      "USG-guided aspiration of liver abscess for diagnosis or therapy.",
+    slug: "liver-abscess-aspiration",
+  },
+  {
+    title: "Plain X-Ray",
+    fullDescription: "Standard radiographic imaging for bones and chest.",
+    slug: "plain-xray",
+  },
+  {
+    title: "HSG (Hysterosalpingography)",
+    fullDescription: "X-ray procedure to evaluate fallopian tubes and uterus.",
+    slug: "hsg",
+  },
+  {
+    title: "IVP (Intravenous Pyelography)",
+    fullDescription: "X-ray contrast study for kidneys, ureters, and bladder.",
+    slug: "ivp",
   },
 ];
 
