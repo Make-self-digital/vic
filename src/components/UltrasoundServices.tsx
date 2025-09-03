@@ -32,9 +32,11 @@ const UltrasoundServices: React.FC = () => {
 
   // ? List of services:-
   const services: ServiceCategory[] = [
+    // * Geneal Ultrasound:-
     {
       id: "abdomen",
-      label: language === "english" ? "Abdomen" : "पेट",
+      label:
+        language === "english" ? "General Ultrasound" : "साधारण अल्ट्रासाउंड",
       services: [
         {
           title:
@@ -68,60 +70,16 @@ const UltrasoundServices: React.FC = () => {
           icon: <Stethoscope className="w-6 h-6 text-white" />,
         },
         {
-          title: language === "english" ? "Thyroid Scan" : "थायरॉइड स्कैन",
-          description:
-            language === "english"
-              ? "Ultrasound to evaluate thyroid gland structure."
-              : "थायरॉइड ग्रंथि की संरचना का मूल्यांकन करने के लिए अल्ट्रासाउंड।",
-          slug: "thyroid-scan",
-          icon: <Bone className="w-6 h-6 text-white" />,
-        },
-        {
-          title: language === "english" ? "Breast Scan" : "स्तन स्कैन",
-          description:
-            language === "english"
-              ? "Ultrasound for breast evaluation."
-              : "स्तन का मूल्यांकन करने के लिए अल्ट्रासाउंड।",
-          slug: "breast-scan",
-          icon: <Bone className="w-6 h-6 text-white" />,
-        },
-        {
-          title: language === "english" ? "Scrotum Scan" : "स्क्रोटम स्कैन",
-          description:
-            language === "english"
-              ? "Ultrasound for scrotal pathologies."
-              : "स्क्रोटम की बीमारियों के लिए अल्ट्रासाउंड।",
-          slug: "scrotum-scan",
-          icon: <Bone className="w-6 h-6 text-white" />,
-        },
-        {
-          title:
-            language === "english" ? "Soft Tissue Scan" : "सॉफ्ट टिशू स्कैन",
-          description:
-            language === "english"
-              ? "Ultrasound for superficial lumps and soft tissues."
-              : "सतही गांठों और नरम ऊतकों के लिए अल्ट्रासाउंड।",
-          slug: "soft-tissue-scan",
-          icon: <Bone className="w-6 h-6 text-white" />,
-        },
-      ],
-    },
-
-    {
-      id: "pregnancy",
-      label: language === "english" ? "Pregnancy" : "गर्भावस्था",
-      services: [
-        {
           title:
             language === "english"
               ? "Follicular Monitoring"
-              : "फॉलिकुलर मॉनिटरिंग",
+              : "फोलिक्यूलर मॉनिटरिंग",
           description:
             language === "english"
-              ? "Ultrasound to track ovarian follicles for fertility evaluation."
-              : "प्रजनन मूल्यांकन के लिए अंडाशय के फॉलिकल्स को ट्रैक करने के लिए अल्ट्रासाउंड।",
+              ? "Ultrasound to track the growth and development of ovarian follicles, essential for fertility evaluation and treatment planning."
+              : "अंडाशय के फॉलिकल्स की वृद्धि और विकास का पता लगाने के लिए अल्ट्रासाउंड, जो प्रजनन क्षमता के मूल्यांकन और उपचार योजना में सहायक है।",
           slug: "follicular-monitoring",
-          icon: <Baby className="w-6 h-6 text-white" />,
+          icon: <Bone className="w-6 h-6 text-white" />,
         },
         {
           title:
@@ -135,6 +93,14 @@ const UltrasoundServices: React.FC = () => {
           slug: "tvs-scan",
           icon: <Baby className="w-6 h-6 text-white" />,
         },
+      ],
+    },
+
+    // * OBS Ultrasound:-
+    {
+      id: "pregnancy",
+      label: language === "english" ? "OBS Ultrasound" : "ओबीएस अल्ट्रासाउंड",
+      services: [
         {
           title:
             language === "english"
@@ -213,6 +179,93 @@ const UltrasoundServices: React.FC = () => {
       ],
     },
 
+    // * Digital X Ray:-
+    {
+      id: "Digital X-Ray",
+      label: language === "english" ? "Digital X-Ray" : "डिजिटल एक्स-रेय",
+      services: [
+        {
+          title: language === "english" ? "Plain X-Ray" : "साधारण एक्स-रे",
+          description:
+            language === "english"
+              ? "Standard radiographic imaging for bones and chest."
+              : "हड्डियों और छाती के लिए मानक रेडियोग्राफिक इमेजिंग।",
+          slug: "plain-xray",
+          icon: <Stethoscope className="w-6 h-6 text-white" />,
+        },
+        {
+          title:
+            language === "english"
+              ? "HSG (Hysterosalpingography)"
+              : "HSG (हिस्टेरोसैल्पिनोग्राफी)",
+          description:
+            language === "english"
+              ? "X-ray procedure to evaluate fallopian tubes and uterus."
+              : "फैलोपियन ट्यूब और गर्भाशय का मूल्यांकन करने के लिए एक्स-रे प्रक्रिया।",
+          slug: "hsg",
+          icon: <Stethoscope className="w-6 h-6 text-white" />,
+        },
+        {
+          title:
+            language === "english"
+              ? "IVP (Intravenous Pyelography)"
+              : "IVP (इंट्रावेनस पायलोग्राफी)",
+          description:
+            language === "english"
+              ? "X-ray contrast study for kidneys, ureters, and bladder."
+              : "किडनी, मूत्रवाहिनी और मूत्राशय के लिए एक्स-रे कंट्रास्ट अध्ययन।",
+          slug: "ivp",
+          icon: <Stethoscope className="w-6 h-6 text-white" />,
+        },
+      ],
+    },
+
+    // * Small Parts:-
+    {
+      id: "Small Parts",
+      label: language === "english" ? "Small Parts" : "छोटे हिस्से",
+      services: [
+        {
+          title: language === "english" ? "Thyroids Scan" : "थायरोड स्कैन",
+          description:
+            language === "english"
+              ? "Ultrasound for thyroid nodules."
+              : "थायरोड के नोडल्स के लिए अल्ट्रासाउंड।",
+          slug: "thyroid-scan",
+          icon: <Bone className="w-6 h-6 text-white" />,
+        },
+        {
+          title: language === "english" ? "Breast Scan" : "स्तन स्कैन",
+          description:
+            language === "english"
+              ? "Ultrasound for breast evaluation."
+              : "स्तन का मूल्यांकन करने के लिए अल्ट्रासाउंड।",
+          slug: "breast-scan",
+          icon: <Bone className="w-6 h-6 text-white" />,
+        },
+        {
+          title: language === "english" ? "Scrotum Scan" : "स्क्रोटम स्कैन",
+          description:
+            language === "english"
+              ? "Ultrasound for scrotal pathologies."
+              : "स्क्रोटम की बीमारियों के लिए अल्ट्रासाउंड।",
+          slug: "scrotum-scan",
+          icon: <Bone className="w-6 h-6 text-white" />,
+        },
+        {
+          title:
+            language === "english" ? "Soft Tissue Scan" : "सॉफ्ट टिशू स्कैन",
+          description:
+            language === "english"
+              ? "Ultrasound for superficial lumps and soft tissues."
+              : "सतही गांठों और नरम ऊतकों के लिए अल्ट्रासाउंड।",
+          slug: "soft-tissue-scan",
+          icon: <Bone className="w-6 h-6 text-white" />,
+        },
+      ],
+    },
+
+    // * Doppler:-
     {
       id: "doppler",
       label: language === "english" ? "Doppler" : "डॉपलर",
@@ -259,9 +312,10 @@ const UltrasoundServices: React.FC = () => {
       ],
     },
 
+    // * Procedures:-
     {
       id: "procedures",
-      label: language === "english" ? "Procedures" : "प्रक्रियाएँ",
+      label: language === "english" ? "Special Procedures" : "विशेष प्रक्रिया",
       services: [
         {
           title:
@@ -310,49 +364,6 @@ const UltrasoundServices: React.FC = () => {
               : "निदान या उपचार के लिए अल्ट्रासाउंड-निर्देशित यकृत फोड़ा अस्पिरेशन।",
           slug: "liver-abscess-aspiration",
           icon: <Syringe className="w-6 h-6 text-white" />,
-        },
-      ],
-    },
-
-    {
-      id: "xray-contrast",
-      label:
-        language === "english"
-          ? "X-Ray & Contrast Studies"
-          : "एक्स-रे और कंट्रास्ट अध्ययन",
-      services: [
-        {
-          title: language === "english" ? "Plain X-Ray" : "साधारण एक्स-रे",
-          description:
-            language === "english"
-              ? "Standard radiographic imaging for bones and chest."
-              : "हड्डियों और छाती के लिए मानक रेडियोग्राफिक इमेजिंग।",
-          slug: "plain-xray",
-          icon: <Stethoscope className="w-6 h-6 text-white" />,
-        },
-        {
-          title:
-            language === "english"
-              ? "HSG (Hysterosalpingography)"
-              : "HSG (हिस्टेरोसैल्पिनोग्राफी)",
-          description:
-            language === "english"
-              ? "X-ray procedure to evaluate fallopian tubes and uterus."
-              : "फैलोपियन ट्यूब और गर्भाशय का मूल्यांकन करने के लिए एक्स-रे प्रक्रिया।",
-          slug: "hsg",
-          icon: <Stethoscope className="w-6 h-6 text-white" />,
-        },
-        {
-          title:
-            language === "english"
-              ? "IVP (Intravenous Pyelography)"
-              : "IVP (इंट्रावेनस पायलोग्राफी)",
-          description:
-            language === "english"
-              ? "X-ray contrast study for kidneys, ureters, and bladder."
-              : "किडनी, मूत्रवाहिनी और मूत्राशय के लिए एक्स-रे कंट्रास्ट अध्ययन।",
-          slug: "ivp",
-          icon: <Stethoscope className="w-6 h-6 text-white" />,
         },
       ],
     },

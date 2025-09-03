@@ -13,16 +13,14 @@ const Hero = () => {
   const { language } = useLanguage();
 
   const services = [
+    language === "english" ? "General Ultrasound" : "साधारण अल्ट्रासाउंड",
     language === "english"
-      ? "Diagnostic Ultrasound"
-      : "निदानात्मक अल्ट्रासाउंड",
-    language === "english" ? "Whole Abdomen Scan" : "संपूर्ण पेट का स्कैन",
-    language === "english" ? "Pregnancy Ultrasound" : "गर्भावस्था अल्ट्रासाउंड",
-    language === "english" ? "Color Doppler Studies" : "कलर डॉप्लर अध्ययन",
-    language === "english" ? "Musculoskeletal Scan" : "मस्कुलोस्केलेटल स्कैन",
-    language === "english"
-      ? "USG-Guided Procedures"
-      : "यूएसजी-निर्देशित प्रक्रियाएं",
+      ? "OBS Ultrasound"
+      : "ओबीएस(ओब्जेक्टिव) अल्ट्रासाउंड",
+    language === "english" ? "Digital X-Ray" : "डिजिटल एक्स-रेय",
+    language === "english" ? "Small Parts" : "छोटे हिस्से",
+    language === "english" ? "Doppler" : "डोप्पलर",
+    language === "english" ? "Special Procedures" : "विशेष प्रक्रिया",
   ];
 
   // Check if user is authenticated:-

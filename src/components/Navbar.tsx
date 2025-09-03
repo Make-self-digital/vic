@@ -120,7 +120,7 @@ export default function Navbar() {
               key={href}
               href={href}
               title={name}
-              className="relative flex items-center space-x-2 text-sm cursor-pointer font-semibold text-gray-600 hover:text-black transition tracking-wide">
+              className="relative flex items-center space-x-2 text-sm cursor-pointer font-semibold text-gray-600 hover:text-black transition tracking-wide leading-relaxed">
               <Icon
                 className={cn(
                   "w-4 h-4 text-gray-600",
@@ -148,7 +148,7 @@ export default function Navbar() {
                 href={href}
                 title={name}
                 onClick={() => setMenuOpen(false)}
-                className="relative flex items-center space-x-2 text-sm cursor-pointer font-semibold text-gray-600 hover:text-black transition tracking-wide p-1">
+                className="relative flex items-center space-x-2 text-sm cursor-pointer font-semibold text-gray-600 hover:text-black transition tracking-wide p-1 leading-relaxed">
                 <Icon
                   className={cn(
                     "w-4 h-4 text-gray-600",
